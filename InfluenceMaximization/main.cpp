@@ -7,9 +7,14 @@
 //
 
 #include <iostream>
+#include "Graph.hpp"
 
 int main(int argc, const char * argv[]) {
     // insert code here...
-    std::cout << "Hello, World!\n";
+//    std::cout << "Hello, World!\n";
+    Graph graph;
+    graph.readGraph("world");
+//    vector<int> a(5, 1000);
+//    cout<<a.size();
     return 0;
 }
