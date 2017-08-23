@@ -32,18 +32,35 @@ void Graph::readGraph(string fileName) {
         myFile.close();
     }
     graphTranspose = constructTranspose(graph);
-    rrSets = vector<vector<int>>();
+    rrSets = vector<vector<int> >();
     visitMark = vector<int>(n);
-    int R = 10000000;
+    int R = 30000000;
     int totalSize = 0;
     clock_t begin = clock();
     for(int i=0;i<R;i++) {
         rrSets.push_back(vector<int>());
     }
     for(int i=0;i<R;i++) {
-//        totalSize+=generateRandomRRSet(i).size();
-        for(int j=0;i<4;j++) {
+        int randomNode = rand() % n;
+        q.clear();
+        q.push_back(randomNode);
+        while (!q.empty()) {
+            int u = q.front();
+            if(visited[u]) continue;
+            visited[u] = true;
+            rrSets[i].push_back(u);
+            for (int v:graphTranspose[u]) {
+                
+            }
+            
         }
+        for(int v:graphTranspose[randomNode]) {
+            q.clear();
+            q.push_back(v);
+            rrSets[i].push_back(v);
+        }
+//        BuildHypergraphNode(randomNode, i, true);
+//        generateRandomRRSet(i);
         totalSize+=rrSets[i].size();
 //        cout<<"Finished  " << i << "\n";
     }
@@ -58,15 +75,15 @@ void Graph::readGraph(string fileName) {
 }
 
 vector<int> Graph::generateRandomRRSet(int rrSetID) {
+    int n_visit_edge=0;
     int randomVertex = rand() % n;
     vector<int> randomSet = rrSets[rrSetID];
-    queue<int> empty;
-    swap(q, empty);
-    q.push(randomVertex);
+    q.clear();
+    q.push_back(randomVertex);
     int nVisitMark = 0;
     while(!q.empty()) {
         int u = q.front();
-        q.pop();
+        q.pop_front();
         if(visited[u]) continue;
 //        float p =(float)1/float(inDegree[u]);
         visited[u] = true;
@@ -75,23 +92,71 @@ vector<int> Graph::generateRandomRRSet(int rrSetID) {
         nVisitMark++;
         vector<int> edgesIn = graphTranspose[u];
         for(int i=0;i<edgesIn.size();i++) {
+            
             int v = edgesIn[i];
             if(visited[v]) continue;
             int inD = inDegree[u];
             int coin = rand() % inD;
             if(coin==0) {
-                q.push(v);
+                q.push_back(v);
             }
         }
     }
     for(int i:visitMark) {
         visited[i] = false;
     }
-    visitMark.clear();
+//    visitMark.clear();
     return randomSet;
     
 }
 
+int Graph::BuildHypergraphNode(int uStart, int hyperiiid, bool addHyperEdge){
+    int n_visit_edge=0;
+    if(addHyperEdge)
+    {
+        rrSets[hyperiiid].push_back(uStart);
+    }
+    
+    int n_visit_mark=0;
+    //for(int i=0; i<12; i++) ASSERT((int)visit[i].size()==n);
+    //for(int i=0; i<12; i++) ASSERT((int)visit_mark[i].size()==n);
+    //hyperiiid ++;
+    q.clear();
+    q.push_back(uStart);
+    visitMark[n_visit_mark++]=uStart;
+    visited[uStart]=true;
+    while(!q.empty()) {
+        int expand=q.front();
+        q.pop_front();
+        int i=expand;
+        for(int j=0; j<(int)graphTranspose[i].size(); j++){
+            //int u=expand;
+            int v=graphTranspose[i][j];
+            n_visit_edge++;
+            int inD = inDegree[v];
+            int coin = rand() % inD;
+            if(coin!=0)
+                continue;
+            if(visited[v])
+                continue;
+            if(!visited[v])
+            {
+                visitMark[n_visit_mark++]=v;
+                visited[v]=true;
+            }
+            q.push_back(v);
+            //#pragma omp  critical
+            //if(0)
+            
+            rrSets[hyperiiid].push_back(v);
+            
+        }
+        
+    }
+    for(int i=0; i<n_visit_mark; i++)
+        visited[visitMark[i]]=false;
+    return n_visit_edge;
+}
 vector<vector<int>> Graph::constructTranspose(vector<vector<int>> someGraph) {
     vector<vector<int>> transposedGraph = vector<vector<int>>();
     for(int i=0;i<someGraph.size();i++) {

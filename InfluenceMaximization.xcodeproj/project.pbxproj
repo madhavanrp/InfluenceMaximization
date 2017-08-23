@@ -228,6 +228,7 @@
 		31FC368F1F354892005CAFEB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = "/usr/local/bin/g++-4.9";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -235,6 +236,7 @@
 		31FC36901F354892005CAFEB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_VERSION = "/usr/local/bin/g++-4.9";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -258,6 +260,7 @@
 				31FC36901F354892005CAFEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
