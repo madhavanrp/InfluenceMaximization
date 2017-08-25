@@ -28,13 +28,14 @@ void Graph::readGraph(string fileName) {
                 maxDegree = inDegree[to];
             }
         }
-        cout<<"\nMax degree is " << maxDegree;
+        cout<<"\nMax degree is " << maxDegree << flush;
         myFile.close();
     }
+    
     graphTranspose = constructTranspose(graph);
     rrSets = vector<vector<int> >();
     visitMark = vector<int>(n);
-    int R = 30000000;
+    int R = 25000000;
     int totalSize = 0;
     clock_t begin = clock();
     for(int i=0;i<R;i++) {
@@ -42,27 +43,10 @@ void Graph::readGraph(string fileName) {
     }
     for(int i=0;i<R;i++) {
         int randomNode = rand() % n;
-        q.clear();
-        q.push_back(randomNode);
-        while (!q.empty()) {
-            int u = q.front();
-            if(visited[u]) continue;
-            visited[u] = true;
-            rrSets[i].push_back(u);
-            for (int v:graphTranspose[u]) {
-                
-            }
-            
-        }
-        for(int v:graphTranspose[randomNode]) {
-            q.clear();
-            q.push_back(v);
-            rrSets[i].push_back(v);
-        }
-//        BuildHypergraphNode(randomNode, i, true);
+        BuildHypergraphNode(randomNode, i, true);
 //        generateRandomRRSet(i);
         totalSize+=rrSets[i].size();
-//        cout<<"Finished  " << i << "\n";
+////        cout<<"Finished  " << i << "\n";
     }
     clock_t end = clock();
     double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
@@ -75,38 +59,33 @@ void Graph::readGraph(string fileName) {
 }
 
 vector<int> Graph::generateRandomRRSet(int rrSetID) {
-    int n_visit_edge=0;
     int randomVertex = rand() % n;
-    vector<int> randomSet = rrSets[rrSetID];
     q.clear();
     q.push_back(randomVertex);
     int nVisitMark = 0;
+    visitMark[nVisitMark++] = randomVertex;
+    visited[randomVertex] = true;
     while(!q.empty()) {
         int u = q.front();
         q.pop_front();
-        if(visited[u]) continue;
-//        float p =(float)1/float(inDegree[u]);
-        visited[u] = true;
-        randomSet.push_back(u);
-        visitMark.push_back(u);
-        nVisitMark++;
-        vector<int> edgesIn = graphTranspose[u];
-        for(int i=0;i<edgesIn.size();i++) {
+        for(int i=0;i<graphTranspose[u].size();i++) {
             
-            int v = edgesIn[i];
+            int v = graphTranspose[u][i];
             if(visited[v]) continue;
-            int inD = inDegree[u];
-            int coin = rand() % inD;
-            if(coin==0) {
+            if((rand()%inDegree[v])==0) {
+                
+                visited[v] = true;
+                rrSets[rrSetID].push_back(v);
+                visitMark[nVisitMark++] = v;
                 q.push_back(v);
             }
         }
     }
-    for(int i:visitMark) {
-        visited[i] = false;
+    for(int i=0;i<nVisitMark;i++) {
+        visited[visitMark[i]] = false;
+        
     }
-//    visitMark.clear();
-    return randomSet;
+    return rrSets[rrSetID];
     
 }
 

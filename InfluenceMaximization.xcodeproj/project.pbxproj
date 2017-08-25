@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		313A589D1F4E072300F86148 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 313A589C1F4E072300F86148 /* Makefile */; };
 		31FC368B1F354892005CAFEB /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31FC368A1F354892005CAFEB /* main.cpp */; };
 		31FC36931F354E56005CAFEB /* Graph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31FC36911F354E56005CAFEB /* Graph.cpp */; };
 /* End PBXBuildFile section */
@@ -24,12 +25,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		313A589C1F4E072300F86148 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		31FC36871F354892005CAFEB /* InfluenceMaximization */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = InfluenceMaximization; sourceTree = BUILT_PRODUCTS_DIR; };
 		31FC368A1F354892005CAFEB /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		31FC36911F354E56005CAFEB /* Graph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Graph.cpp; sourceTree = "<group>"; };
 		31FC36921F354E56005CAFEB /* Graph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Graph.hpp; sourceTree = "<group>"; };
 		31FC36941F3556A6005CAFEB /* graphs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = graphs; sourceTree = "<group>"; };
-		31FC36951F3928C3005CAFEB /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = Makefile; path = graphs/Makefile; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +47,7 @@
 		31FC367E1F354892005CAFEB = {
 			isa = PBXGroup;
 			children = (
-				31FC36951F3928C3005CAFEB /* Makefile */,
+				313A589C1F4E072300F86148 /* Makefile */,
 				31FC36891F354892005CAFEB /* InfluenceMaximization */,
 				31FC36881F354892005CAFEB /* Products */,
 				31FC36941F3556A6005CAFEB /* graphs */,
@@ -128,6 +129,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				313A589D1F4E072300F86148 /* Makefile in Sources */,
 				31FC36931F354E56005CAFEB /* Graph.cpp in Sources */,
 				31FC368B1F354892005CAFEB /* main.cpp in Sources */,
 			);
@@ -228,7 +230,7 @@
 		31FC368F1F354892005CAFEB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_VERSION = "/usr/local/bin/g++-4.9";
+				GCC_VERSION = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -236,7 +238,7 @@
 		31FC36901F354892005CAFEB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_VERSION = "/usr/local/bin/g++-4.9";
+				GCC_VERSION = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
