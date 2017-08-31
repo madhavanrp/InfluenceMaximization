@@ -16,12 +16,8 @@
 #include <stdlib.h>
 #include <queue>
 #include <ctime>
-#include "sfmt/SFMT.h"
 #include <deque>
-
-#endif /* Graph_hpp */
-
-
+#include <string.h>
 using namespace std;
 
 class Graph {
@@ -29,13 +25,23 @@ public:
     int n, m;
     vector<vector<int> > graph;
     vector<vector<int> > graphTranspose;
-    vector<vector<int> > rrSets;
+    vector<vector<int>> rrSets;
+    vector<bool> labels;
+    vector<int> nonTargets;
     deque<int> q;
     vector<int> inDegree;
     vector<bool> visited;
     vector<int> visitMark;
     void readGraph(string fileName);
+    void readLabels(string fileName);
     vector<vector<int> > constructTranspose(vector<vector<int> > aGraph);
-    vector<int> generateRandomRRSet(int rrSetID);
+    void generateRandomRRSets(int R, bool label);
+    vector<int> generateRandomRRSet(int randomVertex, int rrSetID);
+    void clearRandomRRSets();
     int BuildHypergraphNode(int uStart, int hyperiiid, bool addHyperEdge);
 };
+
+#endif /* Graph_hpp */
+
+
+

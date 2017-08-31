@@ -33,20 +33,50 @@ void Graph::readGraph(string fileName) {
     }
     
     graphTranspose = constructTranspose(graph);
-    rrSets = vector<vector<int> >();
     visitMark = vector<int>(n);
-    int R = 25000000;
+    labels = vector<bool>(n);
+    readLabels("graphs/graph_ic.inf_0.8_labels.txt");
+    cout<<"\n label is " << labels[3147];
+    cout << "\n label is " << labels[10910];
+}
+
+
+void Graph::readLabels(string fileName) {
+    ifstream myFile(fileName);
+    bool labelBool;
+    if(myFile.is_open()) {
+        int vertex;
+        char label;
+        while (myFile >> vertex >> label) {
+            labelBool = (tolower(label)=='a');
+            labels[vertex] = labelBool;
+            if(!labelBool) {
+                nonTargets.push_back(vertex);
+            }
+        }
+        myFile.close();
+    }
+}
+
+void Graph::generateRandomRRSets(int R, bool label) {
     int totalSize = 0;
     clock_t begin = clock();
-    for(int i=0;i<R;i++) {
+    while(rrSets.size()<R) {
         rrSets.push_back(vector<int>());
     }
     for(int i=0;i<R;i++) {
-        int randomNode = rand() % n;
-        BuildHypergraphNode(randomNode, i, true);
-//        generateRandomRRSet(i);
+        int randomVertex;
+        randomVertex = rand() % n;
+//        if(label) {
+//            randomVertex = rand() % n;
+//            while(labels[randomVertex]!=label) {
+//                randomVertex = rand() % n;
+//            }
+//        } else {
+//            randomVertex = rand() % nonTargets.size();
+//        }
+        generateRandomRRSet(randomVertex, i);
         totalSize+=rrSets[i].size();
-////        cout<<"Finished  " << i << "\n";
     }
     clock_t end = clock();
     double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
@@ -55,30 +85,37 @@ void Graph::readGraph(string fileName) {
     cout<< " \n Time per RR Set is " << elapsed_secs/R;
     cout<< "\n Total Size is " << totalSize;
     cout<<"\n Average size is " << (float)totalSize/(float)R;
-    
 }
 
-vector<int> Graph::generateRandomRRSet(int rrSetID) {
-    int randomVertex = rand() % n;
+void Graph::clearRandomRRSets() {
+    rrSets.clear();
+}
+
+vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
     q.clear();
+    rrSets[rrSetID].push_back(randomVertex);
     q.push_back(randomVertex);
     int nVisitMark = 0;
     visitMark[nVisitMark++] = randomVertex;
     visited[randomVertex] = true;
     while(!q.empty()) {
-        int u = q.front();
+        int expand=q.front();
         q.pop_front();
-        for(int i=0;i<graphTranspose[u].size();i++) {
-            
-            int v = graphTranspose[u][i];
-            if(visited[v]) continue;
-            if((rand()%inDegree[v])==0) {
-                
-                visited[v] = true;
-                rrSets[rrSetID].push_back(v);
-                visitMark[nVisitMark++] = v;
-                q.push_back(v);
+        for(int j=0; j<(int)graphTranspose[expand].size(); j++){
+            //int u=expand;
+            int v=graphTranspose[expand][j];
+            int randInt = rand() % inDegree[v];
+            if(randInt!=0)
+                continue;
+            if(visited[v])
+                continue;
+            if(!visited[v])
+            {
+                visitMark[nVisitMark++]=v;
+                visited[v]=true;
             }
+            q.push_back(v);
+            rrSets[rrSetID].push_back(v);
         }
     }
     for(int i=0;i<nVisitMark;i++) {
@@ -105,14 +142,12 @@ int Graph::BuildHypergraphNode(int uStart, int hyperiiid, bool addHyperEdge){
     visitMark[n_visit_mark++]=uStart;
     visited[uStart]=true;
     while(!q.empty()) {
-        int expand=q.front();
+        int u=q.front();
         q.pop_front();
-        int i=expand;
-        for(int j=0; j<(int)graphTranspose[i].size(); j++){
-            //int u=expand;
-            int v=graphTranspose[i][j];
+        for(int j=0; j<(int)graphTranspose[u].size(); j++){
+            int v=graphTranspose[u][j];
             n_visit_edge++;
-            int inD = inDegree[v];
+            int inD = inDegree[u];
             int coin = rand() % inD;
             if(coin!=0)
                 continue;
