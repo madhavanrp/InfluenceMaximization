@@ -12,7 +12,7 @@
 
 
 void Phase2::doSomething(vector<int> nodeCounts) {
-    int threshold = 8;
+    int threshold = 20;
     int budget = 20;
     IMTree tree;
     vector<vector<int>> nonTargetMap;
@@ -37,7 +37,7 @@ void Phase2::doSomething(vector<int> nodeCounts) {
         if(depth==0) {
             assert(leafNodes.size()==1);
         } else {
-            assert(leafNodes.size()==(threshold+1));
+            assert(leafNodes.size()<=(threshold+1));
         }
         
         pair<pair<int,int>, struct node*> nodesByNonTargetCount[threshold+1];
@@ -63,6 +63,7 @@ void Phase2::doSomething(vector<int> nodeCounts) {
             //Branch here
             for(int i=0;i<=(threshold-totalNonTargets);i++) {
                 int nextNode = findMaxInfluentialNode(nonTargetMap[i], seedSet);
+                if(nextNode==-1) continue;
                 int targets = rand()%20;
                 assert(leaf!=NULL);
                 //The pruning happens here
@@ -81,18 +82,14 @@ void Phase2::doSomething(vector<int> nodeCounts) {
             cout <<"\n Threshold = " <<threshold << " Non Targets = "<< totalNonTargets << " Difference= " << threshold-totalNonTargets;
             cout <<"\n Finishing 2" << flush;
         }
-        int j = 0;
-        for(bool t:toggle) {
-            cout <<"Toggle correct for: " << j++ << flush;
-            assert(t);
-        }
+        
         
         //Go through nodes by non target and expand.
         cout <<" \n At depth " << depth;
         for (int i = 0; i<(threshold+1); i++) {
             
-//            if(nodesByNonTargetCount[i].second==NULL) continue;
-            assert(nodesByNonTargetCount[i].second!=NULL);
+            if(nodesByNonTargetCount[i].second==NULL) continue;
+            
             int nodeID = nodesByNonTargetCount[i].first.first;
             int targets = nodesByNonTargetCount[i].first.second;
             cout <<"\n For threshold " << i << " adding node " << nodeID << "  With targets" << targets;
@@ -100,7 +97,6 @@ void Phase2::doSomething(vector<int> nodeCounts) {
             struct node* newChild = tree.addChild(nodesByNonTargetCount[i].second, nodeID, targets, i);
             pair<int, int> leafInfluence = tree.influenceAlongPath(newChild);
             cout <<"\n Current node's non target should be " << i << " and total = " << leafInfluence.second;
-//            assert(leafInfluence.second==i);
         }
         depth++;
     }
@@ -114,7 +110,8 @@ void Phase2::doSomething(vector<int> nodeCounts) {
 
 int Phase2::findMaxInfluentialNode(vector<int> candidateNodes, vector<struct node*> seedSet) {
     int numberOfCandidateNodes = (int)candidateNodes.size();
-    int numberOfSeeds = (int)seedSet.size();
+    if(numberOfCandidateNodes==0) return -1;
+    
     int nextNode = candidateNodes[rand()%numberOfCandidateNodes];
     return nextNode;
     
