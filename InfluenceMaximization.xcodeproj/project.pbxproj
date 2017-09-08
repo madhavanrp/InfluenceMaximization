@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31279D6E1F58EBD900FC4D9B /* Phase2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D6C1F58EBD900FC4D9B /* Phase2.cpp */; };
 		313A589D1F4E072300F86148 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 313A589C1F4E072300F86148 /* Makefile */; };
 		31A4949B1F510CBF00745401 /* IMTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494991F510CBF00745401 /* IMTree.cpp */; };
 		31A494A41F55D54700745401 /* catchTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A31F55D54700745401 /* catchTest.cpp */; };
@@ -28,6 +29,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		31279D6C1F58EBD900FC4D9B /* Phase2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Phase2.cpp; sourceTree = "<group>"; };
+		31279D6D1F58EBD900FC4D9B /* Phase2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Phase2.hpp; sourceTree = "<group>"; };
 		313A589C1F4E072300F86148 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		31A494991F510CBF00745401 /* IMTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IMTree.cpp; sourceTree = "<group>"; };
 		31A4949A1F510CBF00745401 /* IMTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IMTree.hpp; sourceTree = "<group>"; };
@@ -93,6 +96,8 @@
 				31A494A71F55E92700745401 /* EstimateNonTargets.cpp */,
 				31A494A81F55E92700745401 /* EstimateNonTargets.hpp */,
 				31A494AB1F56095900745401 /* TIMUtility.hpp */,
+				31279D6C1F58EBD900FC4D9B /* Phase2.cpp */,
+				31279D6D1F58EBD900FC4D9B /* Phase2.hpp */,
 			);
 			path = InfluenceMaximization;
 			sourceTree = "<group>";
@@ -158,6 +163,7 @@
 				313A589D1F4E072300F86148 /* Makefile in Sources */,
 				31A494A91F55E92700745401 /* EstimateNonTargets.cpp in Sources */,
 				31A4949B1F510CBF00745401 /* IMTree.cpp in Sources */,
+				31279D6E1F58EBD900FC4D9B /* Phase2.cpp in Sources */,
 				31A494A61F55D88B00745401 /* main.cpp in Sources */,
 				31FC36931F354E56005CAFEB /* Graph.cpp in Sources */,
 			);

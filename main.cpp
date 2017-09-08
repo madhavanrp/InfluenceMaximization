@@ -11,6 +11,7 @@
 #include "InfluenceMaximization/IMTree.hpp"
 #include "InfluenceMaximization/EstimateNonTargets.hpp"
 #include "InfluenceMaximization/TIMUtility.hpp"
+#include "InfluenceMaximization/Phase2.hpp"
 
 int main(int argc, const char * argv[]) {
     // insert code here...
@@ -18,7 +19,10 @@ int main(int argc, const char * argv[]) {
     graph.readGraph("world");
 //    graph.generateRandomRRSets(25000000, true);
     EstimateNonTargets estimateNonTargets = EstimateNonTargets(graph);
-    estimateNonTargets.getNonTargetsUsingTIM();
+    vector<int> nodeCounts = estimateNonTargets.getNonTargetsUsingTIM();
+    Phase2 phase2;
+    phase2.doSomething(nodeCounts);
+    
 //    IMTree imTree;
 //    imTree.addChild(0, 2, 4, 1);
 //    imTree.addChild(0, 4, 5, 10);
