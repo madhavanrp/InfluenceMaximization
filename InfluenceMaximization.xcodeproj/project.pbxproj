@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		31279D6E1F58EBD900FC4D9B /* Phase2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D6C1F58EBD900FC4D9B /* Phase2.cpp */; };
+		31279D711F63472700FC4D9B /* TIMCoverage.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D701F63472700FC4D9B /* TIMCoverage.hpp */; };
+		31279D731F63485200FC4D9B /* TIMCoverageTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D721F63485200FC4D9B /* TIMCoverageTests.cpp */; };
 		313A589D1F4E072300F86148 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 313A589C1F4E072300F86148 /* Makefile */; };
 		31A4949B1F510CBF00745401 /* IMTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494991F510CBF00745401 /* IMTree.cpp */; };
 		31A494A41F55D54700745401 /* catchTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A31F55D54700745401 /* catchTest.cpp */; };
@@ -31,6 +33,8 @@
 /* Begin PBXFileReference section */
 		31279D6C1F58EBD900FC4D9B /* Phase2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Phase2.cpp; sourceTree = "<group>"; };
 		31279D6D1F58EBD900FC4D9B /* Phase2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Phase2.hpp; sourceTree = "<group>"; };
+		31279D701F63472700FC4D9B /* TIMCoverage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TIMCoverage.hpp; path = "TIM-Models/TIMCoverage.hpp"; sourceTree = "<group>"; };
+		31279D721F63485200FC4D9B /* TIMCoverageTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMCoverageTests.cpp; sourceTree = "<group>"; };
 		313A589C1F4E072300F86148 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		31A494991F510CBF00745401 /* IMTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IMTree.cpp; sourceTree = "<group>"; };
 		31A4949A1F510CBF00745401 /* IMTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IMTree.hpp; sourceTree = "<group>"; };
@@ -57,11 +61,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		31279D6F1F63469F00FC4D9B /* TIM-Models */ = {
+			isa = PBXGroup;
+			children = (
+				31279D701F63472700FC4D9B /* TIMCoverage.hpp */,
+			);
+			name = "TIM-Models";
+			sourceTree = "<group>";
+		};
 		31A494A11F55D54700745401 /* tests */ = {
 			isa = PBXGroup;
 			children = (
 				31A494A21F55D54700745401 /* catch.hpp */,
 				31A494A31F55D54700745401 /* catchTest.cpp */,
+				31279D721F63485200FC4D9B /* TIMCoverageTests.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -89,6 +102,7 @@
 		31FC36891F354892005CAFEB /* InfluenceMaximization */ = {
 			isa = PBXGroup;
 			children = (
+				31279D6F1F63469F00FC4D9B /* TIM-Models */,
 				31FC36911F354E56005CAFEB /* Graph.cpp */,
 				31FC36921F354E56005CAFEB /* Graph.hpp */,
 				31A494991F510CBF00745401 /* IMTree.cpp */,
@@ -163,7 +177,9 @@
 				313A589D1F4E072300F86148 /* Makefile in Sources */,
 				31A494A91F55E92700745401 /* EstimateNonTargets.cpp in Sources */,
 				31A4949B1F510CBF00745401 /* IMTree.cpp in Sources */,
+				31279D711F63472700FC4D9B /* TIMCoverage.hpp in Sources */,
 				31279D6E1F58EBD900FC4D9B /* Phase2.cpp in Sources */,
+				31279D731F63485200FC4D9B /* TIMCoverageTests.cpp in Sources */,
 				31A494A61F55D88B00745401 /* main.cpp in Sources */,
 				31FC36931F354E56005CAFEB /* Graph.cpp in Sources */,
 			);
