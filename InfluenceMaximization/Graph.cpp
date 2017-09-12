@@ -67,14 +67,6 @@ void Graph::generateRandomRRSets(int R, bool label) {
     for(int i=0;i<R;i++) {
         int randomVertex;
         randomVertex = rand() % n;
-//        if(label) {
-//            randomVertex = rand() % n;
-//            while(labels[randomVertex]!=label) {
-//                randomVertex = rand() % n;
-//            }
-//        } else {
-//            randomVertex = rand() % nonTargets.size();
-//        }
         generateRandomRRSet(randomVertex, i);
         totalSize+=rrSets[i].size();
     }
@@ -85,6 +77,10 @@ void Graph::generateRandomRRSets(int R, bool label) {
     cout<< " \n Time per RR Set is " << elapsed_secs/R;
     cout<< "\n Total Size is " << totalSize;
     cout<<"\n Average size is " << (float)totalSize/(float)R;
+}
+
+vector<vector<int>> Graph::getRandomRRSets() {
+    return rrSets;
 }
 
 void Graph::clearRandomRRSets() {
@@ -126,51 +122,6 @@ vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
     
 }
 
-int Graph::BuildHypergraphNode(int uStart, int hyperiiid, bool addHyperEdge){
-    int n_visit_edge=0;
-    if(addHyperEdge)
-    {
-        rrSets[hyperiiid].push_back(uStart);
-    }
-    
-    int n_visit_mark=0;
-    //for(int i=0; i<12; i++) ASSERT((int)visit[i].size()==n);
-    //for(int i=0; i<12; i++) ASSERT((int)visit_mark[i].size()==n);
-    //hyperiiid ++;
-    q.clear();
-    q.push_back(uStart);
-    visitMark[n_visit_mark++]=uStart;
-    visited[uStart]=true;
-    while(!q.empty()) {
-        int u=q.front();
-        q.pop_front();
-        for(int j=0; j<(int)graphTranspose[u].size(); j++){
-            int v=graphTranspose[u][j];
-            n_visit_edge++;
-            int inD = inDegree[u];
-            int coin = rand() % inD;
-            if(coin!=0)
-                continue;
-            if(visited[v])
-                continue;
-            if(!visited[v])
-            {
-                visitMark[n_visit_mark++]=v;
-                visited[v]=true;
-            }
-            q.push_back(v);
-            //#pragma omp  critical
-            //if(0)
-            
-            rrSets[hyperiiid].push_back(v);
-            
-        }
-        
-    }
-    for(int i=0; i<n_visit_mark; i++)
-        visited[visitMark[i]]=false;
-    return n_visit_edge;
-}
 vector<vector<int>> Graph::constructTranspose(vector<vector<int>> someGraph) {
     vector<vector<int>> transposedGraph = vector<vector<int>>();
     for(int i=0;i<someGraph.size();i++) {

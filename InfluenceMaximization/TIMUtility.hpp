@@ -63,12 +63,6 @@ int calculateR(int n, double epsilon, double opt, int k) {
     return (8+2 * epsilon) * ( log(n) + log(2) +  n * logcnk(n, k) ) / ( epsilon * epsilon * opt);
 }
 
-void EstimateOPT(double epsilon){
-    
-    
-    // KPT estimation
-    double kpt_star;
-}
 #endif /* TIMUtility_hpp */
 
 

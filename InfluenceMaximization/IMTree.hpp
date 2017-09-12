@@ -15,6 +15,8 @@
 #include <vector>
 #include <stack>
 #include <deque>
+#include<algorithm>
+#include "TIM-Models/TIMCoverage.hpp"
 using namespace std;
 struct node {
     int nodeID;
@@ -23,6 +25,13 @@ struct node {
     struct node *parent;
     vector<struct node*> children;
     int depth;
+    TIMCoverage *coverage;
+    ~node() {
+        if(coverage!=NULL) {
+            coverage->release();
+            coverage=NULL;
+        }
+    }
 };
 class IMTree {
 public:
@@ -35,6 +44,9 @@ public:
     struct node* addChild(struct node* parent, int childNode, int targets, int nonTargets);
     struct node* makeNode(struct node *parent, struct node *child, int nodeId, int targets, int nonTargets);
     pair<int,int> influenceAlongPath(struct node* leaf);
+    void removeLeaf(struct node* leaf);
+    void removeBranch(struct node* leaf);
+    int getTotalNodes();
 };
 
 #endif /* IMTree_hpp */

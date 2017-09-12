@@ -28,6 +28,26 @@ struct node* IMTree::addChild(struct node* parent, int childNode, int targets, i
     
 }
 
+int IMTree::getTotalNodes() {
+    vector<struct node*> leafNodes;
+    deque<struct node*> someQueue;
+    
+    
+    someQueue.push_back(root);
+    while(!someQueue.empty()) {
+        struct node *current = someQueue.front();
+        someQueue.pop_front();
+        for(struct node* child:current->children) {
+            if(child->children.size()==0) {
+                leafNodes.push_back(child);
+            } else {
+                leafNodes.push_back(child);
+                someQueue.push_back(child);
+            }
+        }
+    }
+    return (int)leafNodes.size();
+}
 vector<struct node*> IMTree::getLeafNodes(int depth) {
     vector<struct node*> leafNodes;
     deque<struct node*> someQueue;
@@ -89,6 +109,24 @@ pair<int,int> IMTree::influenceAlongPath(struct node* leaf) {
     }
     return make_pair(totalTargets, totalNonTargets);
 }
+
+void IMTree::removeLeaf(struct node* leaf) {
+    vector<struct node*> *leaves = &(leaf->parent->children);
+    (*leaves).erase(std::remove((*leaves).begin(), (*leaves).end(), leaf), (*leaves).end());
+    delete leaf;
+}
+
+void IMTree::removeBranch(struct node* leaf) {
+    struct node* parent = leaf->parent;
+    vector<struct node*> *leaves = &(leaf->parent->children);
+    (*leaves).erase(std::remove((*leaves).begin(), (*leaves).end(), leaf), (*leaves).end());
+    delete leaf;
+    
+    //Recursively remove leaf node
+    if(parent!=NULL && parent->children.size()==0) {
+        removeBranch(parent);
+    }
+}
 void IMTree::printTree() {
 //    cout <<"\nBegin printing tree\n";
 //    for(struct node *leaf: getLeafNodes()) {
@@ -100,20 +138,3 @@ void IMTree::printTree() {
 //        cout<<"\n";
 //    }
 }
-//vector<struct node*> IMTree:: findNodesAtLevel(int level) {
-//    struct node *root = tree[0];
-//    stack<struct node*> s;
-//    s.push(root);
-//    int depth = 0;
-//    vector<struct node*> leafNodes;
-//    while(!s.empty()) {
-//        struct node *current = (struct node*)s.top();
-//        s.pop();
-//        
-//        for(struct node *child:current->children) {
-//            s.push(child);
-//        }
-//    }
-//    
-//    
-//}

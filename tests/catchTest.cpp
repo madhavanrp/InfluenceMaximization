@@ -1,3 +1,6 @@
+#ifndef IMTreeTests_cpp
+#define IMTreeTests_cpp
+
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 #include "catch.hpp"
 #include "../InfluenceMaximization/IMTree.hpp"
@@ -148,3 +151,35 @@ TEST_CASE("Get proper leaf nodes", "IMTree leaf nodes") {
     imTree = *new IMTree();
     REQUIRE(imTree.getLeafNodes(0).size()==1);
 }
+
+void deleteHere(IMTree tree, struct node *leaf) {
+    tree.removeLeaf(leaf);
+}
+
+TEST_CASE("Removing leaves from IM Tree", "IMTree leaf nodes") {
+    int depth = 5;
+    IMTree imTree = createTestIMTree(depth);
+    vector<struct node*> leaves = imTree.getLeafNodes(depth);
+    struct node* leaf = leaves[0];
+    struct node* parent = leaf->parent;
+    int leafID = leaf->nodeID;
+    int oldChildrenCount = (int)parent->children.size();
+
+    struct node* anotherPointer = leaf;
+//    imTree.removeLeaf(anotherPointer);
+    deleteHere(imTree, anotherPointer);
+    int newChildrenCount = (int)parent->children.size();
+    REQUIRE(oldChildrenCount==(newChildrenCount+1));
+    
+    bool leafDeleted = true;
+    for(struct node* leaf: parent->children) {
+        if(leaf->nodeID==leafID) {
+            leafDeleted = false;
+        }
+    }
+    REQUIRE(leafDeleted);
+    
+}
+
+
+#endif

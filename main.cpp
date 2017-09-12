@@ -20,22 +20,9 @@ int main(int argc, const char * argv[]) {
 //    graph.generateRandomRRSets(25000000, true);
     EstimateNonTargets estimateNonTargets = EstimateNonTargets(graph);
     vector<int> nodeCounts = estimateNonTargets.getNonTargetsUsingTIM();
-    Phase2 phase2;
+    Phase2TIM phase2(graph);
     phase2.doSomething(nodeCounts);
     
-//    IMTree imTree;
-//    imTree.addChild(0, 2, 4, 1);
-//    imTree.addChild(0, 4, 5, 10);
-//    imTree.addChild(0, 6, 5, 10);
-//    int i=0;
-//    for(struct node *aNode: imTree.tree) {
-//        cout <<"\n Iteration " << i << "\n";
-//        cout<< "Node ID: " << aNode -> nodeID;
-//        if((*aNode).parent!=NULL) {
-//            cout << "\t Parent Node ID: " << (*aNode).parent -> nodeID;
-//        }
-//        i++;
-//    }
     cout <<"\n";
     return 0;
 }

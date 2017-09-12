@@ -6,11 +6,16 @@
 //  Copyright © 2017 Madhavan R.P. All rights reserved.
 //
 
+
+#ifndef TIMCoverageTests_cpp
+#define TIMCoverageTests_cpp
+
 #include "catch.hpp"
 #include "../InfluenceMaximization/TIM-Models/TIMCoverage.hpp"
 
 
-TIMCoverage createTIMCoverage() {
+
+TIMCoverage* createTIMCoverage() {
     vector<vector<int>> *lookupTable = new vector<vector<int>>();
     for (int i = 0; i<5; i++) {
         (*lookupTable).push_back(vector<int>());
@@ -18,10 +23,10 @@ TIMCoverage createTIMCoverage() {
             (*lookupTable)[i].push_back(j);
         }
     }
-    return TIMCoverage(lookupTable);
+    return new TIMCoverage(lookupTable);
 }
 TEST_CASE("TIM Data structures initializes correctly", "TIMCoverage") {
-    TIMCoverage timCoverage = TIMCoverage();
+    TIMCoverage timCoverage = TIMCoverage(new vector<vector<int>>());
     
     for (int i = 0; i<100; i++) {
         timCoverage.nodeMark.push_back(i%2==0);
@@ -37,7 +42,7 @@ TEST_CASE("TIM Data structures initializes correctly", "TIMCoverage") {
 }
 //
 TEST_CASE("TIM Data Structures operations", "TIMCoverage") {
-    TIMCoverage timCoverage = createTIMCoverage();
+    TIMCoverage timCoverage = *createTIMCoverage();
     
     REQUIRE((*timCoverage.lookupTable)[3].size()==10);
     timCoverage.decrementCountForVertex(3, 0);
@@ -50,23 +55,49 @@ TEST_CASE("TIM Data Structures operations", "TIMCoverage") {
 }
 
 TEST_CASE("TIM is copied", "TIMCoverage") {
-    TIMCoverage timCoverage = createTIMCoverage();
+    TIMCoverage *timCoverage = createTIMCoverage();
     for (int i = 0; i<100; i++) {
-        timCoverage.nodeMark.push_back(i%2==0);
-        timCoverage.edgeMark.push_back(i%2==0);
-        timCoverage.coverage.push_back(i);
+        timCoverage->nodeMark.push_back(i%2==0);
+        timCoverage->edgeMark.push_back(i%2==0);
+        timCoverage->coverage.push_back(i);
     }
-    TIMCoverage copy = timCoverage.createCopy();
-    timCoverage.edgeMark.erase(timCoverage.edgeMark.begin());
-    timCoverage.nodeMark.erase(timCoverage.nodeMark.begin());
-    timCoverage.coverage.erase(timCoverage.coverage.begin());
-    
-    REQUIRE(timCoverage.edgeMark.size()==99);
-    REQUIRE(timCoverage.nodeMark.size()==99);
-    REQUIRE(timCoverage.coverage.size()==99);
-    
-    REQUIRE(copy.edgeMark.size()==100);
-    REQUIRE(copy.nodeMark.size()==100);
-    REQUIRE(copy.coverage.size()==100);
+    TIMCoverage *copy = timCoverage->createCopy();
+    timCoverage->edgeMark.erase(timCoverage->edgeMark.begin());
+    timCoverage->nodeMark.erase(timCoverage->nodeMark.begin());
+    timCoverage->coverage.erase(timCoverage->coverage.begin());
+
+    REQUIRE(timCoverage->edgeMark.size()==99);
+    REQUIRE(timCoverage->nodeMark.size()==99);
+    REQUIRE(timCoverage->coverage.size()==99);
+
+    REQUIRE(copy->edgeMark.size()==100);
+    REQUIRE(copy->nodeMark.size()==100);
+    REQUIRE(copy->coverage.size()==100);
     
 }
+
+TEST_CASE("Memory management", "TIMCoverage") {
+    int originalCount = TIMCoverage::totalCount;
+    TIMCoverage *timCoverage = createTIMCoverage();
+    
+    REQUIRE(TIMCoverage::totalCount==(originalCount+1));
+    REQUIRE(timCoverage -> retainCount==1);
+    for(int i=0;i<5;i++) {
+        timCoverage->retain();
+    }
+    
+    REQUIRE(timCoverage->retainCount==6);
+    for(int i=0;i<5;i++) {
+        timCoverage->release();
+    }
+    
+    REQUIRE(timCoverage->retainCount==1);
+    timCoverage->release();
+    REQUIRE(TIMCoverage::totalCount==(originalCount));
+    TIMCoverage *copy = timCoverage->createCopy();
+    REQUIRE(copy->retainCount==1);
+//    delete timCoverage;
+    
+}
+
+#endif
