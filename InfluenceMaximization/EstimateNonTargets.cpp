@@ -42,20 +42,18 @@ void EstimateNonTargets::generateRandomRRSets(int R, bool label) {
         rrSets.push_back(vector<int>());
     }
     int randomVertex;
-    for(int i=0;i<R;i++) {
-        int some = rand()%n;
-        while(!graph.labels[some]) {
-            some = rand()%n;
+    if(graph.nonTargets.size()>0) {
+        for(int i=0;i<R;i++) {
+            randomVertex = graph.nonTargets[rand() % graph.nonTargets.size()];
+            assert(!graph.labels[randomVertex]);
+            generateRandomRRSet(randomVertex, i);
         }
-        assert(graph.labels[some]);
-        randomVertex = graph.nonTargets[rand() % graph.nonTargets.size()];
-        assert(!graph.labels[randomVertex]);
-        generateRandomRRSet(randomVertex, i);
     }
     int i=0;
     int maxNode = -1;
     int maxInfluence = -1;
     while(i<n) {
+//        cout << "\n For vertex phase 1 " << i << " covered RR sets is " << nodeCounts[i];
        nodeCounts[i] = round( (float)nodeCounts[i] * (float)graph.nonTargets.size()/(float)R);
         if(nodeCounts[i]==0) {
             assert(graph.labels[i]);

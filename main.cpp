@@ -15,12 +15,12 @@
 
 int main(int argc, const char * argv[]) {
     // insert code here...
-    Graph graph;
-    graph.readGraph("world");
+    Graph *graph = new Graph;
+    graph->readGraph("world");
 //    graph.generateRandomRRSets(25000000, true);
-    EstimateNonTargets estimateNonTargets = EstimateNonTargets(graph);
+    EstimateNonTargets estimateNonTargets = EstimateNonTargets(*graph);
     vector<int> nodeCounts = estimateNonTargets.getNonTargetsUsingTIM();
-    Phase2TIM phase2(graph);
+    Phase2TIM phase2(*graph);
     phase2.doSomething(nodeCounts);
     
     cout <<"\n";

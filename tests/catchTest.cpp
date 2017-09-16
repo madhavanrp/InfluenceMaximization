@@ -75,13 +75,13 @@ TEST_CASE("Creating Test IMTree With Depth", "IMTree") {
         REQUIRE(seed.size()==depth);
     }
     
-    imTree = createIMTreeWithVaryingBranchingFactor(depth);
-    
-    leafNodes = imTree.getLeafNodes(depth);
-    for(struct node* leaf:leafNodes) {
-        vector<struct node*> seed = imTree.findSeedSetInPath(leaf);
-        REQUIRE(seed.size()==depth);
-    }
+//    imTree = createIMTreeWithVaryingBranchingFactor(depth);
+//    
+//    leafNodes = imTree.getLeafNodes(depth);
+//    for(struct node* leaf:leafNodes) {
+//        vector<struct node*> seed = imTree.findSeedSetInPath(leaf);
+//        REQUIRE(seed.size()==depth);
+//    }
     
 }
 

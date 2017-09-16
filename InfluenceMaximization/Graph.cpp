@@ -7,6 +7,7 @@
 //
 
 #include "Graph.hpp"
+#include <assert.h>
 using namespace std;
 void Graph::readGraph(string fileName) {
     ifstream myFile("graphs/graph_ic.inf");
@@ -59,15 +60,20 @@ void Graph::readLabels(string fileName) {
 }
 
 void Graph::generateRandomRRSets(int R, bool label) {
+    this->rrSets = *(new vector<vector<int>>());
     int totalSize = 0;
     clock_t begin = clock();
     while(rrSets.size()<R) {
-        rrSets.push_back(vector<int>());
+        rrSets.push_back(*new vector<int>());
     }
     for(int i=0;i<R;i++) {
         int randomVertex;
         randomVertex = rand() % n;
+        while(!labels[randomVertex]) {
+            randomVertex = rand() % n;
+        }
         generateRandomRRSet(randomVertex, i);
+//        oldRRSetGeneration(randomVertex, i);
         totalSize+=rrSets[i].size();
     }
     clock_t end = clock();
@@ -80,6 +86,10 @@ void Graph::generateRandomRRSets(int R, bool label) {
 }
 
 vector<vector<int>> Graph::getRandomRRSets() {
+    cout<<"\n";
+    
+    cout<<" RR Sets size is " << rrSets.size();
+    cout<<"\n";
     return rrSets;
 }
 
@@ -98,9 +108,8 @@ vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
         int expand=q.front();
         q.pop_front();
         for(int j=0; j<(int)graphTranspose[expand].size(); j++){
-            //int u=expand;
             int v=graphTranspose[expand][j];
-            int randInt = rand() % inDegree[v];
+            int randInt = rand() % inDegree[expand];
             if(randInt!=0)
                 continue;
             if(visited[v])
@@ -133,4 +142,60 @@ vector<vector<int>> Graph::constructTranspose(vector<vector<int>> someGraph) {
         }
     }
     return transposedGraph;
+}
+
+
+vector<int> Graph::oldRRSetGeneration(int randomVertex, int rrSetID) {
+    int n_visit_edge=0;
+    int uStart = randomVertex;
+    int hyperiiid = rrSetID;
+    
+    int n_visit_mark=0;
+    //for(int i=0; i<12; i++) ASSERT((int)visit[i].size()==n);
+    //for(int i=0; i<12; i++) ASSERT((int)visit_mark[i].size()==n);
+    //hyperiiid ++;
+    q.clear();
+    q.push_back(uStart);
+    rrSets[hyperiiid].push_back(uStart);
+    visitMark[n_visit_mark++]=uStart;
+    visited[uStart]=true;
+    while(!q.empty()) {
+        int expand=q.front();
+        q.pop_front();
+        int i=expand;
+        for(int j=0; j<(int)graphTranspose[i].size(); j++){
+            //int u=expand;
+            int v=graphTranspose[i][j];
+            n_visit_edge++;
+            // double randDouble=double(sfmt_genrand_uint32(&sfmtSeed))/double(RAND_MAX)/2;
+            int randDouble = rand() % (int)(inDegree[i]);
+//            if(i==100) {
+//                cout << "\n In Degree of vertex 100 is " << inDegree[i];
+//                cout << " 1/inDegree of vertex 100 is " << (1/inDegree[i]);
+//            }
+            
+            // if(randDouble > probT[i][j])
+            //     continue;
+            if(randDouble!=0)
+                continue;
+            if(visited[v])
+                continue;
+            if(!visited[v])
+            {
+                assert(n_visit_mark<n);
+                visitMark[n_visit_mark++]=v;
+                visited[v]=true;
+            }
+            q.push_back(v);
+            //#pragma omp  critical
+            //if(0)
+            //hyperG[v].push_back(hyperiiid);
+            assert((int)rrSets.size() > hyperiiid);
+            rrSets[hyperiiid].push_back(v);
+        }
+        
+    }
+    for(int i=0; i<n_visit_mark; i++)
+        visited[visitMark[i]]=false;
+    return rrSets[hyperiiid];
 }

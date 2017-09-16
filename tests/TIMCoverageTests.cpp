@@ -52,6 +52,10 @@ TEST_CASE("TIM Data Structures operations", "TIMCoverage") {
     timCoverage.incrementCountForVertex(2, 40);
     REQUIRE((*timCoverage.lookupTable)[2].size()==11);
     REQUIRE((*timCoverage.lookupTable)[2][10]==40);
+    
+    for (int i = 0; i<5; i++) {
+        REQUIRE((*timCoverage.lookupTable)[i].size()==timCoverage.countForVertex(i));
+    }
 }
 
 TEST_CASE("TIM is copied", "TIMCoverage") {
@@ -98,6 +102,34 @@ TEST_CASE("Memory management", "TIMCoverage") {
     REQUIRE(copy->retainCount==1);
 //    delete timCoverage;
     
+}
+
+TEST_CASE("Initialize Data Structures", "TIMCoverage") {
+    TIMCoverage *timCoverage = createTIMCoverage();
+    int R = (int)timCoverage->lookupTable->size();
+    int n = rand() % R;
+    timCoverage->initializeDataStructures(R, n);
+    REQUIRE(timCoverage->edgeMark.size()==R);
+    REQUIRE(timCoverage->nodeMark.size()==n);
+    REQUIRE(timCoverage->coverage.size()==n);
+    REQUIRE(timCoverage->queue.size()==n);
+}
+
+TEST_CASE("TIM Coverage queue copy", "TIMCoverage") {
+    TIMCoverage *timCoverage = createTIMCoverage();
+    int R = (int)timCoverage->lookupTable->size();
+    int n = 3;
+    timCoverage->initializeDataStructures(R, n);
+    REQUIRE(timCoverage->queue.size()==n);
+    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *copy = new priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>(timCoverage->queue);
+    REQUIRE(copy->size()==n);
+    copy->pop();
+    REQUIRE(copy->size()==n-1);
+    copy->top();
+    REQUIRE(copy->size()==n-1);
+    REQUIRE(timCoverage->queue.size()==n);
+    
+    delete copy;
 }
 
 #endif
