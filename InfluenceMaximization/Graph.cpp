@@ -36,9 +36,7 @@ void Graph::readGraph(string fileName) {
     graphTranspose = constructTranspose(graph);
     visitMark = vector<int>(n);
     labels = vector<bool>(n);
-    readLabels("graphs/graph_ic.inf_0.8_labels.txt");
-    cout<<"\n label is " << labels[3147];
-    cout << "\n label is " << labels[10910];
+    readLabels("graphs/graph_ic.inf_1.0_labels.txt");
 }
 
 
