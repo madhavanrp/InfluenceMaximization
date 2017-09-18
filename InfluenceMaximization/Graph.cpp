@@ -10,7 +10,7 @@
 #include <assert.h>
 using namespace std;
 void Graph::readGraph(string fileName) {
-    ifstream myFile("graphs/graph_ic.inf");
+    ifstream myFile("graphs/" + fileName);
     string s;
     if(myFile.is_open()) {
         myFile >> n >> m;
@@ -36,7 +36,7 @@ void Graph::readGraph(string fileName) {
     graphTranspose = constructTranspose(graph);
     visitMark = vector<int>(n);
     labels = vector<bool>(n);
-    readLabels("graphs/graph_ic.inf_0.8_labels.txt");
+    readLabels("graphs/" + fileName + "_0.8_labels.txt");
 }
 
 

@@ -15,23 +15,27 @@
 #include "InfluenceMaximization/Diffusion.hpp"
 #include "InfluenceMaximization/IMResults/IMResults.h"
 #include "InfluenceMaximization/memoryusage.h"
-#include <sstream>
+#include <string>
 
 using json = nlohmann::json;
 
 int main(int argc, const char * argv[]) {
     int budget;
     int nonTargetThreshold;
-    if(argc==0) {
+    string graphFileName;
+    if(argc<=1) {
         budget=20;
         nonTargetThreshold = 10;
+        graphFileName = "graph_ic.inf";
+        
     } else {
-        budget = atoi(argv[1]);
-        nonTargetThreshold = atoi(argv[2]);
+        budget = atoi(argv[2]);
+        nonTargetThreshold = atoi(argv[3]);
+        graphFileName = argv[1];
     }
     // insert code here...
     Graph *graph = new Graph;
-    graph->readGraph("world");
+    graph->readGraph(graphFileName);
     
     
     
@@ -56,7 +60,12 @@ int main(int argc, const char * argv[]) {
     
     IMResults::getInstance().setPhase2Time(phase2TimeTaken);
 
-    IMResults::getInstance().writeToFile("results/aResult.json");
+    string resultFileName = "results/" + graphFileName;
+    resultFileName+="_" + to_string(budget);
+    resultFileName+="_" + to_string(nonTargetThreshold);
+    resultFileName+="_" + to_string(80);
+    resultFileName+="_" + to_string(rand() % 1000000);
+    IMResults::getInstance().writeToFile(resultFileName);
     
     
     IMTree *tree = phase2.getTree();
