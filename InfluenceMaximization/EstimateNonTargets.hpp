@@ -27,6 +27,7 @@ public:
     
     
     EstimateNonTargets(Graph graph);
+    EstimateNonTargets();
     int getNonTargets(int vertex);
     void writeToFile();
     vector<int> getNonTargetsUsingTIM();
@@ -36,6 +37,7 @@ public:
     deque<int> q;
     vector<bool> visited;
     vector<int> visitMark;
+    void readFromFile();
     
 };
 #endif /* EstimateNonTargets_hpp */

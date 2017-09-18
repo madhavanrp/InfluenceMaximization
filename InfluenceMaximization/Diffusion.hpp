@@ -42,6 +42,9 @@ void singleDiffusion(set<int> *activatedSet, Graph *graph, vector<int> *seedSet)
             unique.erase(u);
             activatedSet->insert(u);
             for (int v : graph->graph[u]) {
+//                cout <<"\n hi " << flush;
+//                cout << v << flush;
+//                cout << " " << graph->inDegree[v] << flush;
                 int randomNumber = rand() % graph->inDegree[v];
                 
                 if (randomNumber==0) {
@@ -59,16 +62,16 @@ void singleDiffusion(set<int> *activatedSet, Graph *graph, vector<int> *seedSet)
     }
 }
 
-vector<int> performDiffusion(Graph graph, vector<int> seedSet) {
-    int activatedFrequency[graph.n];
-    for(int i=0; i<graph.n; i++) {
+vector<int> performDiffusion(Graph *graph, vector<int> seedSet) {
+    int activatedFrequency[graph->n];
+    for(int i=0; i<graph->n; i++) {
         activatedFrequency[i] = 0;
     }
     
     int totalActiveSetSize = 0;
     set<int> *activatedSet = new set<int>();
     for (int i=0; i<NUMBER_OF_SIMULATIONS; i++) {
-        singleDiffusion(activatedSet, &graph, &seedSet);
+        singleDiffusion(activatedSet, graph, &seedSet);
         set <int> :: iterator itr;
         totalActiveSetSize+= activatedSet->size();
         for (itr = activatedSet->begin(); itr != activatedSet->end(); ++itr)
@@ -85,7 +88,7 @@ vector<int> performDiffusion(Graph graph, vector<int> seedSet) {
     int averageActiveSetSize = round((double)totalActiveSetSize/(double)NUMBER_OF_SIMULATIONS);
 //    cout << "\n Total activated set size = " << totalActiveSetSize;
 //    cout << "\n Average activated set size = " << averageActiveSetSize;
-    for(int i=0; i<graph.n; i++) {
+    for(int i=0; i<graph->n; i++) {
         queue.push(make_pair(i, activatedFrequency[i]));
     }
     

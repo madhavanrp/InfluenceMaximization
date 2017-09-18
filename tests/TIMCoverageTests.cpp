@@ -25,6 +25,16 @@ TIMCoverage* createTIMCoverage() {
     }
     return new TIMCoverage(lookupTable);
 }
+TIMCoverage* createLargetTIMCoverage() {
+    vector<vector<int>> *lookupTable = new vector<vector<int>>();
+    for (int i = 0; i<50000000; i++) {
+        (*lookupTable).push_back(vector<int>());
+        for (int j = 0; j<10; j++) {
+            (*lookupTable)[i].push_back(j);
+        }
+    }
+    return new TIMCoverage(lookupTable);
+}
 TEST_CASE("TIM Data structures initializes correctly", "TIMCoverage") {
     TIMCoverage timCoverage = TIMCoverage(new vector<vector<int>>());
     
@@ -109,6 +119,18 @@ TEST_CASE("Initialize Data Structures", "TIMCoverage") {
     int R = (int)timCoverage->lookupTable->size();
     int n = rand() % R;
     timCoverage->initializeDataStructures(R, n);
+    REQUIRE(timCoverage->edgeMark.size()==R);
+    REQUIRE(timCoverage->nodeMark.size()==n);
+    REQUIRE(timCoverage->coverage.size()==n);
+    REQUIRE(timCoverage->queue.size()==n);
+}
+
+TEST_CASE("Copy larget tim coverage", "TIMCoverage") {
+    TIMCoverage *timCoverage = createLargetTIMCoverage();
+    int R = (int)timCoverage->lookupTable->size();
+    int n = 613586;
+    timCoverage->initializeDataStructures(R, n);
+    
     REQUIRE(timCoverage->edgeMark.size()==R);
     REQUIRE(timCoverage->nodeMark.size()==n);
     REQUIRE(timCoverage->coverage.size()==n);

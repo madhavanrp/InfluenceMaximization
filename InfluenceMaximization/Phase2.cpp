@@ -9,20 +9,18 @@
 #include "Phase2.hpp"
 #include <assert.h>
 int TIMCoverage::totalCount=0;
-void Phase2::doSomething(vector<int> nodeCounts) {
+void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates) {
     
-    int threshold = 10;
-    int budget = 1;
-    vector<vector<int>> nonTargetMap;
+    vector<set<int>> nonTargetMap;
     for(int i=0;i<=threshold;i++) {
-        nonTargetMap.push_back(vector<int>());
+        nonTargetMap.push_back(set<int>());
     }
     int totalNodesLessThanThreshold = 0;
-    int numberOfNodes = (int)nodeCounts.size();
+    int numberOfNodes = (int)nonTargetEstimates.size();
     
     for (int i=0; i<numberOfNodes; i++) {
-        if(nodeCounts[i]<=threshold) {
-            nonTargetMap[nodeCounts[i]].push_back(i);
+        if(nonTargetEstimates[i]<=threshold) {
+            nonTargetMap[nonTargetEstimates[i]].insert(i);
             totalNodesLessThanThreshold++;
         }
     }
@@ -32,7 +30,7 @@ void Phase2::doSomething(vector<int> nodeCounts) {
     int totalNonTargets = -1;
     while(depth<budget) {
         vector<struct node*> leafNodes = tree.getLeafNodes(depth);
-        pair<pair<int,int>, struct node*> nodesByNonTargetCount[threshold+1];
+        pair<pair<int,pair<int,int>>, struct node*> nodesByNonTargetCount[threshold+1];
         vector<pair<struct node*, bool>> expandedNodes;
         
         for(struct node *leaf: leafNodes) {
@@ -42,6 +40,7 @@ void Phase2::doSomething(vector<int> nodeCounts) {
             pair<int, int> influence = tree.influenceAlongPath(leaf);
             totalTargets = influence.first;
             totalNonTargets = influence.second;
+            assert(totalNonTargets<=threshold);
             
             // Maintain expanded nodes if needed
             if(leaf!=tree.root) {
@@ -55,16 +54,20 @@ void Phase2::doSomething(vector<int> nodeCounts) {
                 if(nextNode==-1) continue;
                 int targets = nodePair.second;
                 //The pruning happens here
+                
+                assert(totalNonTargets+i<=threshold);
+                pair<int,int> influence = make_pair(targets, i);
                 if(nodesByNonTargetCount[totalNonTargets+i].second==NULL) {
-                    nodesByNonTargetCount[totalNonTargets+i] = make_pair(make_pair(nextNode, targets), leaf);
+                    nodesByNonTargetCount[totalNonTargets+i] = make_pair(make_pair(nextNode, influence), leaf);
                 } else {
-                    if(nodesByNonTargetCount[totalNonTargets+i].first.second<targets) {
-                        nodesByNonTargetCount[totalNonTargets+i] = make_pair(make_pair(nextNode, targets), leaf);
+                    if(nodesByNonTargetCount[totalNonTargets+i].first.second.first<targets) {
+                        nodesByNonTargetCount[totalNonTargets+i] = make_pair(make_pair(nextNode, influence), leaf);
                         
                     }
                 }
             }
         }
+        
         
         
         //Go through nodes by non target and expand.
@@ -73,14 +76,21 @@ void Phase2::doSomething(vector<int> nodeCounts) {
             if(nodesByNonTargetCount[i].second==NULL) continue;
             
             int nodeID = nodesByNonTargetCount[i].first.first;
-            int targets = nodesByNonTargetCount[i].first.second;
-            addChild(nodesByNonTargetCount[i].second, nodeID, targets, i);
+            int targets = nodesByNonTargetCount[i].first.second.first;
+            int nonTargets = nodesByNonTargetCount[i].first.second.second;
+//            cout << "\n Adding child node with  " << targets << " targets and " << nonTargets << " Non Targets" << " and child ID is " << nodeID;
+            struct node* newChild = addChild(nodesByNonTargetCount[i].second, nodeID, targets, nonTargets);
+            
+//            cout << "\n Expected " << i;
+//            cout << " Actual " << tree.influenceAlongPath(newChild).second;
+            assert(tree.influenceAlongPath(newChild).second==i);
             for(int j=0;j<expandedNodes.size();j++) {
                 if(expandedNodes[j].first==nodesByNonTargetCount[i].second && !expandedNodes[j].second) {
                     expandedNodes[j].second=true;
                     break;
                 }
             }
+            assert(tree.influenceAlongPath(newChild).second<=threshold);
         }
         int toRemove = 0;
         for(pair<struct node*, bool> expandedNode:expandedNodes) {
@@ -101,9 +111,14 @@ void Phase2::doSomething(vector<int> nodeCounts) {
         cout << "\n Seed set: ";
         vector<struct node*> seedSet = tree.findSeedSetInPath(leaf);
         for(struct node* seed:seedSet) {
-            cout<< " " << seed->nodeID;
+//            cout<< "\n seedSet.add(" << seed->nodeID << ");";
+            cout << " " << seed->nodeID;
         }
     }
+}
+
+IMTree* Phase2::getTree() {
+    return &tree;
 }
 
 void Phase2::deleteUnexpandedNodes(vector<pair<struct node*, bool>> expandedNodes) {
@@ -122,30 +137,31 @@ void Phase2::deleteUnexpandedNodes(vector<pair<struct node*, bool>> expandedNode
     }
 }
 
-void Phase2::addChild(struct node* parent, int childNodeID, int targets, int nonTargets) {
-    tree.addChild(parent, childNodeID, targets, nonTargets);
+struct node* Phase2::addChild(struct node* parent, int childNodeID, int targets, int nonTargets) {
+    struct node* newChild = tree.addChild(parent, childNodeID, targets, nonTargets);
+    return newChild;
 }
 
 
-pair<int,int> Phase2::findMaxInfluentialNode(vector<int> candidateNodes, vector<struct node*> seedSet) {
+pair<int,int> Phase2::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet) {
     int numberOfCandidateNodes = (int)candidateNodes.size();
     if(numberOfCandidateNodes==0) return make_pair(-1,0);
     
-    int nextNode = candidateNodes[rand()%numberOfCandidateNodes];
+    int nextNode = rand()% numberOfCandidateNodes;
     return make_pair(nextNode, rand()%20);
 }
 
-Phase2::Phase2(Graph graph) {
+Phase2::Phase2(Graph *graph) {
     this->graph = graph;
 }
 
-Phase2TIM::Phase2TIM(Graph graph): Phase2(graph) {
-    int n = graph.n;
+Phase2TIM::Phase2TIM(Graph *graph): Phase2(graph) {
+    int n = graph->n;
     double epsilon = EPSLON_TARGETS;
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
 //    R = 23648871;
-    graph.generateRandomRRSets(R, true);
-    rrSets = graph.getRandomRRSets();
+    graph->generateRandomRRSets(R, true);
+    rrSets = graph->getRandomRRSets();
     vector<vector<int>> *lookupTable = new vector<vector<int>>();
     TIMCoverage *coverage = new TIMCoverage(lookupTable);
     coverage->initializeLookupTable(rrSets, n);
@@ -160,7 +176,7 @@ Phase2TIM::Phase2TIM(Graph graph): Phase2(graph) {
     tree.root->coverage = coverage;
     
 }
-void Phase2TIM::addChild(struct node* parent, int childNodeID, int targets, int nonTargets) {
+struct node* Phase2TIM::addChild(struct node* parent, int childNodeID, int targets, int nonTargets) {
     struct node *newChild=NULL;
     if(parent->children.size()>0) {
         TIMCoverage *coverage = parent->coverage;
@@ -178,20 +194,10 @@ void Phase2TIM::addChild(struct node* parent, int childNodeID, int targets, int 
         newChild->coverage->retain();
     }
     addToSeed(childNodeID, newChild->coverage);
+    return newChild;
 }
 
-bool vectorContains(vector<int> aVector, int a) {
-    bool contains = false;
-    for(int element:aVector) {
-        if(a==element) {
-            contains = true;
-            break;
-        }
-    }
-    return contains;
-}
-
-pair<int,int> Phase2TIM::findMaxInfluentialNode(vector<int> candidateNodes, vector<struct node*> seedSet) {
+pair<int,int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet) {
     
     int numberOfCandidateNodes = (int)candidateNodes.size();
     
@@ -208,6 +214,7 @@ pair<int,int> Phase2TIM::findMaxInfluentialNode(vector<int> candidateNodes, vect
         leaf = tree.root;
     }
     TIMCoverage *timCoverage = leaf->coverage;
+    int originalSize = (int)timCoverage->queue.size();
     priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queueCopy = new priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>(timCoverage->queue);
     
 //    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queue = &timCoverage->queue;
@@ -230,7 +237,7 @@ pair<int,int> Phase2TIM::findMaxInfluentialNode(vector<int> candidateNodes, vect
         if(!(*nodeMark)[element.first]) {
             continue;
         }
-        if(vectorContains(candidateNodes, element.first)) {
+        if(candidateNodes.find(element.first)!=candidateNodes.end()) {
             maximumGainNode = element.first;
             influence = (*coverage)[element.first];
             break;
@@ -239,9 +246,10 @@ pair<int,int> Phase2TIM::findMaxInfluentialNode(vector<int> candidateNodes, vect
     }
     
     delete queueCopy;
-    // TODO: Scale this.
-//    double scaledInfluence = (double) influence * nodeMark->size()/(int)this->rrSets.size();
-    return make_pair(maximumGainNode, influence);
+    assert(timCoverage->queue.size()==originalSize);
+//     TODO: Scale this.
+    double scaledInfluence = (double) influence * nodeMark->size()/(int)this->rrSets.size();
+    return make_pair(maximumGainNode, scaledInfluence);
 }
 
 void Phase2TIM::addToSeed(int vertex, TIMCoverage *timCoverage) {

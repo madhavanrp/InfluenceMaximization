@@ -18,6 +18,10 @@ EstimateNonTargets::EstimateNonTargets(Graph graph) {
     n = graph.n;
 }
 
+EstimateNonTargets::EstimateNonTargets() {
+    
+}
+
 int EstimateNonTargets::getNonTargets(int vertex) {
 //    return getNonTargetsUsingTIM();
     return 0;
@@ -117,4 +121,13 @@ void EstimateNonTargets::writeToFile() {
         
     }
     myfile.close();
+}
+
+void EstimateNonTargets::readFromFile() {
+    ifstream myFile("NonTargetsEstimateFiles/nonTargets.txt");
+    int nonTargets;
+    while (myFile >> nonTargets) {
+        nodeCounts.push_back(nonTargets);
+    }
+    
 }

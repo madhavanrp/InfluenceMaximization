@@ -32,6 +32,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		311423111F6F4AA7001BA3FA /* memoryusage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memoryusage.h; sourceTree = "<group>"; };
 		31279D6C1F58EBD900FC4D9B /* Phase2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Phase2.cpp; sourceTree = "<group>"; };
 		31279D6D1F58EBD900FC4D9B /* Phase2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Phase2.hpp; sourceTree = "<group>"; };
 		31279D701F63472700FC4D9B /* TIMCoverage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TIMCoverage.hpp; path = "TIM-Models/TIMCoverage.hpp"; sourceTree = "<group>"; };
@@ -39,6 +40,7 @@
 		31279D751F6CAB3400FC4D9B /* Diffusion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Diffusion.hpp; sourceTree = "<group>"; };
 		31279D771F6CC18300FC4D9B /* DiffusionTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiffusionTests.cpp; sourceTree = "<group>"; };
 		31279D791F6F052C00FC4D9B /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
+		31279D7A1F6F0CFC00FC4D9B /* IMResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IMResults.h; path = IMResults/IMResults.h; sourceTree = "<group>"; };
 		313A589C1F4E072300F86148 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		31A494991F510CBF00745401 /* IMTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IMTree.cpp; sourceTree = "<group>"; };
 		31A4949A1F510CBF00745401 /* IMTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IMTree.hpp; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 			children = (
 				31279D6F1F63469F00FC4D9B /* TIM-Models */,
 				31FC36911F354E56005CAFEB /* Graph.cpp */,
+				311423111F6F4AA7001BA3FA /* memoryusage.h */,
 				31FC36921F354E56005CAFEB /* Graph.hpp */,
 				31A494991F510CBF00745401 /* IMTree.cpp */,
 				31A4949A1F510CBF00745401 /* IMTree.hpp */,
@@ -119,6 +122,7 @@
 				31279D6D1F58EBD900FC4D9B /* Phase2.hpp */,
 				31279D751F6CAB3400FC4D9B /* Diffusion.hpp */,
 				31279D791F6F052C00FC4D9B /* json.hpp */,
+				31279D7A1F6F0CFC00FC4D9B /* IMResults.h */,
 			);
 			path = InfluenceMaximization;
 			sourceTree = "<group>";
