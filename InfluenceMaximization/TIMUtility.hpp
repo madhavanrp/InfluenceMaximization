@@ -1,10 +1,3 @@
-//
-//  TIMUtility.hpp
-//  InfluenceMaximization
-//
-//  Created by Madhavan R.P on 8/29/17.
-//  Copyright © 2017 Madhavan R.P. All rights reserved.
-//
 
 #ifndef TIMUtility_hpp
 #define TIMUtility_hpp
@@ -16,7 +9,10 @@
 #include <cstdio>
 using namespace std;
 
-//Most of this code is used from the source code of TIM - Influence Maximization: Near-Optimal Time Complexity Meets Practical Efficiency by Tang et al. Will add more citations and license in future git commits.
+//Most of this code is used from the source code of TIM - Influence Maximization: Near-Optimal Time Complexity Meets Practical Efficiency by Tang et al.
+// Source code - https://sourceforge.net/projects/timplus/
+// License GNU GENERAL PUBLIC LICENSE Version 3
+
 double MgT(int u){
     return (double)2;
 }

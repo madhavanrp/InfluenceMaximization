@@ -144,6 +144,10 @@ vector<vector<int>> Graph::constructTranspose(vector<vector<int>> someGraph) {
 
 
 vector<int> Graph::oldRRSetGeneration(int randomVertex, int rrSetID) {
+    //Most of this code is used from the source code of TIM - Influence Maximization: Near-Optimal Time Complexity Meets Practical Efficiency by Tang et al.
+    // Source code - https://sourceforge.net/projects/timplus/
+    // License GNU GENERAL PUBLIC LICENSE Version 3
+
     int n_visit_edge=0;
     int uStart = randomVertex;
     int hyperiiid = rrSetID;
