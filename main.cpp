@@ -19,78 +19,62 @@
 
 using json = nlohmann::json;
 
-void printTopk(int k, vector<int> counts) {
-    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> queue;
-    for(int i=0;i<counts.size();i++) {
-        queue.push(make_pair(i, counts[i]));
-    }
-    for(int i=0;i<k;i++) {
-        pair<int,int> vertexPair = queue.top();
-        queue.pop();
-        cout << "\nVertex " << vertexPair.first << " Covers: " <<vertexPair.second;
-    }
-}
 
 int main(int argc, const char * argv[]) {
     srand(time(0));
     int budget;
     int nonTargetThreshold;
     string graphFileName;
+    int percentagetNonTargets;
     if(argc<=1) {
         budget=20;
         nonTargetThreshold = 10;
         graphFileName = "graph_ic.inf";
+        percentagetNonTargets = 80;
         
     } else {
         budget = atoi(argv[2]);
         nonTargetThreshold = atoi(argv[3]);
         graphFileName = argv[1];
+        percentagetNonTargets = atoi(argv[4]);
     }
     // insert code here...
+    float percentageNonTargetsFloat = (float)percentagetNonTargets/(float)100;
     Graph *graph = new Graph;
-    graph->readGraph(graphFileName);
+    graph->readGraph(graphFileName, percentageNonTargetsFloat);
     
     
     
     clock_t phase1StartTime = clock();
     EstimateNonTargets *estimateNonTargets = new EstimateNonTargets(*graph);
     vector<int> nodeCounts = estimateNonTargets->getNonTargetsUsingTIM();
-//    printTopk(20, nodeCounts);
     
-    Phase2TIM phase2(graph);
-    TIMCoverage *coverage = phase2.getTree()->root->coverage;
-    set<int> candidateNodes;
-    for(int i=0;i<graph->n;i++) {
-        candidateNodes.insert(i);
-    }
-//    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> queueCopy = coverage->queue;
-//    
-//    cout << "\n Initial max influential node";
-//    for (int i=0; i<20; i++) {
-//        cout << "\n Max influential node = " << queueCopy.top().first << " Coverage is " << queueCopy.top().second;
-//        queueCopy.pop();
-//    }
-//    cout << "\n Accounting for submodularity:";
-//    vector<int> seedSet;
-//    for(int i=0; i<20; i++) {
-//        pair<int, int> maxPair = phase2.findMaxInfluentialNode(candidateNodes, coverage);
-//        phase2.addToSeed(maxPair.first, coverage);
-//        cout << "\n Max influential node = " << maxPair.first << " Coverage is " << maxPair.second;
-//        seedSet.push_back(maxPair.first);
-//    }
-//    
-//    vector<int> activatedSet = performDiffusion(graph, seedSet);
-//    cout << "\n Activated set size = " << activatedSet.size();
-    
-    
-    Phase2TIM newPhase2(graph);
+    clock_t phase1EndTime = clock();
+    delete estimateNonTargets;
 
-    newPhase2.doPhase2(20, 10, nodeCounts);
+    double phase1TimeTaken = double(phase1EndTime - phase1StartTime) / CLOCKS_PER_SEC;
+    IMResults::getInstance().setPhase1Time(phase1TimeTaken);
+
+    clock_t phase2StartTime = clock();
+    Phase2TIM phase2(graph);
+    phase2.doPhase2(budget, nonTargetThreshold, nodeCounts);
+    clock_t phase2EndTime = clock();
+
+    double phase2TimeTaken = double(phase2EndTime - phase2StartTime) / CLOCKS_PER_SEC;
+
+    IMResults::getInstance().setPhase2Time(phase2TimeTaken);
+
+    string resultFileName = "results/" + graphFileName;
+    resultFileName+="_" + to_string(budget);
+    resultFileName+="_" + to_string(nonTargetThreshold);
+    resultFileName+="_" + to_string(80);
+    resultFileName+="_" + to_string(rand() % 1000000);
+    resultFileName+=".json";
+    IMResults::getInstance().writeToFile(resultFileName);
     
-    vector<IMSeedSet> allSeedSets = newPhase2.getTree()->getAllSeeds(budget);
+    vector<IMSeedSet> allSeedSets = phase2.getTree()->getAllSeeds(budget);
     for(IMSeedSet imSeedSet:allSeedSets) {
         set<int> seedSet = imSeedSet.getSeedSet();
-        assert(seedSet.size()==20);
         vector<int> activatedVector = performDiffusion(graph, seedSet);
         int targetsActivated = 0;
         int nonTargetsActivated = 0;
@@ -105,7 +89,7 @@ int main(int argc, const char * argv[]) {
     }
     
     cout << "\n Finding best";
-    IMSeedSet bestSeedSet = newPhase2.getTree()->getBestSeedSet(budget);
+    IMSeedSet bestSeedSet = phase2.getTree()->getBestSeedSet(budget);
     int targetsActivated = 0;
     int nonTargetsActivated = 0;
     for(int i:performDiffusion(graph, bestSeedSet.getSeedSet())) {

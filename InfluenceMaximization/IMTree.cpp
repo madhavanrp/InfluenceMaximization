@@ -178,16 +178,11 @@ IMSeedSet IMTree::getBestSeedSet(int depth) {
         };
         assert(imSeedSet.getTargets()==influenceAlongPath(leaf).first);
         if (imSeedSet.getTargets()>maxTargets) {
-            cout << "\n Old max targets" << maxTargets;
-            cout << " New max targets " << imSeedSet.getTargets();
             maxSeedSet = imSeedSet;
             maxTargets = imSeedSet.getTargets();
             maxNonTargets = imSeedSet.getNonTargets();
         } else if (imSeedSet.getTargets()==maxTargets) {
             if (imSeedSet.getNonTargets()<maxNonTargets) {
-                
-                cout << "\n Old max targets" << maxTargets;
-                cout << " New max targets " << imSeedSet.getTargets();
                 maxSeedSet = imSeedSet;
                 maxTargets = imSeedSet.getTargets();
                 maxNonTargets = imSeedSet.getNonTargets();

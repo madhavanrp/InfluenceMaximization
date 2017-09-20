@@ -8,8 +8,14 @@
 
 #include "Graph.hpp"
 #include <assert.h>
+#include <sstream>
+#include <iomanip>
 using namespace std;
 void Graph::readGraph(string fileName) {
+    readGraph(fileName, 0.8);
+}
+
+void Graph::readGraph(string fileName, float percentage) {
     ifstream myFile("graphs/" + fileName);
     string s;
     if(myFile.is_open()) {
@@ -29,14 +35,16 @@ void Graph::readGraph(string fileName) {
                 maxDegree = inDegree[to];
             }
         }
-        cout<<"\nMax degree is " << maxDegree << flush;
         myFile.close();
     }
     
     graphTranspose = constructTranspose(graph);
     visitMark = vector<int>(n);
     labels = vector<bool>(n);
-    readLabels("graphs/" + fileName + "_0.8_labels.txt");
+    stringstream stream;
+    stream << fixed << setprecision(1) << percentage;
+    s = stream.str();
+    readLabels("graphs/" + fileName + "_" + s + "_labels.txt");
 }
 
 

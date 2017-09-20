@@ -33,6 +33,7 @@ public:
     vector<bool> visited;
     vector<int> visitMark;
     void readGraph(string fileName);
+    void readGraph(string fileName, float percentage);
     void readLabels(string fileName);
     vector<vector<int> > constructTranspose(vector<vector<int> > aGraph);
     void generateRandomRRSets(int R, bool label);
