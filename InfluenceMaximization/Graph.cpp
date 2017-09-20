@@ -71,7 +71,6 @@ void Graph::generateRandomRRSets(int R, bool label) {
             randomVertex = rand() % n;
         }
         generateRandomRRSet(randomVertex, i);
-//        oldRRSetGeneration(randomVertex, i);
         totalSize+=rrSets[i].size();
     }
     clock_t end = clock();
@@ -153,9 +152,6 @@ vector<int> Graph::oldRRSetGeneration(int randomVertex, int rrSetID) {
     int hyperiiid = rrSetID;
     
     int n_visit_mark=0;
-    //for(int i=0; i<12; i++) ASSERT((int)visit[i].size()==n);
-    //for(int i=0; i<12; i++) ASSERT((int)visit_mark[i].size()==n);
-    //hyperiiid ++;
     q.clear();
     q.push_back(uStart);
     rrSets[hyperiiid].push_back(uStart);
@@ -166,17 +162,9 @@ vector<int> Graph::oldRRSetGeneration(int randomVertex, int rrSetID) {
         q.pop_front();
         int i=expand;
         for(int j=0; j<(int)graphTranspose[i].size(); j++){
-            //int u=expand;
             int v=graphTranspose[i][j];
             n_visit_edge++;
-            // double randDouble=double(sfmt_genrand_uint32(&sfmtSeed))/double(RAND_MAX)/2;
             int randDouble = rand() % (int)(inDegree[i]);
-//            if(i==100) {
-//                cout << "\n In Degree of vertex 100 is " << inDegree[i];
-//                cout << " 1/inDegree of vertex 100 is " << (1/inDegree[i]);
-//            }
-            
-            // if(randDouble > probT[i][j])
             //     continue;
             if(randDouble!=0)
                 continue;
@@ -189,9 +177,6 @@ vector<int> Graph::oldRRSetGeneration(int randomVertex, int rrSetID) {
                 visited[v]=true;
             }
             q.push_back(v);
-            //#pragma omp  critical
-            //if(0)
-            //hyperG[v].push_back(hyperiiid);
             assert((int)rrSets.size() > hyperiiid);
             rrSets[hyperiiid].push_back(v);
         }
