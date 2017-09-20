@@ -16,7 +16,10 @@
 #include <stack>
 #include <deque>
 #include<algorithm>
+#include <set>
 #include "TIM-Models/TIMCoverage.hpp"
+#include <limits.h>
+
 using namespace std;
 struct node {
     int nodeID;
@@ -34,6 +37,20 @@ struct node {
     }
 };
 
+class IMSeedSet {
+    
+public:
+    IMSeedSet();
+    set<int> seedSet;
+    int targets;
+    int nonTargets;
+    
+    set<int> getSeedSet();
+    int getTargets();
+    int getNonTargets();
+    
+};
+
 class IMTree {
 public:
     IMTree(void);
@@ -48,6 +65,8 @@ public:
     void removeLeaf(struct node* leaf);
     void removeBranch(struct node* leaf);
     int getTotalNodes();
+    vector<IMSeedSet> getAllSeeds(int depth);
+    IMSeedSet getBestSeedSet(int depth);
 };
 
 #endif /* IMTree_hpp */

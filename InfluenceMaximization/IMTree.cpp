@@ -129,6 +129,74 @@ void IMTree::removeBranch(struct node* leaf) {
 }
 
 
+set<int> IMSeedSet::getSeedSet() {
+    return this->seedSet;
+}
+int IMSeedSet::getTargets() {
+    return this->targets;
+}
+int IMSeedSet::getNonTargets() {
+    return this->nonTargets;
+}
+
+IMSeedSet::IMSeedSet() {
+    this->targets = 0;
+    this->nonTargets = 0;
+}
+
+vector<IMSeedSet> IMTree::getAllSeeds(int depth) {
+    vector<struct node*> leafNodes = getLeafNodes(depth);
+    vector<IMSeedSet> seedSets;
+    for(struct node* leaf:leafNodes) {
+        IMSeedSet imSeedSet;
+        
+        struct node* current = leaf;
+        while(current!=root) {
+            imSeedSet.targets+= current->targets;
+            imSeedSet.nonTargets+= current->nonTargets;
+            imSeedSet.seedSet.insert(current->nodeID);
+            current = current->parent;
+        };
+        seedSets.push_back(imSeedSet);
+    }
+    return seedSets;
+}
+
+IMSeedSet IMTree::getBestSeedSet(int depth) {
+    vector<struct node*> leafNodes = getLeafNodes(depth);
+    IMSeedSet maxSeedSet;
+    int maxTargets = 0;
+    int maxNonTargets = INT_MAX;
+    for(struct node* leaf:leafNodes) {
+        IMSeedSet imSeedSet;
+        struct node* current = leaf;
+        while(current!=root) {
+            imSeedSet.targets+= current->targets;
+            imSeedSet.nonTargets+= current->nonTargets;
+            imSeedSet.seedSet.insert(current->nodeID);
+            current = current->parent;
+        };
+        assert(imSeedSet.getTargets()==influenceAlongPath(leaf).first);
+        if (imSeedSet.getTargets()>maxTargets) {
+            cout << "\n Old max targets" << maxTargets;
+            cout << " New max targets " << imSeedSet.getTargets();
+            maxSeedSet = imSeedSet;
+            maxTargets = imSeedSet.getTargets();
+            maxNonTargets = imSeedSet.getNonTargets();
+        } else if (imSeedSet.getTargets()==maxTargets) {
+            if (imSeedSet.getNonTargets()<maxNonTargets) {
+                
+                cout << "\n Old max targets" << maxTargets;
+                cout << " New max targets " << imSeedSet.getTargets();
+                maxSeedSet = imSeedSet;
+                maxTargets = imSeedSet.getTargets();
+                maxNonTargets = imSeedSet.getNonTargets();
+            }
+        }
+    }
+    return maxSeedSet;
+}
+
 void IMTree::printTree() {
 //    cout <<"\nBegin printing tree\n";
 //    for(struct node *leaf: getLeafNodes()) {

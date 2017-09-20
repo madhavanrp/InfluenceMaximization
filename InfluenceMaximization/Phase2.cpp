@@ -112,18 +112,7 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
         depth++;
         
     }
-    
-    vector<struct node*> leafNodes = tree.getLeafNodes(depth);
-    for(struct node* leaf: leafNodes) {
-        pair<int, int> influence = tree.influenceAlongPath(leaf);
-//        cout << "\n Targets hit = " << influence.first << " Non Targets hit = " << influence.second;
-//        cout << "\n Seed set: ";
-        vector<struct node*> seedSet = tree.findSeedSetInPath(leaf);
-        for(struct node* seed:seedSet) {
-//            cout<< "\n seedSet.add(" << seed->nodeID << ");";
-            cout << " " << seed->nodeID;
-        }
-    }
+   
 }
 
 IMTree* Phase2::getTree() {
@@ -243,8 +232,8 @@ pair<int, int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, TIMCov
     assert(timCoverage->queue.size()==originalSize);
     assert(candidateNodes.find(maximumGainNode)!=candidateNodes.end());
     //     TODO: Scale this.
-//    double scaledInfluence = (double) influence * nodeMark->size()/(int)this->rrSets.size();
-    return make_pair(maximumGainNode, influence);
+    double scaledInfluence = (double) influence * nodeMark->size()/(int)this->rrSets.size();
+    return make_pair(maximumGainNode, scaledInfluence);
 }
 pair<int,int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet) {
     

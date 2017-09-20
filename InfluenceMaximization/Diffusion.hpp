@@ -22,7 +22,7 @@ using namespace std;
 
 #define NUMBER_OF_SIMULATIONS 20000
 
-void singleDiffusion(set<int> *activatedSet, Graph *graph, vector<int> *seedSet) {
+void singleDiffusion(set<int> *activatedSet, Graph *graph, set<int> *seedSet) {
     
     deque<int> queue;
     set<int> unique;
@@ -62,7 +62,7 @@ void singleDiffusion(set<int> *activatedSet, Graph *graph, vector<int> *seedSet)
     }
 }
 
-vector<int> performDiffusion(Graph *graph, vector<int> seedSet) {
+vector<int> performDiffusion(Graph *graph, set<int> seedSet) {
     int activatedFrequency[graph->n];
     for(int i=0; i<graph->n; i++) {
         activatedFrequency[i] = 0;

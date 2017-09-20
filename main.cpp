@@ -87,33 +87,34 @@ int main(int argc, const char * argv[]) {
 
     newPhase2.doPhase2(20, 10, nodeCounts);
     
-    
-    vector<struct node*> leafNodes = newPhase2.getTree()->getLeafNodes(budget);
-    for(struct node* leaf:leafNodes) {
-        vector<int> seedSet;
-        vector<struct node*> seedAlongPath = newPhase2.getTree()->findSeedSetInPath(leaf);
-        for (struct node* seed:seedAlongPath) {
-            seedSet.push_back(seed->nodeID);
-        }
-        
+    vector<IMSeedSet> allSeedSets = newPhase2.getTree()->getAllSeeds(budget);
+    for(IMSeedSet imSeedSet:allSeedSets) {
+        set<int> seedSet = imSeedSet.getSeedSet();
+        assert(seedSet.size()==20);
         vector<int> activatedVector = performDiffusion(graph, seedSet);
-        set<int> activatedSet;
         int targetsActivated = 0;
         int nonTargetsActivated = 0;
         for(int i:activatedVector) {
-            activatedSet.insert(i);
             if(graph->labels[i]) targetsActivated++;
             else nonTargetsActivated++;
         }
-        for(int i:seedSet) {
-            assert(activatedSet.find(i)!=activatedSet.end());
-        }
-//        cout << "\n Activated set size = " << activatedVector.size();
         assert(targetsActivated+nonTargetsActivated==activatedVector.size());
         cout << "\n Targets activated = " << targetsActivated;
         cout << "\n Non targets activated = " << nonTargetsActivated;
         
     }
+    
+    cout << "\n Finding best";
+    IMSeedSet bestSeedSet = newPhase2.getTree()->getBestSeedSet(budget);
+    int targetsActivated = 0;
+    int nonTargetsActivated = 0;
+    for(int i:performDiffusion(graph, bestSeedSet.getSeedSet())) {
+        if(graph->labels[i]) targetsActivated++;
+        else nonTargetsActivated++;
+    }
+    
+    cout << "\n Targets activated = " << targetsActivated;
+    cout << "\n Non targets activated = " << nonTargetsActivated;
     
     disp_mem_usage("");
     return 0;
