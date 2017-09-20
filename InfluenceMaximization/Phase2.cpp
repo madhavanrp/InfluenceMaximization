@@ -107,8 +107,8 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
     vector<struct node*> leafNodes = tree.getLeafNodes(depth);
     for(struct node* leaf: leafNodes) {
         pair<int, int> influence = tree.influenceAlongPath(leaf);
-        cout << "\n Targets hit = " << influence.first << " Non Targets hit = " << influence.second;
-        cout << "\n Seed set: ";
+//        cout << "\n Targets hit = " << influence.first << " Non Targets hit = " << influence.second;
+//        cout << "\n Seed set: ";
         vector<struct node*> seedSet = tree.findSeedSetInPath(leaf);
         for(struct node* seed:seedSet) {
 //            cout<< "\n seedSet.add(" << seed->nodeID << ");";
@@ -144,6 +144,7 @@ struct node* Phase2::addChild(struct node* parent, int childNodeID, int targets,
 
 
 pair<int,int> Phase2::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet) {
+    assert(false);
     int numberOfCandidateNodes = (int)candidateNodes.size();
     if(numberOfCandidateNodes==0) return make_pair(-1,0);
     
@@ -197,27 +198,11 @@ struct node* Phase2TIM::addChild(struct node* parent, int childNodeID, int targe
     return newChild;
 }
 
-pair<int,int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet) {
-    
-    int numberOfCandidateNodes = (int)candidateNodes.size();
-    
-    if(numberOfCandidateNodes==0) {
-        return make_pair(-1,0);
-    }
-    
-    // The first node in the vector should be the leaf. If it's empty, then take the root
-    struct node* leaf;
-    if(seedSet.size()>0) {
-        leaf = seedSet[0];
-    }
-    else {
-        leaf = tree.root;
-    }
-    TIMCoverage *timCoverage = leaf->coverage;
+pair<int, int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, TIMCoverage *timCoverage) {
     int originalSize = (int)timCoverage->queue.size();
     priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queueCopy = new priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>(timCoverage->queue);
     
-//    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queue = &timCoverage->queue;
+    //    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queue = &timCoverage->queue;
     
     vector<int> *coverage = &timCoverage->coverage;
     vector<bool> *nodeMark = &timCoverage->nodeMark;
@@ -247,9 +232,28 @@ pair<int,int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, vector<
     
     delete queueCopy;
     assert(timCoverage->queue.size()==originalSize);
-//     TODO: Scale this.
-    double scaledInfluence = (double) influence * nodeMark->size()/(int)this->rrSets.size();
-    return make_pair(maximumGainNode, scaledInfluence);
+    //     TODO: Scale this.
+//    double scaledInfluence = (double) influence * nodeMark->size()/(int)this->rrSets.size();
+    return make_pair(maximumGainNode, influence);
+}
+pair<int,int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet) {
+    
+    int numberOfCandidateNodes = (int)candidateNodes.size();
+    
+    if(numberOfCandidateNodes==0) {
+        return make_pair(-1,0);
+    }
+    
+    // The first node in the vector should be the leaf. If it's empty, then take the root
+    struct node* leaf;
+    if(seedSet.size()>0) {
+        leaf = seedSet[0];
+    }
+    else {
+        leaf = tree.root;
+    }
+    TIMCoverage *timCoverage = leaf->coverage;
+    return findMaxInfluentialNode(candidateNodes, timCoverage);
 }
 
 void Phase2TIM::addToSeed(int vertex, TIMCoverage *timCoverage) {

@@ -39,5 +39,6 @@ public:
     struct node* addChild(struct node* parent, int childNodeID, int targets, int nonTargets);
     pair<int,int> findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet);
     void addToSeed(int vertex, TIMCoverage *timCoverage);
+    pair<int, int> findMaxInfluentialNode(set<int> candidateNodes, TIMCoverage *timCoverage);
 };
 #endif /* Phase2_hpp */

@@ -57,8 +57,9 @@ void EstimateNonTargets::generateRandomRRSets(int R, bool label) {
     int maxNode = -1;
     int maxInfluence = -1;
     while(i<n) {
-//        cout << "\n For vertex phase 1 " << i << " covered RR sets is " << nodeCounts[i];
-       nodeCounts[i] = round( (float)nodeCounts[i] * (float)graph.nonTargets.size()/(float)R);
+//        cout << "\n Phase1 : Vertex  " << i << " covered RR sets is " << nodeCounts[i];
+//       nodeCounts[i] = round( (float)nodeCounts[i] * (float)graph.nonTargets.size()/(float)R);
+        
         if(nodeCounts[i]==0) {
             assert(graph.labels[i]);
         }

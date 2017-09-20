@@ -19,7 +19,20 @@
 
 using json = nlohmann::json;
 
+void printTopk(int k, vector<int> counts) {
+    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> queue;
+    for(int i=0;i<counts.size();i++) {
+        queue.push(make_pair(i, counts[i]));
+    }
+    for(int i=0;i<k;i++) {
+        pair<int,int> vertexPair = queue.top();
+        queue.pop();
+        cout << "\nVertex " << vertexPair.first << " Covers: " <<vertexPair.second;
+    }
+}
+
 int main(int argc, const char * argv[]) {
+    srand(time(0));
     int budget;
     int nonTargetThreshold;
     string graphFileName;
@@ -42,53 +55,53 @@ int main(int argc, const char * argv[]) {
     clock_t phase1StartTime = clock();
     EstimateNonTargets *estimateNonTargets = new EstimateNonTargets(*graph);
     vector<int> nodeCounts = estimateNonTargets->getNonTargetsUsingTIM();
-//    EstimateNonTargets *estimateNonTargets = new EstimateNonTargets();
-//    estimateNonTargets->readFromFile();
-//    vector<int> nodeCounts = estimateNonTargets->nodeCounts;
-    clock_t phase1EndTime = clock();
-    delete estimateNonTargets;
+//    printTopk(20, nodeCounts);
     
-    double phase1TimeTaken = double(phase1EndTime - phase1StartTime) / CLOCKS_PER_SEC;
-    IMResults::getInstance().setPhase1Time(phase1TimeTaken);
-    
-    clock_t phase2StartTime = clock();
     Phase2TIM phase2(graph);
-    phase2.doPhase2(budget, nonTargetThreshold, nodeCounts);
-    clock_t phase2EndTime = clock();
+    TIMCoverage *coverage = phase2.getTree()->root->coverage;
+    set<int> candidateNodes;
+    for(int i=0;i<graph->n;i++) {
+        candidateNodes.insert(i);
+    }
+//    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> queueCopy = coverage->queue;
+//    
+//    cout << "\n Initial max influential node";
+//    for (int i=0; i<20; i++) {
+//        cout << "\n Max influential node = " << queueCopy.top().first << " Coverage is " << queueCopy.top().second;
+//        queueCopy.pop();
+//    }
+//    cout << "\n Accounting for submodularity:";
+//    vector<int> seedSet;
+//    for(int i=0; i<20; i++) {
+//        pair<int, int> maxPair = phase2.findMaxInfluentialNode(candidateNodes, coverage);
+//        phase2.addToSeed(maxPair.first, coverage);
+//        cout << "\n Max influential node = " << maxPair.first << " Coverage is " << maxPair.second;
+//        seedSet.push_back(maxPair.first);
+//    }
+//    
+//    vector<int> activatedSet = performDiffusion(graph, seedSet);
+//    cout << "\n Activated set size = " << activatedSet.size();
     
-    double phase2TimeTaken = double(phase2EndTime - phase2StartTime) / CLOCKS_PER_SEC;
     
-    IMResults::getInstance().setPhase2Time(phase2TimeTaken);
-
-    string resultFileName = "results/" + graphFileName;
-    resultFileName+="_" + to_string(budget);
-    resultFileName+="_" + to_string(nonTargetThreshold);
-    resultFileName+="_" + to_string(80);
-    resultFileName+="_" + to_string(rand() % 1000000);
-    IMResults::getInstance().writeToFile(resultFileName);
+    Phase2TIM newPhase2(graph);
+    for (int i:nodeCounts) {
+        assert(i==0);
+    }
+    newPhase2.doPhase2(20, 10, nodeCounts);
     
     
-    IMTree *tree = phase2.getTree();
-    for(struct node* leaf:tree->getLeafNodes(budget)) {
+    vector<struct node*> leafNodes = newPhase2.getTree()->getLeafNodes(budget);
+    for(struct node* leaf:leafNodes) {
         vector<int> seedSet;
-        for(struct node* seed:tree->findSeedSetInPath(leaf)) {
+        vector<struct node*> seedAlongPath = newPhase2.getTree()->findSeedSetInPath(leaf);
+        for (struct node* seed:seedAlongPath) {
             seedSet.push_back(seed->nodeID);
         }
+        
         vector<int> activatedSet = performDiffusion(graph, seedSet);
-        int targets = 0;
-        int nonTargets = 0;
-        for(int activeNode:activatedSet) {
-            if(graph->labels[activeNode]) {
-                targets++;
-            } else {
-                nonTargets++;
-            }
-        }
-        cout << "\n For Threshold " << tree->influenceAlongPath(leaf).second << " Targets activated is  " << targets;
-        cout << " Non targets activated is " << nonTargets;
+        cout << "\n Activated set size = " << activatedSet.size();
     }
-    delete graph;
-    cout << "\n";
+    
     disp_mem_usage("");
     return 0;
 }
