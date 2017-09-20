@@ -127,6 +127,8 @@ void IMTree::removeBranch(struct node* leaf) {
         removeBranch(parent);
     }
 }
+
+
 void IMTree::printTree() {
 //    cout <<"\nBegin printing tree\n";
 //    for(struct node *leaf: getLeafNodes()) {

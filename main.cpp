@@ -84,9 +84,7 @@ int main(int argc, const char * argv[]) {
     
     
     Phase2TIM newPhase2(graph);
-    for (int i:nodeCounts) {
-        assert(i==0);
-    }
+
     newPhase2.doPhase2(20, 10, nodeCounts);
     
     
@@ -98,8 +96,23 @@ int main(int argc, const char * argv[]) {
             seedSet.push_back(seed->nodeID);
         }
         
-        vector<int> activatedSet = performDiffusion(graph, seedSet);
-        cout << "\n Activated set size = " << activatedSet.size();
+        vector<int> activatedVector = performDiffusion(graph, seedSet);
+        set<int> activatedSet;
+        int targetsActivated = 0;
+        int nonTargetsActivated = 0;
+        for(int i:activatedVector) {
+            activatedSet.insert(i);
+            if(graph->labels[i]) targetsActivated++;
+            else nonTargetsActivated++;
+        }
+        for(int i:seedSet) {
+            assert(activatedSet.find(i)!=activatedSet.end());
+        }
+//        cout << "\n Activated set size = " << activatedVector.size();
+        assert(targetsActivated+nonTargetsActivated==activatedVector.size());
+        cout << "\n Targets activated = " << targetsActivated;
+        cout << "\n Non targets activated = " << nonTargetsActivated;
+        
     }
     
     disp_mem_usage("");

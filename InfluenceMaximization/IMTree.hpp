@@ -33,6 +33,7 @@ struct node {
         }
     }
 };
+
 class IMTree {
 public:
     IMTree(void);

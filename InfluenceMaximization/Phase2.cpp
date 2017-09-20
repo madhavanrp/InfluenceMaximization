@@ -28,6 +28,10 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
     int depth = 0;
     int totalTargets = -1;
     int totalNonTargets = -1;
+    set<int> allNodesSet;
+    for (int i=0; i<numberOfNodes; i++) {
+        allNodesSet.insert(i);
+    }
     while(depth<budget) {
         vector<struct node*> leafNodes = tree.getLeafNodes(depth);
         pair<pair<int,pair<int,int>>, struct node*> nodesByNonTargetCount[threshold+1];
@@ -49,6 +53,7 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
             
             //Branch here
             for(int i=0;i<=(threshold-totalNonTargets);i++) {
+//                pair<int,int> nodePair = findMaxInfluentialNode(nonTargetMap[i], seedSet);
                 pair<int,int> nodePair = findMaxInfluentialNode(nonTargetMap[i], seedSet);
                 int nextNode = nodePair.first;
                 if(nextNode==-1) continue;
@@ -56,12 +61,16 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
                 //The pruning happens here
                 
                 assert(totalNonTargets+i<=threshold);
-                pair<int,int> influence = make_pair(targets, i);
+                pair<int,int> nodeInfluence = make_pair(targets, i);
                 if(nodesByNonTargetCount[totalNonTargets+i].second==NULL) {
-                    nodesByNonTargetCount[totalNonTargets+i] = make_pair(make_pair(nextNode, influence), leaf);
+                    nodesByNonTargetCount[totalNonTargets+i] = make_pair(make_pair(nextNode, nodeInfluence), leaf);
                 } else {
-                    if(nodesByNonTargetCount[totalNonTargets+i].first.second.first<targets) {
-                        nodesByNonTargetCount[totalNonTargets+i] = make_pair(make_pair(nextNode, influence), leaf);
+                    struct node* currentNodeParent = nodesByNonTargetCount[totalNonTargets+i].second;
+                    pair<int,int> currentTotalInfluence = tree.influenceAlongPath(currentNodeParent);
+                    assert(currentTotalInfluence.second + nodesByNonTargetCount[totalNonTargets+i].first.second.second==totalNonTargets+i);
+                    
+                    if(nodesByNonTargetCount[totalNonTargets+i].first.second.first + currentTotalInfluence.first < targets + totalTargets) {
+                        nodesByNonTargetCount[totalNonTargets+i] = make_pair(make_pair(nextNode, nodeInfluence), leaf);
                         
                     }
                 }
@@ -232,6 +241,7 @@ pair<int, int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, TIMCov
     
     delete queueCopy;
     assert(timCoverage->queue.size()==originalSize);
+    assert(candidateNodes.find(maximumGainNode)!=candidateNodes.end());
     //     TODO: Scale this.
 //    double scaledInfluence = (double) influence * nodeMark->size()/(int)this->rrSets.size();
     return make_pair(maximumGainNode, influence);
