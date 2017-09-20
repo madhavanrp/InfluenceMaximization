@@ -12,13 +12,13 @@
 #include "../InfluenceMaximization/Graph.hpp"
 
 TEST_CASE("Graph diffusion happens correctly " , "Diffusion") {
-    Graph *graph = new Graph;
-    graph->readGraph("world");
-    
-    vector<int> seedSet;
-    seedSet.push_back(100);
-    vector<int> activatedSet = performDiffusion(*graph, seedSet);
-    REQUIRE(activatedSet.size()>0);
+//    Graph *graph = new Graph;
+//    graph->readGraph("graph_ic.inf");
+//    
+//    set<int> seedSet;
+//    seedSet.insert(100);
+//    vector<int> activatedSet = performDiffusion(graph, seedSet);
+//    REQUIRE(activatedSet.size()>0);
     
     
 }
