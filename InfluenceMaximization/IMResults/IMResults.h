@@ -80,5 +80,11 @@ public:
     void setPhase2RRSets(int numberOfRRSets) {
         data["phase2RRSets"] = numberOfRRSets;
     }
+    
+    void setExpectedTargets(pair<int,int> influence) {
+        data["expectedTargets"] = influence.first;
+        data["expectedNonTargets"] = influence.second;
+    }
+    
 };
 #endif /* IMResults_h */

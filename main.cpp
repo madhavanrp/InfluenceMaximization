@@ -109,7 +109,6 @@ int main(int argc, const char * argv[]) {
     resultFileName+="_" + to_string(rand() % 1000000);
     resultFileName+="_1";
     resultFileName+=".json";
-    IMResults::getInstance().writeToFile(resultFileName);
     
     cout << "\n Finding best";
     IMSeedSet bestSeedSet = phase2.getTree()->getBestSeedSet(budget);
@@ -123,6 +122,8 @@ int main(int argc, const char * argv[]) {
     cout << "\n Targets activated = " << targetsActivated;
     cout << "\n Non targets activated = " << nonTargetsActivated;
     
+    IMResults::getInstance().setExpectedTargets(make_pair(targetsActivated, nonTargetsActivated));
+    IMResults::getInstance().writeToFile(resultFileName);
     disp_mem_usage("");
     return 0;
 }
