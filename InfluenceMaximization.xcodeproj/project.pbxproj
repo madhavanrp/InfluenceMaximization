@@ -67,6 +67,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		311423121F733720001BA3FA /* IMResults */ = {
+			isa = PBXGroup;
+			children = (
+				31279D7A1F6F0CFC00FC4D9B /* IMResults.h */,
+			);
+			name = IMResults;
+			sourceTree = "<group>";
+		};
 		31279D6F1F63469F00FC4D9B /* TIM-Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +117,7 @@
 		31FC36891F354892005CAFEB /* InfluenceMaximization */ = {
 			isa = PBXGroup;
 			children = (
+				311423121F733720001BA3FA /* IMResults */,
 				31279D6F1F63469F00FC4D9B /* TIM-Models */,
 				31FC36911F354E56005CAFEB /* Graph.cpp */,
 				311423111F6F4AA7001BA3FA /* memoryusage.h */,
@@ -122,7 +131,6 @@
 				31279D6D1F58EBD900FC4D9B /* Phase2.hpp */,
 				31279D751F6CAB3400FC4D9B /* Diffusion.hpp */,
 				31279D791F6F052C00FC4D9B /* json.hpp */,
-				31279D7A1F6F0CFC00FC4D9B /* IMResults.h */,
 			);
 			path = InfluenceMaximization;
 			sourceTree = "<group>";

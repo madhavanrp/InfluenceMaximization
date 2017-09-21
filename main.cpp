@@ -16,6 +16,7 @@
 #include "InfluenceMaximization/IMResults/IMResults.h"
 #include "InfluenceMaximization/memoryusage.h"
 #include <string>
+#include <chrono>
 
 using json = nlohmann::json;
 
@@ -26,6 +27,8 @@ int main(int argc, const char * argv[]) {
     int nonTargetThreshold;
     string graphFileName;
     int percentagetNonTargets;
+    bool fromFile = false;
+    string nonTargetsFileName;
     if(argc<=1) {
         budget=20;
         nonTargetThreshold = 10;
@@ -37,24 +40,51 @@ int main(int argc, const char * argv[]) {
         nonTargetThreshold = atoi(argv[3]);
         graphFileName = argv[1];
         percentagetNonTargets = atoi(argv[4]);
+        if(argc>5) {
+            nonTargetsFileName = argv[5];
+            fromFile = true;
+        }
     }
+    IMResults::getInstance().setFromFile(fromFile);
     // insert code here...
     float percentageNonTargetsFloat = (float)percentagetNonTargets/(float)100;
     Graph *graph = new Graph;
     graph->readGraph(graphFileName, percentageNonTargetsFloat);
     
-    
-    
+    vector<int> nodeCounts;
     clock_t phase1StartTime = clock();
-    EstimateNonTargets *estimateNonTargets = new EstimateNonTargets(*graph);
-    vector<int> nodeCounts = estimateNonTargets->getNonTargetsUsingTIM();
+    EstimateNonTargets *estimateNonTargets = NULL;
+    if(!fromFile) {
+        estimateNonTargets = new EstimateNonTargets(*graph);
+        nodeCounts = estimateNonTargets->getNonTargetsUsingTIM();
+    } else {
+        estimateNonTargets = new EstimateNonTargets();
+        estimateNonTargets->readFromFile(nonTargetsFileName);
+        nodeCounts = estimateNonTargets->nodeCounts;
+        delete estimateNonTargets;
+    }
     
     clock_t phase1EndTime = clock();
-    delete estimateNonTargets;
 
     double phase1TimeTaken = double(phase1EndTime - phase1StartTime) / CLOCKS_PER_SEC;
     IMResults::getInstance().setPhase1Time(phase1TimeTaken);
+    if(!fromFile) {
+        nonTargetsFileName = graphFileName;
+        nonTargetsFileName+="_" + to_string(budget);
+        nonTargetsFileName+="_" + to_string(nonTargetThreshold);
+        nonTargetsFileName+="_" + to_string(80);
+        nonTargetsFileName+="_" + to_string(rand() % 1000000);
+        nonTargetsFileName+="_1";
+        nonTargetsFileName+=".txt";
+        estimateNonTargets->writeToFile(nonTargetsFileName);
+        cout << "\nWriting Non Targets to file " << nonTargetsFileName;
+        cout << "\n";
+        IMResults::getInstance().setNonTargetFileName(nonTargetsFileName);
+        delete estimateNonTargets;
+    }
 
+    
+    //Start phase 2
     clock_t phase2StartTime = clock();
     Phase2TIM phase2(graph);
     phase2.doPhase2(budget, nonTargetThreshold, nodeCounts);
@@ -64,29 +94,22 @@ int main(int argc, const char * argv[]) {
 
     IMResults::getInstance().setPhase2Time(phase2TimeTaken);
 
+    
+    
+    vector<IMSeedSet> allSeedSets = phase2.getTree()->getAllSeeds(budget);
+    IMResults::getInstance().addSeedSets(allSeedSets);
+    IMResults::getInstance().addBestSeedSet(phase2.getTree()->getBestSeedSet(budget));
+    
+    
+    //Construct results file name
     string resultFileName = "results/" + graphFileName;
     resultFileName+="_" + to_string(budget);
     resultFileName+="_" + to_string(nonTargetThreshold);
     resultFileName+="_" + to_string(80);
     resultFileName+="_" + to_string(rand() % 1000000);
+    resultFileName+="_1";
     resultFileName+=".json";
     IMResults::getInstance().writeToFile(resultFileName);
-    
-    vector<IMSeedSet> allSeedSets = phase2.getTree()->getAllSeeds(budget);
-    for(IMSeedSet imSeedSet:allSeedSets) {
-        set<int> seedSet = imSeedSet.getSeedSet();
-        vector<int> activatedVector = performDiffusion(graph, seedSet);
-        int targetsActivated = 0;
-        int nonTargetsActivated = 0;
-        for(int i:activatedVector) {
-            if(graph->labels[i]) targetsActivated++;
-            else nonTargetsActivated++;
-        }
-        assert(targetsActivated+nonTargetsActivated==activatedVector.size());
-        cout << "\n Targets activated = " << targetsActivated;
-        cout << "\n Non targets activated = " << nonTargetsActivated;
-        
-    }
     
     cout << "\n Finding best";
     IMSeedSet bestSeedSet = phase2.getTree()->getBestSeedSet(budget);

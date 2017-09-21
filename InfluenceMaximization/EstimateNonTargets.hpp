@@ -29,7 +29,7 @@ public:
     EstimateNonTargets(Graph graph);
     EstimateNonTargets();
     int getNonTargets(int vertex);
-    void writeToFile();
+    void writeToFile(string fileName);
     vector<int> getNonTargetsUsingTIM();
     vector<int> generateRandomRRSet(int randomVertex, int rrSetID);
     void generateRandomRRSets(int R, bool label);
@@ -37,7 +37,7 @@ public:
     deque<int> q;
     vector<bool> visited;
     vector<int> visitMark;
-    void readFromFile();
+    void readFromFile(string fileName);
     
 };
 #endif /* EstimateNonTargets_hpp */

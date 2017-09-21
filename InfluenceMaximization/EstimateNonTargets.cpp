@@ -31,11 +31,9 @@ vector<int> EstimateNonTargets::getNonTargetsUsingTIM() {
     int n = graph.n;
     double epsilon = EPSILON;
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
-    
     cout << "R is " << R;
     cout << "\n Non targets number is " << graph.nonTargets.size();
     generateRandomRRSets(R, false);
-    writeToFile();
     return nodeCounts;
 }
 
@@ -114,9 +112,10 @@ vector<int> EstimateNonTargets::generateRandomRRSet(int randomVertex, int rrSetI
     
 }
 
-void EstimateNonTargets::writeToFile() {
+void EstimateNonTargets::writeToFile(string fileName) {
     ofstream myfile;
-    myfile.open ("NonTargetsEstimateFiles/nonTargets.txt");
+    fileName = "NonTargetsEstimateFiles/" + fileName;
+    myfile.open (fileName);
     for (int i=0; i<nodeCounts.size(); i++) {
         myfile << nodeCounts[i] << "\n";
         
@@ -124,8 +123,8 @@ void EstimateNonTargets::writeToFile() {
     myfile.close();
 }
 
-void EstimateNonTargets::readFromFile() {
-    ifstream myFile("NonTargetsEstimateFiles/nonTargets.txt");
+void EstimateNonTargets::readFromFile(string fileName) {
+    ifstream myFile("NonTargetsEstimateFiles/" + fileName);
     int nonTargets;
     while (myFile >> nonTargets) {
         nodeCounts.push_back(nonTargets);
