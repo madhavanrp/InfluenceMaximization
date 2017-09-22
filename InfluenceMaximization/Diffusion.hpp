@@ -22,12 +22,16 @@ using namespace std;
 
 #define NUMBER_OF_SIMULATIONS 20000
 
-void singleDiffusion(set<int> *activatedSet, Graph *graph, set<int> *seedSet) {
+void singleDiffusion(set<int> *activatedSet, Graph *graph, set<int> *seedSet, set<int> *alreadyActivated) {
     
     deque<int> queue;
     set<int> unique;
     set<int> visited;
     assert(activatedSet->size()==0);
+    if(alreadyActivated!=NULL) {
+        activatedSet->insert(alreadyActivated->begin(), alreadyActivated->end());
+        assert(activatedSet->size()==alreadyActivated->size());
+    }
     for(int seed: *seedSet) {
         if(activatedSet->find(seed)==activatedSet->end()) {
             if(unique.find(seed)==unique.end()) {
@@ -42,19 +46,14 @@ void singleDiffusion(set<int> *activatedSet, Graph *graph, set<int> *seedSet) {
             unique.erase(u);
             activatedSet->insert(u);
             for (int v : graph->graph[u]) {
-//                cout <<"\n hi " << flush;
-//                cout << v << flush;
-//                cout << " " << graph->inDegree[v] << flush;
                 int randomNumber = rand() % graph->inDegree[v];
                 
                 if (randomNumber==0) {
                     if (activatedSet->find(v)==activatedSet->end()) {
-//                        if(visited.find(v)==visited.end()) {
                             if(unique.find(v)==unique.end()) {
                                 queue.push_front(v);
                                 unique.insert(v);
                             }
-//                        }
                     }
                 }
             }
@@ -62,7 +61,7 @@ void singleDiffusion(set<int> *activatedSet, Graph *graph, set<int> *seedSet) {
     }
 }
 
-vector<int> performDiffusion(Graph *graph, set<int> seedSet) {
+vector<int> performDiffusion(Graph *graph, set<int> seedSet, set<int> *alreadyActivated) {
     int activatedFrequency[graph->n];
     for(int i=0; i<graph->n; i++) {
         activatedFrequency[i] = 0;
@@ -71,7 +70,7 @@ vector<int> performDiffusion(Graph *graph, set<int> seedSet) {
     int totalActiveSetSize = 0;
     set<int> *activatedSet = new set<int>();
     for (int i=0; i<NUMBER_OF_SIMULATIONS; i++) {
-        singleDiffusion(activatedSet, graph, &seedSet);
+        singleDiffusion(activatedSet, graph, &seedSet, alreadyActivated);
         set <int> :: iterator itr;
         totalActiveSetSize+= activatedSet->size();
         for (itr = activatedSet->begin(); itr != activatedSet->end(); ++itr)
@@ -101,4 +100,7 @@ vector<int> performDiffusion(Graph *graph, set<int> seedSet) {
     return averageActivatedSet;
 }
 
+vector<int> performDiffusion(Graph *graph, set<int> seedSet) {
+    return performDiffusion(graph, seedSet, NULL);
+}
 #endif /* Diffusion_hpp */
