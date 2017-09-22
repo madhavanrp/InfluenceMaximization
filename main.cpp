@@ -99,16 +99,15 @@ int main(int argc, const char * argv[]) {
     Phase2TIM phase2(graph);
     phase2.doPhase2(budget, nonTargetThreshold, nodeCounts);
     clock_t phase2EndTime = clock();
-
     double phase2TimeTaken = double(phase2EndTime - phase2StartTime) / CLOCKS_PER_SEC;
-
+    
+    IMResults::getInstance().addBestSeedSet(phase2.getTree()->getBestSeedSet(budget));
     IMResults::getInstance().setPhase2Time(phase2TimeTaken);
 
     
     
     vector<IMSeedSet> allSeedSets = phase2.getTree()->getAllSeeds(budget);
     IMResults::getInstance().addSeedSets(allSeedSets);
-    IMResults::getInstance().addBestSeedSet(phase2.getTree()->getBestSeedSet(budget));
     
     
     //Construct results file name
