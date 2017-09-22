@@ -45,12 +45,22 @@ int main(int argc, const char * argv[]) {
             fromFile = true;
         }
     }
+    
+    
+    cout << "\n Conducting experiments for:\n";
+    cout <<" Graph: " << graphFileName;
+    cout << "\t Budget: " << budget;
+    cout << "\t Non Target Threshod: " << nonTargetThreshold;
+    cout << "\t Percentage:  " << percentagetNonTargets;
+    if(fromFile) {
+        cout << "\n Reading Non targets from file: " << nonTargetsFileName;
+    }
+    
     IMResults::getInstance().setFromFile(fromFile);
     // insert code here...
     float percentageNonTargetsFloat = (float)percentagetNonTargets/(float)100;
     Graph *graph = new Graph;
     graph->readGraph(graphFileName, percentageNonTargetsFloat);
-    
     vector<int> nodeCounts;
     clock_t phase1StartTime = clock();
     EstimateNonTargets *estimateNonTargets = NULL;

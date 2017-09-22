@@ -42,6 +42,7 @@ public:
     vector<vector<int>> getRandomRRSets();
     
     vector<int> oldRRSetGeneration(int randomVertex, int rrSetID);
+    void assertTransposeIsCorrect();
 };
 
 #endif /* Graph_hpp */

@@ -31,14 +31,13 @@ vector<int> EstimateNonTargets::getNonTargetsUsingTIM() {
     int n = graph.n;
     double epsilon = EPSILON;
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
-    cout << "R is " << R;
+    cout << "\n For phase 1: R is " << R;
     cout << "\n Non targets number is " << graph.nonTargets.size();
     generateRandomRRSets(R, false);
     return nodeCounts;
 }
 
 void EstimateNonTargets::generateRandomRRSets(int R, bool label) {
-//    R = 10;
     clock_t begin = clock();
     while(rrSets.size()<R) {
         rrSets.push_back(vector<int>());
@@ -68,8 +67,6 @@ void EstimateNonTargets::generateRandomRRSets(int R, bool label) {
         i++;
         
     }
-    cout << "\nMax node is " << maxNode;
-    cout << "\n Max influence is " << maxInfluence;
     
     clock_t end = clock();
     double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;

@@ -27,8 +27,7 @@ void Graph::readGraph(string fileName, float percentage) {
         }
         int from, to;
         int maxDegree = 0;
-        double p = 0;
-        while (myFile >> from >> to >> p) {
+        while (myFile >> from >> to) {
             graph[from].push_back(to);
             inDegree[to] = inDegree[to]+1;
             if(inDegree[to] > maxDegree) {
@@ -38,12 +37,15 @@ void Graph::readGraph(string fileName, float percentage) {
         myFile.close();
     }
     
+    
     graphTranspose = constructTranspose(graph);
     visitMark = vector<int>(n);
     labels = vector<bool>(n);
     stringstream stream;
     stream << fixed << setprecision(1) << percentage;
     s = stream.str();
+    cout << "\n Reading graph: " << fileName;
+    cout << "\n Reading labels file name: " << "graphs/" + fileName + "_" + s + "_labels.txt";
     readLabels("graphs/" + fileName + "_" + s + "_labels.txt");
 }
 
@@ -147,6 +149,40 @@ vector<vector<int>> Graph::constructTranspose(vector<vector<int>> someGraph) {
         }
     }
     return transposedGraph;
+}
+
+void Graph::assertTransposeIsCorrect() {
+    assert(graph.size()==n);
+    int edges = 0;
+    
+    for (int i=0; i< n; i++) {
+        for (int j:graph[i]) {
+            edges++;
+        }
+    }
+    assert(edges==m);
+    int edgeCount = 0;
+    int reverseEdgeCount = 0;
+    for (int i=0; i< n; i++) {
+        int u = i;
+        for (int j=0; j< graph[u].size(); j++) {
+            edgeCount++;
+            int v = graph[u][j];
+            bool reverseEdgePresent = false;
+            vector<int> reverseEdges = graphTranspose[v];
+            for(int uPrime:reverseEdges) {
+                if(uPrime==u) {
+                    reverseEdgeCount++;
+                    reverseEdgePresent = true;
+                }
+            }
+            assert(reverseEdgePresent);
+        }
+        
+    }
+    assert(edgeCount==reverseEdgeCount);
+    assert(edgeCount==m);
+    
 }
 
 
