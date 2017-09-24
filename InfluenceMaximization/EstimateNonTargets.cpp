@@ -26,6 +26,16 @@ int EstimateNonTargets::getNonTargets(int vertex) {
 //    return getNonTargetsUsingTIM();
     return 0;
 }
+vector<int> EstimateNonTargets::getNonTargetsUsingSIM() {
+    set<int> seedSet;
+    for(int i=0; i<n; i++) {
+        seedSet.insert(i);
+        int nonTargets = findInfluenceUsingDiffusion(&graph, seedSet).second;
+        seedSet.clear();
+        nodeCounts[i] = nonTargets;
+    }
+    return nodeCounts;
+}
 
 vector<int> EstimateNonTargets::getNonTargetsUsingTIM() {
     int n = graph.n;

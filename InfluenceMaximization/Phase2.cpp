@@ -110,7 +110,6 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
             }
         }
         depth++;
-        
     }
    
 }
@@ -152,6 +151,11 @@ pair<int,int> Phase2::findMaxInfluentialNode(set<int> candidateNodes, vector<str
 
 Phase2::Phase2(Graph *graph) {
     this->graph = graph;
+}
+
+
+Phase2SIM::Phase2SIM(Graph *graph): Phase2(graph) {
+    
 }
 
 Phase2TIM::Phase2TIM(Graph *graph): Phase2(graph) {
@@ -277,3 +281,29 @@ void Phase2TIM::addToSeed(int vertex, TIMCoverage *timCoverage) {
         (*edgeMark)[edgeInfluence[i]] = true;
     }
 }
+
+pair<int,int> Phase2SIM::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet) {
+    set<int> seeds;
+    for (struct node *seed:seedSet) {
+        seeds.insert(seed->nodeID);
+    }
+    
+    pair<pair<int,int>, set<int>> currentActiveSetInfluence = findActivatedSetAndInfluenceUsingDiffusion(graph, seeds, NULL);
+    int maxInfluentialNode = -1;
+    int maxMarginalGain = INT_MIN;
+    for(int candidateNode: candidateNodes) {
+        if (seeds.find(candidateNode)==seeds.end()) {
+            seeds.insert(candidateNode);
+            pair<pair<int, int>, set<int>> newSpreadAndInfluence = findActivatedSetAndInfluenceUsingDiffusion(graph, seeds, &currentActiveSetInfluence.second);
+            
+            int marginalInfluenceSpread = newSpreadAndInfluence.first.first - currentActiveSetInfluence.first.first;
+            if (marginalInfluenceSpread > maxMarginalGain) {
+                maxMarginalGain = marginalInfluenceSpread;
+                maxInfluentialNode = candidateNode;
+            }
+            seeds.erase(candidateNode);
+        }
+    }
+    return make_pair(maxInfluentialNode, maxMarginalGain);
+}
+

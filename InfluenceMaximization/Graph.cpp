@@ -26,8 +26,9 @@ void Graph::readGraph(string fileName, float percentage) {
             inDegree.push_back(0);
         }
         int from, to;
+        float p;
         int maxDegree = 0;
-        while (myFile >> from >> to) {
+        while (myFile >> from >> to >> p) {
             graph[from].push_back(to);
             inDegree[to] = inDegree[to]+1;
             if(inDegree[to] > maxDegree) {

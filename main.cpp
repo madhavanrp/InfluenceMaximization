@@ -20,6 +20,8 @@
 
 using json = nlohmann::json;
 
+#define PHASE1TIM_PHASE2TIM 1;
+#define PHASE1SIM_PHASE2SIM 2;
 
 int main(int argc, const char * argv[]) {
     srand(time(0));
@@ -29,19 +31,22 @@ int main(int argc, const char * argv[]) {
     int percentagetNonTargets;
     bool fromFile = false;
     string nonTargetsFileName;
+    int method;
     if(argc<=1) {
         budget=20;
         nonTargetThreshold = 10;
         graphFileName = "graph_ic.inf";
         percentagetNonTargets = 80;
+        method = PHASE1TIM_PHASE2TIM;
         
     } else {
         budget = atoi(argv[2]);
         nonTargetThreshold = atoi(argv[3]);
         graphFileName = argv[1];
         percentagetNonTargets = atoi(argv[4]);
-        if(argc>5) {
-            nonTargetsFileName = argv[5];
+        method = atoi(argv[5]);
+        if(argc>6) {
+            nonTargetsFileName = argv[6];
             fromFile = true;
         }
     }
@@ -52,6 +57,7 @@ int main(int argc, const char * argv[]) {
     cout << "\t Budget: " << budget;
     cout << "\t Non Target Threshod: " << nonTargetThreshold;
     cout << "\t Percentage:  " << percentagetNonTargets;
+    cout << "\t Method: " <<method;
     if(fromFile) {
         cout << "\n Reading Non targets from file: " << nonTargetsFileName;
     }
@@ -67,7 +73,11 @@ int main(int argc, const char * argv[]) {
     EstimateNonTargets *estimateNonTargets = NULL;
     if(!fromFile) {
         estimateNonTargets = new EstimateNonTargets(*graph);
-        nodeCounts = estimateNonTargets->getNonTargetsUsingTIM();
+        if(method==1) {
+            nodeCounts = estimateNonTargets->getNonTargetsUsingTIM();
+        } else {
+            nodeCounts = estimateNonTargets->getNonTargetsUsingSIM();
+        }
     } else {
         estimateNonTargets = new EstimateNonTargets();
         estimateNonTargets->readFromFile(nonTargetsFileName);
@@ -97,9 +107,15 @@ int main(int argc, const char * argv[]) {
     
     //Start phase 2
     clock_t phase2StartTime = clock();
-    Phase2TIM phase2(graph);
-    phase2.doPhase2(budget, nonTargetThreshold, nodeCounts);
-    IMResults::getInstance().addBestSeedSet(phase2.getTree()->getBestSeedSet(budget));
+    Phase2 *phase2= NULL;
+    if(method==1) {
+        phase2 = new Phase2TIM(graph);
+    }
+    else {
+        phase2 = new Phase2SIM(graph);
+    }
+    phase2->doPhase2(budget, nonTargetThreshold, nodeCounts);
+    IMResults::getInstance().addBestSeedSet(phase2->getTree()->getBestSeedSet(budget));
     clock_t phase2EndTime = clock();
     double phase2TimeTaken = double(phase2EndTime - phase2StartTime) / CLOCKS_PER_SEC;
     
@@ -107,9 +123,8 @@ int main(int argc, const char * argv[]) {
 
     
     
-    vector<IMSeedSet> allSeedSets = phase2.getTree()->getAllSeeds(budget);
+    vector<IMSeedSet> allSeedSets = phase2->getTree()->getAllSeeds(budget);
     IMResults::getInstance().addSeedSets(allSeedSets);
-    
     
     //Construct results file name
     string resultFileName = "results/" + graphFileName;
@@ -120,20 +135,19 @@ int main(int argc, const char * argv[]) {
     resultFileName+="_1";
     resultFileName+=".json";
     
-    cout << "\n Finding best";
-    IMSeedSet bestSeedSet = phase2.getTree()->getBestSeedSet(budget);
-    int targetsActivated = 0;
-    int nonTargetsActivated = 0;
-    for(int i:performDiffusion(graph, bestSeedSet.getSeedSet())) {
-        if(graph->labels[i]) targetsActivated++;
-        else nonTargetsActivated++;
-    }
+    IMSeedSet bestSeedSet = phase2->getTree()->getBestSeedSet(budget);
+    delete phase2;
+    
+    pair<int, int> influenceOfBestSeedSet = findInfluenceUsingDiffusion(graph, bestSeedSet.getSeedSet());
+    int targetsActivated = influenceOfBestSeedSet.first;
+    int nonTargetsActivated = influenceOfBestSeedSet.second;
     
     cout << "\n Targets activated = " << targetsActivated;
     cout << "\n Non targets activated = " << nonTargetsActivated;
     
     IMResults::getInstance().setExpectedTargets(make_pair(targetsActivated, nonTargetsActivated));
     IMResults::getInstance().writeToFile(resultFileName);
+    
     disp_mem_usage("");
     return 0;
 }

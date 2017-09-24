@@ -15,6 +15,7 @@
 #include <queue>
 #include <cmath>
 #include <set>
+#include "Diffusion.hpp"
 
 #define EPSLON_TARGETS 2
 
@@ -32,8 +33,15 @@ public:
     IMTree* getTree();
 };
 
-class Phase2TIM: public Phase2 {
+class Phase2SIM: public Phase2 {
+protected:
     
+public:
+    Phase2SIM(Graph *graph);
+    virtual pair<int,int> findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet);
+};
+
+class Phase2TIM: public Phase2 {
 public:
     Phase2TIM(Graph *graph);
     struct node* addChild(struct node* parent, int childNodeID, int targets, int nonTargets);

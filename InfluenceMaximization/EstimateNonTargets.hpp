@@ -14,6 +14,7 @@
 #include <cmath>
 #include <assert.h>
 #include "json.hpp"
+#include "Diffusion.hpp"
 
 
 #define EPSILON 2
@@ -31,6 +32,7 @@ public:
     int getNonTargets(int vertex);
     void writeToFile(string fileName);
     vector<int> getNonTargetsUsingTIM();
+    vector<int> getNonTargetsUsingSIM();
     vector<int> generateRandomRRSet(int randomVertex, int rrSetID);
     void generateRandomRRSets(int R, bool label);
     vector<vector<int>> rrSets;
