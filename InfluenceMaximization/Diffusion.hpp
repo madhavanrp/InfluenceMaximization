@@ -22,7 +22,7 @@ using namespace std;
 
 #define NUMBER_OF_SIMULATIONS 20000
 
-void singleDiffusion(set<int> *activatedSet, Graph *graph, set<int> *seedSet, set<int> *alreadyActivated) {
+inline void singleDiffusion(set<int> *activatedSet, Graph *graph, set<int> *seedSet, set<int> *alreadyActivated) {
     
     deque<int> queue;
     set<int> unique;
@@ -61,7 +61,7 @@ void singleDiffusion(set<int> *activatedSet, Graph *graph, set<int> *seedSet, se
     }
 }
 
-vector<int> performDiffusion(Graph *graph, set<int> seedSet, set<int> *alreadyActivated) {
+inline vector<int> performDiffusion(Graph *graph, set<int> seedSet, set<int> *alreadyActivated) {
     int activatedFrequency[graph->n];
     for(int i=0; i<graph->n; i++) {
         activatedFrequency[i] = 0;
@@ -81,7 +81,6 @@ vector<int> performDiffusion(Graph *graph, set<int> seedSet, set<int> *alreadyAc
     }
     delete activatedSet;
     
-    
     priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> queue;
     
     int averageActiveSetSize = round((double)totalActiveSetSize/(double)NUMBER_OF_SIMULATIONS);
@@ -100,7 +99,33 @@ vector<int> performDiffusion(Graph *graph, set<int> seedSet, set<int> *alreadyAc
     return averageActivatedSet;
 }
 
-vector<int> performDiffusion(Graph *graph, set<int> seedSet) {
-    return performDiffusion(graph, seedSet, NULL);
+inline pair<int, int> findInfluenceUsingDiffusion(Graph *graph, set<int> seedSet, set<int> *alreadyActivated) {
+    vector<int>activatedSet = performDiffusion(graph, seedSet, alreadyActivated);
+    int targetsActivated = 0;
+    int nonTargetsActivated = 0;
+    for(int activeNode:activatedSet) {
+        if(graph->labels[activeNode]) targetsActivated++;
+        else nonTargetsActivated++;
+    }
+    return make_pair(targetsActivated, nonTargetsActivated);
 }
+
+inline pair<int, int> findInfluenceUsingDiffusion(Graph *graph, set<int> seedSet) {
+    return findInfluenceUsingDiffusion(graph, seedSet, NULL);
+}
+
+inline pair<pair<int, int>, set<int>> findActivatedSetAndInfluenceUsingDiffusion(Graph *graph, set<int> seedSet, set<int> *alreadyActivated) {
+    vector<int>activatedSet = performDiffusion(graph, seedSet, alreadyActivated);
+    set<int>activated;
+    
+    int targetsActivated = 0;
+    int nonTargetsActivated = 0;
+    for(int activeNode:activatedSet) {
+        if(graph->labels[activeNode]) targetsActivated++;
+        else nonTargetsActivated++;
+        activated.insert(activeNode);
+    }
+    return make_pair(make_pair(targetsActivated, nonTargetsActivated), activated);
+}
+
 #endif /* Diffusion_hpp */
