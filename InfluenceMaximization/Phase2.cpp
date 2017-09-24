@@ -169,13 +169,7 @@ Phase2TIM::Phase2TIM(Graph *graph): Phase2(graph) {
     TIMCoverage *coverage = new TIMCoverage(lookupTable);
     coverage->initializeLookupTable(rrSets, n);
     coverage->initializeDataStructures(R, n);
-    int count = 0;
-    for(vector<int> oneSet:rrSets) {
-        for(int vertex:oneSet) {
-            if(vertex==15228) count++;
-        }
-    }
-    assert(count==coverage->countForVertex(15228));
+    
     tree.root->coverage = coverage;
     
 }
