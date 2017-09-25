@@ -50,6 +50,8 @@
 		31A494A71F55E92700745401 /* EstimateNonTargets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EstimateNonTargets.cpp; sourceTree = "<group>"; };
 		31A494A81F55E92700745401 /* EstimateNonTargets.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EstimateNonTargets.hpp; sourceTree = "<group>"; };
 		31A494AB1F56095900745401 /* TIMUtility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TIMUtility.hpp; sourceTree = "<group>"; };
+		31C4ADA01F787C610077D6BF /* log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
+		31C4ADA11F787C610077D6BF /* log1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log1.h; sourceTree = "<group>"; };
 		31FC36871F354892005CAFEB /* InfluenceMaximization */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = InfluenceMaximization; sourceTree = BUILT_PRODUCTS_DIR; };
 		31FC36911F354E56005CAFEB /* Graph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Graph.cpp; sourceTree = "<group>"; };
 		31FC36921F354E56005CAFEB /* Graph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Graph.hpp; sourceTree = "<group>"; };
@@ -117,6 +119,8 @@
 		31FC36891F354892005CAFEB /* InfluenceMaximization */ = {
 			isa = PBXGroup;
 			children = (
+				31C4ADA01F787C610077D6BF /* log.h */,
+				31C4ADA11F787C610077D6BF /* log1.h */,
 				311423121F733720001BA3FA /* IMResults */,
 				31279D6F1F63469F00FC4D9B /* TIM-Models */,
 				31FC36911F354E56005CAFEB /* Graph.cpp */,

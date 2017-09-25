@@ -17,13 +17,35 @@
 #include "InfluenceMaximization/memoryusage.h"
 #include <string>
 #include <chrono>
+#include "InfluenceMaximization/log.h"
+
+#include <iomanip>
+#include <ctime>
+#include <sstream>
 
 using json = nlohmann::json;
 
 #define PHASE1TIM_PHASE2TIM 1;
 #define PHASE1SIM_PHASE2SIM 2;
 
+void setupLogger() {
+    time_t rawtime;
+    struct tm * timeinfo;
+    char buffer[80];
+    
+    time (&rawtime);
+    timeinfo = localtime(&rawtime);
+    
+    strftime(buffer,sizeof(buffer),"%d-%m-%Y-%I:%M:%S",timeinfo);
+    std::string str(buffer);
+    FILELog::ReportingLevel() = logDEBUG3;
+    string logFileName = "logs/influence-" + str + ".log";
+    FILE* log_fd = fopen( logFileName.c_str(), "w" );
+    Output2FILE::Stream() = log_fd;
+}
 int main(int argc, const char * argv[]) {
+    setupLogger();
+    
     srand(time(0));
     int budget;
     int nonTargetThreshold;
@@ -62,6 +84,16 @@ int main(int argc, const char * argv[]) {
         cout << "\n Reading Non targets from file: " << nonTargetsFileName;
     }
     
+    FILE_LOG(logDEBUG) << "\n Conducting experiments for:\n";
+    FILE_LOG(logDEBUG) <<" Graph: " << graphFileName;
+    FILE_LOG(logDEBUG) << "\t Budget: " << budget;
+    FILE_LOG(logDEBUG) << "\t Non Target Threshod: " << nonTargetThreshold;
+    FILE_LOG(logDEBUG) << "\t Percentage:  " << percentagetNonTargets;
+    FILE_LOG(logDEBUG) << "\t Method: " <<method;
+    if(fromFile) {
+        FILE_LOG(logDEBUG) << "\n Reading Non targets from file: " << nonTargetsFileName;
+    }
+    
     IMResults::getInstance().setFromFile(fromFile);
     // insert code here...
     float percentageNonTargetsFloat = (float)percentagetNonTargets/(float)100;
@@ -86,7 +118,7 @@ int main(int argc, const char * argv[]) {
     }
     
     clock_t phase1EndTime = clock();
-
+    FILE_LOG(logDEBUG) << "Completed Phase 1";
     double phase1TimeTaken = double(phase1EndTime - phase1StartTime) / CLOCKS_PER_SEC;
     IMResults::getInstance().setPhase1Time(phase1TimeTaken);
     if(!fromFile) {
@@ -103,9 +135,9 @@ int main(int argc, const char * argv[]) {
         IMResults::getInstance().setNonTargetFileName(nonTargetsFileName);
         delete estimateNonTargets;
     }
-
     
     //Start phase 2
+    FILE_LOG(logDEBUG) << "Starting phase 2";
     clock_t phase2StartTime = clock();
     Phase2 *phase2= NULL;
     if(method==1) {
@@ -118,7 +150,7 @@ int main(int argc, const char * argv[]) {
     IMResults::getInstance().addBestSeedSet(phase2->getTree()->getBestSeedSet(budget));
     clock_t phase2EndTime = clock();
     double phase2TimeTaken = double(phase2EndTime - phase2StartTime) / CLOCKS_PER_SEC;
-    
+    FILE_LOG(logDEBUG) << "Completed phase 2";
     IMResults::getInstance().setPhase2Time(phase2TimeTaken);
 
     
@@ -147,7 +179,7 @@ int main(int argc, const char * argv[]) {
     
     IMResults::getInstance().setExpectedTargets(make_pair(targetsActivated, nonTargetsActivated));
     IMResults::getInstance().writeToFile(resultFileName);
-    
+    FILE_LOG(logDEBUG) << "Writing results to file " << resultFileName;
     disp_mem_usage("");
     return 0;
 }

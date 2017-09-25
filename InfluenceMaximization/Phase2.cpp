@@ -8,6 +8,7 @@
 
 #include "Phase2.hpp"
 #include <assert.h>
+#include "log.h"
 int TIMCoverage::totalCount=0;
 void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates) {
     
@@ -33,6 +34,7 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
         allNodesSet.insert(i);
     }
     while(depth<budget) {
+        FILE_LOG(logDEBUG) << "Starting depth " << depth;
         vector<struct node*> leafNodes = tree.getLeafNodes(depth);
         pair<pair<int,pair<int,int>>, struct node*> nodesByNonTargetCount[threshold+1];
         vector<pair<struct node*, bool>> expandedNodes;
@@ -109,6 +111,7 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
                 assert(expandedNode.first->children.size()==0);
             }
         }
+        FILE_LOG(logDEBUG) << "Finishing depth " << depth;
         depth++;
     }
    
