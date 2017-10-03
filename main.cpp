@@ -125,7 +125,7 @@ int main(int argc, const char * argv[]) {
         nonTargetsFileName = graphFileName;
         nonTargetsFileName+="_" + to_string(budget);
         nonTargetsFileName+="_" + to_string(nonTargetThreshold);
-        nonTargetsFileName+="_" + to_string(80);
+        nonTargetsFileName+="_" + to_string(percentagetNonTargets);
         nonTargetsFileName+="_" + to_string(rand() % 1000000);
         nonTargetsFileName+="_1";
         nonTargetsFileName+=".txt";
