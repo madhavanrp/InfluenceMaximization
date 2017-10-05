@@ -21,7 +21,12 @@
 using namespace std;
 
 class Graph {
+private:
+    float propogationProbability;
+    int propogationProbabilityNumber;
+    bool standardProbability;
 public:
+    Graph();
     int n, m;
     vector<vector<int> > graph;
     vector<vector<int> > graphTranspose;
@@ -43,6 +48,14 @@ public:
     
     vector<int> oldRRSetGeneration(int randomVertex, int rrSetID);
     void assertTransposeIsCorrect();
+    
+    //Functions for propogation probability
+    void setPropogationProbability(float p);
+    bool flipCoinOnEdge(int u, int v);
+    int generateRandomNumber(int u, int v);
+    int getPropogationProbabilityNumber();
+    
+    
 };
 
 #endif /* Graph_hpp */

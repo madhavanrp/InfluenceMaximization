@@ -15,6 +15,36 @@ void Graph::readGraph(string fileName) {
     readGraph(fileName, 0.8);
 }
 
+Graph::Graph() {
+    this->standardProbability = false;
+}
+
+void Graph::setPropogationProbability(float p) {
+    this->propogationProbability = p;
+    this->standardProbability = true;
+    this->propogationProbabilityNumber = (float)1/p;
+}
+
+int Graph::getPropogationProbabilityNumber() {
+    return this->propogationProbabilityNumber;
+}
+
+int Graph:: generateRandomNumber(int u, int v) {
+    int randomNumberLimit;
+    if(this->standardProbability) {
+        randomNumberLimit = this->propogationProbabilityNumber;
+    }
+    else {
+        randomNumberLimit = inDegree[v];
+    }
+    return rand() % randomNumberLimit;
+}
+
+bool Graph:: flipCoinOnEdge(int u, int v) {
+    int randomNumber = generateRandomNumber(u, v);
+    return randomNumber==0;
+}
+
 void Graph::readGraph(string fileName, float percentage) {
     ifstream myFile("graphs/" + fileName);
     string s;
