@@ -147,8 +147,7 @@ vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
         q.pop_front();
         for(int j=0; j<(int)graphTranspose[expand].size(); j++){
             int v=graphTranspose[expand][j];
-            int randInt = rand() % inDegree[expand];
-            if(randInt!=0)
+            if(!this->flipCoinOnEdge(v, expand))
                 continue;
             if(visited[v])
                 continue;

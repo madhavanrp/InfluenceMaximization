@@ -231,7 +231,8 @@ pair<int, int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, TIMCov
     
     delete queueCopy;
     assert(timCoverage->queue.size()==originalSize);
-    assert(candidateNodes.find(maximumGainNode)!=candidateNodes.end());
+    if(maximumGainNode!=-1)
+        assert(candidateNodes.find(maximumGainNode)!=candidateNodes.end());
     //     TODO: Scale this.
     double scaledInfluence = (double) influence * nodeMark->size()/(int)this->rrSets.size();
     return make_pair(maximumGainNode, scaledInfluence);

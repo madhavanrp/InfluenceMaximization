@@ -97,9 +97,8 @@ vector<int> EstimateNonTargets::generateRandomRRSet(int randomVertex, int rrSetI
         int u=q.front();
         q.pop_front();
         for(int j=0; j<(int)graph.graphTranspose[u].size(); j++){
-            int v=graph.graphTranspose[u][j];
-            int randInt = rand() % graph.inDegree[u];
-            if(randInt!=0)
+            int v = graph.graphTranspose[u][j];
+            if(!graph.flipCoinOnEdge(v, u))
                 continue;
             if(visited[v])
                 continue;

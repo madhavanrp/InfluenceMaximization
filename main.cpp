@@ -54,6 +54,8 @@ int main(int argc, const char * argv[]) {
     bool fromFile = false;
     string nonTargetsFileName;
     int method;
+    bool useIndegree = true;
+    float probability = 0;
     if(argc<=1) {
         budget=20;
         nonTargetThreshold = 10;
@@ -68,11 +70,16 @@ int main(int argc, const char * argv[]) {
         percentagetNonTargets = atoi(argv[4]);
         method = atoi(argv[5]);
         if(argc>6) {
-            nonTargetsFileName = argv[6];
+            probability = atof(argv[6]);
+            if(probability<1) {
+                useIndegree = false;
+            }
+        }
+        if(argc>7) {
+            nonTargetsFileName = argv[7];
             fromFile = true;
         }
     }
-    
     
     cout << "\n Conducting experiments for:\n";
     cout <<" Graph: " << graphFileName;
@@ -80,6 +87,11 @@ int main(int argc, const char * argv[]) {
     cout << "\t Non Target Threshod: " << nonTargetThreshold;
     cout << "\t Percentage:  " << percentagetNonTargets;
     cout << "\t Method: " <<method;
+    if(useIndegree) {
+        cout << "\t Probability: Indegree";
+    } else {
+        cout << "\t Probability: " <<  probability;
+    }
     if(fromFile) {
         cout << "\n Reading Non targets from file: " << nonTargetsFileName;
     }
@@ -99,7 +111,9 @@ int main(int argc, const char * argv[]) {
     float percentageNonTargetsFloat = (float)percentagetNonTargets/(float)100;
     Graph *graph = new Graph;
     graph->readGraph(graphFileName, percentageNonTargetsFloat);
-    
+    if(!useIndegree) {
+        graph->setPropogationProbability(probability);
+    }
     vector<int> nodeCounts;
     clock_t phase1StartTime = clock();
     EstimateNonTargets *estimateNonTargets = NULL;

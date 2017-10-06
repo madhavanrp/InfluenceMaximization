@@ -42,9 +42,8 @@ inline void singleDiffusion(set<int> *activatedSet, Graph *graph, set<int> *seed
             queue->pop_front();
             activatedSet->insert(u);
             for (int v : graph->graph[u]) {
-                int randomNumber = rand() % graph->inDegree[v];
-                
-                if (randomNumber==0) {
+                bool activeEdge = graph->flipCoinOnEdge(u, v);
+                if (activeEdge) {
                     if(!(*visited)[v])
                     if (activatedSet->find(v)==activatedSet->end()) {
                         queue->push_front(v);
