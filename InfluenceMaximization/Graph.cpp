@@ -73,7 +73,7 @@ void Graph::readGraph(string fileName, float percentage) {
     visitMark = vector<int>(n);
     labels = vector<bool>(n);
     stringstream stream;
-    stream << fixed << setprecision(1) << percentage;
+    stream << fixed << setprecision(2) << percentage;
     s = stream.str();
     cout << "\n Reading graph: " << fileName;
     cout << "\n Reading labels file name: " << "graphs/" + fileName + "_" + s + "_labels.txt";
