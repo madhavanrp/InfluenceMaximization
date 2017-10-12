@@ -176,7 +176,7 @@ int main(int argc, const char * argv[]) {
     string resultFileName = "results/" + graphFileName;
     resultFileName+="_" + to_string(budget);
     resultFileName+="_" + to_string(nonTargetThreshold);
-    resultFileName+="_" + to_string(80);
+    resultFileName+="_" + to_string(percentagetNonTargets);
     resultFileName+="_" + to_string(rand() % 1000000);
     resultFileName+="_1";
     resultFileName+=".json";
