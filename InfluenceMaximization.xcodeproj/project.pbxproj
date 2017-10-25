@@ -13,6 +13,10 @@
 		31279D781F6CC18300FC4D9B /* DiffusionTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D771F6CC18300FC4D9B /* DiffusionTests.cpp */; };
 		313A589D1F4E072300F86148 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 313A589C1F4E072300F86148 /* Makefile */; };
 		3141B0F61F86BE1500B4F1D2 /* GraphTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3141B0F51F86BE1500B4F1D2 /* GraphTests.cpp */; };
+		3159634D1F9E756C000EB2F4 /* DifferenceApproximator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3159634B1F9E756C000EB2F4 /* DifferenceApproximator.cpp */; };
+		3159634F1F9E8797000EB2F4 /* ApproximationTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3159634E1F9E8797000EB2F4 /* ApproximationTests.cpp */; };
+		315963561F9EC153000EB2F4 /* FunctionEvaluators.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 315963541F9EC153000EB2F4 /* FunctionEvaluators.cpp */; };
+		315963581F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 315963571F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp */; };
 		31A4949B1F510CBF00745401 /* IMTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494991F510CBF00745401 /* IMTree.cpp */; };
 		31A494A41F55D54700745401 /* catchTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A31F55D54700745401 /* catchTest.cpp */; };
 		31A494A61F55D88B00745401 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A51F55D88B00745401 /* main.cpp */; };
@@ -44,6 +48,12 @@
 		31279D7A1F6F0CFC00FC4D9B /* IMResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IMResults.h; path = IMResults/IMResults.h; sourceTree = "<group>"; };
 		313A589C1F4E072300F86148 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		3141B0F51F86BE1500B4F1D2 /* GraphTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphTests.cpp; sourceTree = "<group>"; };
+		3159634B1F9E756C000EB2F4 /* DifferenceApproximator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DifferenceApproximator.cpp; sourceTree = "<group>"; };
+		3159634C1F9E756C000EB2F4 /* DifferenceApproximator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DifferenceApproximator.hpp; sourceTree = "<group>"; };
+		3159634E1F9E8797000EB2F4 /* ApproximationTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApproximationTests.cpp; sourceTree = "<group>"; };
+		315963541F9EC153000EB2F4 /* FunctionEvaluators.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FunctionEvaluators.cpp; sourceTree = "<group>"; };
+		315963551F9EC153000EB2F4 /* FunctionEvaluators.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FunctionEvaluators.hpp; sourceTree = "<group>"; };
+		315963571F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMEvaluatorTests.cpp; sourceTree = "<group>"; };
 		31A494991F510CBF00745401 /* IMTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IMTree.cpp; sourceTree = "<group>"; };
 		31A4949A1F510CBF00745401 /* IMTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IMTree.hpp; sourceTree = "<group>"; };
 		31A494A21F55D54700745401 /* catch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
@@ -95,6 +105,8 @@
 				31279D721F63485200FC4D9B /* TIMCoverageTests.cpp */,
 				31279D771F6CC18300FC4D9B /* DiffusionTests.cpp */,
 				3141B0F51F86BE1500B4F1D2 /* GraphTests.cpp */,
+				3159634E1F9E8797000EB2F4 /* ApproximationTests.cpp */,
+				315963571F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -138,6 +150,10 @@
 				31279D6D1F58EBD900FC4D9B /* Phase2.hpp */,
 				31279D751F6CAB3400FC4D9B /* Diffusion.hpp */,
 				31279D791F6F052C00FC4D9B /* json.hpp */,
+				3159634B1F9E756C000EB2F4 /* DifferenceApproximator.cpp */,
+				3159634C1F9E756C000EB2F4 /* DifferenceApproximator.hpp */,
+				315963541F9EC153000EB2F4 /* FunctionEvaluators.cpp */,
+				315963551F9EC153000EB2F4 /* FunctionEvaluators.hpp */,
 			);
 			path = InfluenceMaximization;
 			sourceTree = "<group>";
@@ -199,10 +215,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3159634D1F9E756C000EB2F4 /* DifferenceApproximator.cpp in Sources */,
 				31A494A41F55D54700745401 /* catchTest.cpp in Sources */,
 				313A589D1F4E072300F86148 /* Makefile in Sources */,
 				31A494A91F55E92700745401 /* EstimateNonTargets.cpp in Sources */,
 				31A4949B1F510CBF00745401 /* IMTree.cpp in Sources */,
+				315963561F9EC153000EB2F4 /* FunctionEvaluators.cpp in Sources */,
+				3159634F1F9E8797000EB2F4 /* ApproximationTests.cpp in Sources */,
 				31279D711F63472700FC4D9B /* TIMCoverage.hpp in Sources */,
 				31279D6E1F58EBD900FC4D9B /* Phase2.cpp in Sources */,
 				31279D731F63485200FC4D9B /* TIMCoverageTests.cpp in Sources */,
@@ -210,6 +229,7 @@
 				31A494A61F55D88B00745401 /* main.cpp in Sources */,
 				31FC36931F354E56005CAFEB /* Graph.cpp in Sources */,
 				31279D781F6CC18300FC4D9B /* DiffusionTests.cpp in Sources */,
+				315963581F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

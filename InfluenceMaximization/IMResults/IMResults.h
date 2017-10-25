@@ -86,5 +86,15 @@ public:
         data["expectedNonTargets"] = influence.second;
     }
     
+    void setApproximationInfluence(pair<int, int> influence) {
+        data["approximationTargetsExpected"] = influence.first;
+        data["approximationNonTargetsExpected"] = influence.second;
+    }
+    void setApproximationValue(int value) {
+        data["approximationValue"] = value;
+    }
+    void setApproximationTime(double value) {
+        data["approximationTime"] = value;
+    }
 };
 #endif /* IMResults_h */

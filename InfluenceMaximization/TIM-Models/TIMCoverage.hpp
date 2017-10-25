@@ -54,6 +54,10 @@ public:
         return (int)(*lookupTable)[u].size();
     }
     
+    vector<int> getRRSetsCoveredByVertex(int vertex) {
+        return (*lookupTable)[vertex];
+    }
+    
     void initializeLookupTable(vector<vector<int>> randomRRSets, int n) {
         
         for(int i=0;i<n; i++) {

@@ -18,6 +18,7 @@
 #include <string>
 #include <chrono>
 #include "InfluenceMaximization/log.h"
+#include "InfluenceMaximization/DifferenceApproximator.hpp"
 
 #include <iomanip>
 #include <ctime>
@@ -42,6 +43,42 @@ void setupLogger() {
     string logFileName = "logs/influence-" + str + ".log";
     FILE* log_fd = fopen( logFileName.c_str(), "w" );
     Output2FILE::Stream() = log_fd;
+}
+
+void testApprox(Graph *graph, ModularApproximation *modular) {
+    if( modular==NULL) {
+        DifferenceApproximator differenceApproximator(graph);
+        differenceApproximator.setN(graph->n);
+        vector<int> permutation = differenceApproximator.generatePermutation();
+        ModularApproximation modularApprox(permutation);
+        modularApprox.createTIMEvaluator(graph);
+        modularApprox.findAllApproximations();
+        modular = &modularApprox;
+    }
+    
+    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> orderedNodes;
+    int numberOfNonNegative = 0;
+    for(int i=0; i<graph->n; i++) {
+        int evaluation = modular->evaluateFunction(i);
+        //        cout << "\n h(" << i << ") = " << evaluation;
+        orderedNodes.push(make_pair(i, evaluation));
+        if(evaluation>=0) {
+            numberOfNonNegative++;
+        }
+    }
+    set<int> seedSet;
+    for (int i =0; i<20; i++) {
+        seedSet.insert(orderedNodes.top().first);
+        orderedNodes.pop();
+    }
+    int approximationValue = modular->evaluateFunction(seedSet);
+    pair<int, int> influence = findInfluenceUsingDiffusion(graph, seedSet, NULL);
+    cout <<"\n Results Approximation: ";
+    cout << "\nInfluence Targets: " << influence.first;
+    cout << "\nInfluence NT: " << influence.second;
+    IMResults::getInstance().setApproximationValue(approximationValue);
+    IMResults::getInstance().setApproximationInfluence(influence);
+
 }
 int main(int argc, const char * argv[]) {
     setupLogger();
@@ -192,6 +229,30 @@ int main(int argc, const char * argv[]) {
     cout << "\n Non targets activated = " << nonTargetsActivated;
     
     IMResults::getInstance().setExpectedTargets(make_pair(targetsActivated, nonTargetsActivated));
+    
+    //Begin f-g
+    clock_t differenceStartTime = clock();
+    DifferenceApproximator differenceApproximator(graph);
+    differenceApproximator.setN(graph->n);
+    vector<int> permutation = differenceApproximator.generatePermutation();
+    ModularApproximation modularApprox(permutation);
+    modularApprox.createTIMEvaluator(graph);
+    modularApprox.findAllApproximations();
+
+    set<int> best = bestSeedSet.getSeedSet();
+    int sanityTotal = 0;
+    cout << "\n (f-g) of best seed set from TIM-TIM";
+    for (int s: best) {
+        int evaluation = modularApprox.evaluateFunction(s);
+        sanityTotal+=evaluation;
+        cout << "\n h(" << s << ") = " << evaluation;
+    }
+    cout << "\n (f-g)(bestSeedSet): " << modularApprox.evaluateFunction(best);
+    testApprox(graph, &modularApprox);
+    clock_t differenceEndTime = clock();
+    double differenceTimeTaken = double(differenceEndTime - differenceStartTime) / CLOCKS_PER_SEC;
+    IMResults::getInstance().setApproximationTime(differenceTimeTaken);
+    
     IMResults::getInstance().writeToFile(resultFileName);
     FILE_LOG(logDEBUG) << "Writing results to file " << resultFileName;
     disp_mem_usage("");
