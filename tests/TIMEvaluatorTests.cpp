@@ -13,7 +13,7 @@
 TEST_CASE("Value of Targets correctly calculated " , "Function Evaluation") {
     Graph *graph = new Graph;
     graph->readGraph("ca-GrQc-processed.txt");
-    TIMEvaluator timEvaluator(graph);
+    TIMEvaluator timEvaluator(graph, setting1);
     set<int> seedSet;
     for (int i=0; i<20; i++) {
         int vertex = rand()%graph->n;

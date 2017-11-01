@@ -15,16 +15,20 @@
 #include "FunctionEvaluators.hpp"
 #include "Graph.hpp"
 #include <algorithm>
+#include "ApproximationSetting.hpp"
 
 using namespace std;
+
+
 class ModularApproximation {
     vector<int> *permutation;
     vector<int> *reverseMap;
     int n;
     int *approximations;
     TIMEvaluator *timEvaluator;
+    ApproximationSetting setting;
 public:
-    ModularApproximation(vector<int> permutation);
+    ModularApproximation(vector<int> permutation, ApproximationSetting approximationSetting);
     ~ModularApproximation();
     vector<int> getPerumutation();
     vector<int> getReverseMap();
@@ -32,6 +36,7 @@ public:
     int* getApproximations();
     
     void createTIMEvaluator(Graph *graph);
+    void setApproximationSetting(ApproximationSetting approximationSetting);
     void constructReverseMap();
     void calculateApproximation(int element, set<int> *vertices);
     void findAllApproximations();

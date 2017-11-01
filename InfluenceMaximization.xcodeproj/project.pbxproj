@@ -54,6 +54,7 @@
 		315963541F9EC153000EB2F4 /* FunctionEvaluators.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FunctionEvaluators.cpp; sourceTree = "<group>"; };
 		315963551F9EC153000EB2F4 /* FunctionEvaluators.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FunctionEvaluators.hpp; sourceTree = "<group>"; };
 		315963571F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMEvaluatorTests.cpp; sourceTree = "<group>"; };
+		315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ApproximationSetting.hpp; sourceTree = "<group>"; };
 		31A494991F510CBF00745401 /* IMTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IMTree.cpp; sourceTree = "<group>"; };
 		31A4949A1F510CBF00745401 /* IMTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IMTree.hpp; sourceTree = "<group>"; };
 		31A494A21F55D54700745401 /* catch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
@@ -154,6 +155,7 @@
 				3159634C1F9E756C000EB2F4 /* DifferenceApproximator.hpp */,
 				315963541F9EC153000EB2F4 /* FunctionEvaluators.cpp */,
 				315963551F9EC153000EB2F4 /* FunctionEvaluators.hpp */,
+				315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */,
 			);
 			path = InfluenceMaximization;
 			sourceTree = "<group>";

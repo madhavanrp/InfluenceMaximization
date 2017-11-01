@@ -21,6 +21,9 @@ EstimateNonTargets::EstimateNonTargets(Graph graph) {
 EstimateNonTargets::EstimateNonTargets() {
     
 }
+vector<vector<int>>* EstimateNonTargets::getRandomRRSets() {
+    return &this->rrSets;
+}
 
 int EstimateNonTargets::getNonTargets(int vertex) {
 //    return getNonTargetsUsingTIM();
@@ -47,7 +50,7 @@ vector<int> EstimateNonTargets::getNonTargetsUsingTIM() {
     return nodeCounts;
 }
 
-void EstimateNonTargets::generateRandomRRSets(int R, bool label) {
+vector<vector<int>>* EstimateNonTargets::generateRandomRRSets(int R, bool label) {
     clock_t begin = clock();
     while(rrSets.size()<R) {
         rrSets.push_back(vector<int>());
@@ -83,6 +86,7 @@ void EstimateNonTargets::generateRandomRRSets(int R, bool label) {
     cout <<"\n Generated " << R << " RR sets\n";
     cout << "Elapsed time " << elapsed_secs;
     cout<< " \n Time per RR Set is " << elapsed_secs/R;
+    return &rrSets;
 }
 
 vector<int> EstimateNonTargets::generateRandomRRSet(int randomVertex, int rrSetID) {

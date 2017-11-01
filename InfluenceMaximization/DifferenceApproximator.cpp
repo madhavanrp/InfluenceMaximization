@@ -9,17 +9,19 @@
 #include "DifferenceApproximator.hpp"
 
 
-ModularApproximation::ModularApproximation(vector<int> permutation) {
+ModularApproximation::ModularApproximation(vector<int> permutation, ApproximationSetting approximationSetting) {
     this->permutation = new vector<int>(permutation);
     this->n = (int)permutation.size();
     this->reverseMap = new vector<int>(this->n);
     this->approximations = new int[this->n];
+    this->setting = approximationSetting;
     constructReverseMap();
 }
 
 void ModularApproximation::createTIMEvaluator(Graph *graph) {
-    this->timEvaluator = new TIMEvaluator(graph);
+    this->timEvaluator = new TIMEvaluator(graph, this->setting);
 }
+
 
 ModularApproximation::~ModularApproximation() {
     delete this->permutation;
