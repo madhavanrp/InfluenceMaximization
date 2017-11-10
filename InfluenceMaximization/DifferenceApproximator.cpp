@@ -103,6 +103,82 @@ vector<int> DifferenceApproximator::generatePermutation() {
     return *this->permutation;
 }
 
+vector<int> DifferenceApproximator::generatePermutation(vector<int> startingElements) {
+    int totalSize = (int)this->permutation->size();
+    
+    // Shuffle the starting elements and build the new permutation
+    random_shuffle(startingElements.begin(), startingElements.end());
+    vector<int> *newPermutation = new vector<int>(totalSize);
+    set<int> startingSet;
+    int i = 0;
+    for(int vertex: startingElements) {
+        startingSet.insert(vertex);
+        (*newPermutation)[i] = vertex;
+        i++;
+    }
+    
+    // Shuffle the existing permutation to randomize the new one.
+    random_shuffle(this->permutation->begin(), this->permutation->end());
+    for (int element: *this->permutation) {
+        if(startingSet.find(element)!= startingSet.end()) continue;
+        (*newPermutation)[i] = element;
+        i++;
+    }
+    
+    // The existing permutation should have been allocated on heap and deleted on destructor. Switch here.
+    delete this->permutation;
+    this->permutation = newPermutation;
+    return *this->permutation;
+}
+
+set<int> DifferenceApproximator::executeGreedyAlgorithm(Graph *graph, ModularApproximation *modularApproximation, int k) {
+    
+    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> orderedNodes;
+    for(int i=0; i<graph->n; i++) {
+        int evaluation = modularApproximation->evaluateFunction(i);
+        orderedNodes.push(make_pair(i, evaluation));
+    }
+    set<int> seedSet;
+    for (int i =0; i<k; i++) {
+        seedSet.insert(orderedNodes.top().first);
+        orderedNodes.pop();
+    }
+    return seedSet;
+    
+}
+
+set<int> DifferenceApproximator::executeGreedyAlgorithmAdjustingPermutation(ApproximationSetting setting, int k) {
+    set<int> seedSet;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> orderedNodes;
+    vector<int> permutation = generatePermutation();
+    vector<int> startingVector;
+    for (int i =0; i<k; i++) {
+        orderedNodes = priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>();
+        permutation = generatePermutation(startingVector);
+        for(int j = 0; j<i; j++) {
+            assert(seedSet.find(permutation[j])!=seedSet.end());
+        }
+        ModularApproximation *approximation = new ModularApproximation(permutation, setting);
+        approximation->createTIMEvaluator(graph);
+        approximation->findAllApproximations();
+        for(int i=0; i<graph->n; i++) {
+            int evaluation = approximation->evaluateFunction(i);
+            orderedNodes.push(make_pair(i, evaluation));
+        }
+        delete approximation;
+
+        int top = orderedNodes.top().first;
+        while(seedSet.find(top)!=seedSet.end()) {
+            orderedNodes.pop();
+            top = orderedNodes.top().first;
+        }
+        seedSet.insert(top);
+        startingVector.push_back(top);
+    }
+    
+    return seedSet;
+}
+
 DifferenceApproximator::~DifferenceApproximator() {
     if(this->permutation!=NULL) {
         delete this->permutation;

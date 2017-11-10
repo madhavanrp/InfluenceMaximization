@@ -25,6 +25,40 @@ TEST_CASE("Correct size permutation" , "Approx") {
     REQUIRE(verticesCovered.size()==n);
 }
 
+TEST_CASE("Permutation starting with some set", "Difference Approx") {
+    Graph *graph = new Graph;
+    graph->readGraph("ca-GrQc-processed.txt");
+    DifferenceApproximator differenceApproximator(graph);
+    int n = graph->n;
+    differenceApproximator.setN(n);
+    vector<int> permutation = differenceApproximator.generatePermutation();
+    set<int> startingSet;
+    for (int i = 0; i<10; i++) {
+        int randomNumber = rand()%n;
+        while(startingSet.find(randomNumber)!=startingSet.end()) {
+            randomNumber = rand() % n;
+        }
+        startingSet.insert(randomNumber);
+    }
+    int startingSetSize = (int)startingSet.size();
+    REQUIRE(startingSetSize==10);
+    vector<int> startingElements;
+    for (int element: startingSet) {
+        
+        startingElements.push_back(element);
+    }
+    REQUIRE(startingElements.size()==10);
+    vector<int> newPermutation = differenceApproximator.generatePermutation(startingElements);
+    REQUIRE(newPermutation.size()==n);
+    bool correctlyStarting = true;
+    for (int i = 0; i < startingSetSize; i++) {
+        if(startingSet.find(newPermutation[i]) == startingSet.end()) {
+            correctlyStarting = false;
+        }
+    }
+    REQUIRE(correctlyStarting);
+}
+
 TEST_CASE("Reverse map" , "Modular Approx") {
     Graph *graph = new Graph;
     graph->readGraph("ca-GrQc-processed.txt");

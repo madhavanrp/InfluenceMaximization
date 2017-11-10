@@ -45,33 +45,10 @@ void setupLogger() {
     Output2FILE::Stream() = log_fd;
 }
 
-void testApprox(Graph *graph, ModularApproximation *modular) {
-    if( modular==NULL) {
-        DifferenceApproximator differenceApproximator(graph);
-        differenceApproximator.setN(graph->n);
-        vector<int> permutation = differenceApproximator.generatePermutation();
-        ModularApproximation modularApprox(permutation);
-        modularApprox.createTIMEvaluator(graph);
-        modularApprox.findAllApproximations();
-        modular = &modularApprox;
-    }
-    
-    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> orderedNodes;
-    int numberOfNonNegative = 0;
-    for(int i=0; i<graph->n; i++) {
-        int evaluation = modular->evaluateFunction(i);
-        //        cout << "\n h(" << i << ") = " << evaluation;
-        orderedNodes.push(make_pair(i, evaluation));
-        if(evaluation>=0) {
-            numberOfNonNegative++;
-        }
-    }
-    set<int> seedSet;
-    for (int i =0; i<20; i++) {
-        seedSet.insert(orderedNodes.top().first);
-        orderedNodes.pop();
-    }
-    int approximationValue = modular->evaluateFunction(seedSet);
+void testApprox(DifferenceApproximator *difference, Graph *graph, ModularApproximation *modularApprox , int budget) {
+//    set<int> seedSet = difference->executeGreedyAlgorithm(graph, modularApprox, budget);
+    set<int> seedSet = difference->executeGreedyAlgorithmAdjustingPermutation(setting2, budget);
+    int approximationValue = modularApprox->evaluateFunction(seedSet);
     pair<int, int> influence = findInfluenceUsingDiffusion(graph, seedSet, NULL);
     cout <<"\n Results Approximation: ";
     cout << "\nInfluence Targets: " << influence.first;
@@ -235,7 +212,7 @@ int main(int argc, const char * argv[]) {
     DifferenceApproximator differenceApproximator(graph);
     differenceApproximator.setN(graph->n);
     vector<int> permutation = differenceApproximator.generatePermutation();
-    ModularApproximation modularApprox(permutation);
+    ModularApproximation modularApprox(permutation, setting2);
     modularApprox.createTIMEvaluator(graph);
     modularApprox.findAllApproximations();
 
@@ -248,7 +225,7 @@ int main(int argc, const char * argv[]) {
         cout << "\n h(" << s << ") = " << evaluation;
     }
     cout << "\n (f-g)(bestSeedSet): " << modularApprox.evaluateFunction(best);
-    testApprox(graph, &modularApprox);
+    testApprox(&differenceApproximator, graph, &modularApprox, budget);
     clock_t differenceEndTime = clock();
     double differenceTimeTaken = double(differenceEndTime - differenceStartTime) / CLOCKS_PER_SEC;
     IMResults::getInstance().setApproximationTime(differenceTimeTaken);
