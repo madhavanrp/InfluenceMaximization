@@ -56,6 +56,7 @@ public:
     vector<int> generatePermutation(vector<int> startingElements);
     set<int> executeGreedyAlgorithm(Graph *graph, ModularApproximation *modularApproximation, int k);
     set<int> executeGreedyAlgorithmAdjustingPermutation(ApproximationSetting setting, int k);
+    set<int> executeAlgorithmApproximatingOneFunction(ApproximationSetting setting, int k);
 };
 
 #endif /* DifferenceApproximator_hpp */

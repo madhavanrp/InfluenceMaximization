@@ -50,6 +50,8 @@ public:
     TIMCoverage *getTIMCoverageNonTargets();
     vector<vector<int>> *getRRSetsTargets();
     vector<vector<int>> *getRRSetsNonTargets();
+    double getScalingFactorTargets();
+    double getScalingFactorNonTargets();
     int getCount();
 };
 #endif /* FunctionEvaluators_hpp */

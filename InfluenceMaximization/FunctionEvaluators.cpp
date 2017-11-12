@@ -45,6 +45,16 @@ int TIMEvaluator::getCount() {
     return count;
 }
 
+double TIMEvaluator::getScalingFactorTargets() {
+    double scalingFactor = (double)this->graph->n/(int)this->rrSetsTargets.size();
+    return scalingFactor;
+}
+
+double TIMEvaluator::getScalingFactorNonTargets() {
+    double scalingFactor = (double)this->graph->nonTargets.size()/(int)this->rrSetsNonTargets.size();
+    return scalingFactor;
+}
+
 void TIMEvaluator::calculateNonTargets() {
     EstimateNonTargets estimateNonTargets(*this->graph);
     this->nonTargets = estimateNonTargets.getNonTargetsUsingTIM();
@@ -76,7 +86,7 @@ int TIMEvaluator::findInfluenceOnTargets(set<int> *seedSet) {
     //Don't create copy for now. TODO: Complete this correctly
     TIMCoverage *timCoverage = this->timCoverage;
     vector<bool> *nodeMark = &timCoverage->nodeMark;
-    double scalingFactor = (double)nodeMark->size()/(int)rrSetsTargets.size();
+    double scalingFactor = getScalingFactorTargets();
     int scaledInfluence =
     findGenericInfluence(seedSet, timCoverage, &this->rrSetsTargets, scalingFactor);
     return scaledInfluence;
@@ -84,7 +94,7 @@ int TIMEvaluator::findInfluenceOnTargets(set<int> *seedSet) {
 
 int TIMEvaluator::findInfluenceOnNonTargets(set<int> *seedSet) {
     TIMCoverage *timCoverage = this->timCoverageNonTargets;
-    double scalingFactor = graph->nonTargets.size()/(int)this->rrSetsNonTargets.size();
+    double scalingFactor = getScalingFactorNonTargets();
     int scaledInfluence =
     findGenericInfluence(seedSet, timCoverage, &this->rrSetsNonTargets, scalingFactor);
     return scaledInfluence;
@@ -119,7 +129,7 @@ int TIMEvaluator::findGenericInfluence(set<int> *seedSet, TIMCoverage *timCovera
             (*edgeMark)[edgeInfluence[i]] = true;
         }
     }
-    int scaledInfluence = (double)totalInfluence * scalingFactor;
+    int scaledInfluence = round((double)totalInfluence * scalingFactor);
     return scaledInfluence;
 }
 
@@ -127,13 +137,14 @@ pair<int, int> TIMEvaluator::findInfluence(set<int> *seedSet) {
     // For now not calculating the non targets modularly. TODO: separate this.
     int targetsInfluenced=0, nonTargetsInfluenced=0;
     switch (this->setting) {
-        case setting1:
+        case setting1: {
             targetsInfluenced = findInfluenceOnTargets(seedSet);
             for(int seed:*seedSet) {
                 nonTargetsInfluenced+= findSingleNodeNonTargetsInfluence(seed);
             }
             break;
-        case setting2:
+        }
+        case setting2: {
             
             targetsInfluenced = findInfluenceOnTargets(seedSet);
             nonTargetsInfluenced = findInfluenceOnNonTargets(seedSet);
@@ -147,6 +158,12 @@ pair<int, int> TIMEvaluator::findInfluence(set<int> *seedSet) {
                 }
             }
             break;
+        }
+        case setting3: {
+            nonTargetsInfluenced = findInfluenceOnNonTargets(seedSet);
+            targetsInfluenced = 0;
+            break;
+        }
     }
     
     return make_pair(targetsInfluenced, nonTargetsInfluenced);

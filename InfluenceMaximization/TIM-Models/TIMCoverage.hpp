@@ -29,6 +29,7 @@ public:
     vector<bool> edgeMark;
     vector<int> coverage;
     vector<vector<int>> *lookupTable;
+    int R;
     priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> queue;
     int retainCount = 0;
     
@@ -58,6 +59,10 @@ public:
         return (*lookupTable)[vertex];
     }
     
+    void offsetCoverage(int vertex, int offset) {
+        this->coverage[vertex] = this->coverage[vertex] + offset;
+    }
+    
     void initializeLookupTable(vector<vector<int>> randomRRSets, int n) {
         
         for(int i=0;i<n; i++) {
@@ -73,7 +78,6 @@ public:
     }
     
     void initializeDataStructures(int R, int n) {
-        assert(n<R);
         int numberCovered;
         for (int i = 0; i < n; i++) {
             nodeMark.push_back(false);
@@ -93,9 +97,80 @@ public:
             coverage[i] = numberCovered;
             nodeMark[i] = true;
         }
-        
+        this->R = R;
         
     }
+    
+    pair<int, int> findMaxInfluentialNodeAndUpdateModel() {
+        priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queueCopy = &this->queue;
+        
+        vector<int> *coverage = &this->coverage;
+        vector<bool> *nodeMark = &this->nodeMark;
+        int maximumGainNode = -1;
+        int influence = 0;
+        while(!queueCopy->empty()) {
+            pair<int,int> element = queueCopy->top();
+            if(element.second > (*coverage)[element.first]) {
+                queueCopy->pop();
+                element.second = (*coverage)[element.first];
+                queueCopy->push(element);
+                continue;
+            }
+            
+            queueCopy->pop();
+            if(!(*nodeMark)[element.first]) {
+                continue;
+            }
+            
+            maximumGainNode = element.first;
+            influence = (*coverage)[element.first];
+            break;
+        }
+        
+        int R = this->R;
+        double scaledInfluence = (double) influence * nodeMark->size()/R;
+        return make_pair(maximumGainNode, scaledInfluence);
+    }
+    
+    set<pair<int, int>> findTopKNodesWithInfluence(int k) {
+        set<pair<int, int>> topKNodesWithInfluence;
+        for(int i=0; i< k; i++) {
+            topKNodesWithInfluence.insert(findMaxInfluentialNodeAndUpdateModel());
+        }
+        return topKNodesWithInfluence;
+    }
+    
+    set<int> findTopKNodes(int k) {
+        set<int> topKNodes;
+        for(int i=0; i< k; i++) {
+            topKNodes.insert(findMaxInfluentialNodeAndUpdateModel().first);
+        }
+        return topKNodes;
+    }
+    
+    void addToSeed(int vertex, vector<vector<int>> *rrSets) {
+        
+        vector<int> *coverage = &this->coverage;
+        vector<bool> *nodeMark = &this->nodeMark;
+        vector<bool> *edgeMark = &this->edgeMark;
+        (*nodeMark)[vertex] = false;
+        int numberCovered = this->countForVertex(vertex);
+        vector<int> edgeInfluence = (*this->lookupTable)[vertex];
+        
+        for (int i = 0; i < numberCovered; i++) {
+            if ((*edgeMark)[edgeInfluence[i]]) continue;
+            
+            vector<int> nList = (*rrSets)[edgeInfluence[i]];
+            for (int l :
+                 nList) {
+                if ((*nodeMark)[l]) {
+                    (*coverage)[l]--;
+                }
+            }
+            (*edgeMark)[edgeInfluence[i]] = true;
+        }
+    }
+
     
     TIMCoverage *createCopy() {
         vector<bool> nodeMarkCopy;

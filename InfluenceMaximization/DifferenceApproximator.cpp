@@ -179,6 +179,35 @@ set<int> DifferenceApproximator::executeGreedyAlgorithmAdjustingPermutation(Appr
     return seedSet;
 }
 
+
+// Call this function with setting 3. This will approximate only g while optimizing: f - g_aprox
+set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunction(ApproximationSetting setting, int k) {
+    set<int> seedSet;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> orderedNodes;
+    vector<int> permutation = generatePermutation();
+    ModularApproximation *approximation = new ModularApproximation(permutation, setting);
+    approximation->createTIMEvaluator(graph);
+    approximation->findAllApproximations();
+    TIMCoverage *timCoverageTargets = approximation->getTIMEvaluator()->getTIMCoverage();
+    
+    for (int i=0; i<graph->n; i++) {
+        /* 
+         Get g(i) and update coverage so that its value is now f(i) - g(i).
+         If you add i to the seed, and update the coverage of each node, its value will be TIM estimate of f(i|seed set) - g(i)
+         */
+        // This value is negative
+        int nonTargetsEstimateNegated = approximation->evaluateFunction(i);
+        // Now scale it back
+        TIMEvaluator *timEvaluator = approximation->getTIMEvaluator();
+        double reverseScale = (double)1/timEvaluator->getScalingFactorNonTargets();
+        timCoverageTargets->offsetCoverage(i, nonTargetsEstimateNegated * reverseScale);
+    }
+    
+    seedSet = timCoverageTargets->findTopKNodes(k);
+    
+    return seedSet;
+}
+
 DifferenceApproximator::~DifferenceApproximator() {
     if(this->permutation!=NULL) {
         delete this->permutation;
