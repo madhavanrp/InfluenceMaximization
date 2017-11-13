@@ -18,8 +18,10 @@ enum ApproximationSetting {
     setting1,
     // f(i) - g(i) = f(i|1..i-1) - g(i|1..i-1)
     setting2,
-    // returns g(i|1..i-1)
-    setting3
+    // returns -g(i|1..i-1)
+    setting3,
+    // returns f(i) - g(i) = f(i) - g(i|1..i-1)
+    setting4
 };
 
 #endif /* ApproximationSetting_h */

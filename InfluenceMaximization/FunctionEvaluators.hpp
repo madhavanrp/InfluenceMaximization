@@ -39,6 +39,7 @@ public:
     int findInfluenceOnTargets(set<int> *seedSet);
     int findInfluenceOnNonTargets(set<int> *seedSet);
     
+    int findSingleNodeTargetsInfluence(int vertex);
     int findSingleNodeNonTargetsInfluence(int vertex);
     int findGenericInfluence(set<int> *seedSet, TIMCoverage *timCoverage, vector<vector<int>> *randomRRSets, double scalingFactor);
     

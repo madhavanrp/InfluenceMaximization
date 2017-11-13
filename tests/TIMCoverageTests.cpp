@@ -55,8 +55,11 @@ TEST_CASE("TIM Data Structures operations", "TIMCoverage") {
     TIMCoverage timCoverage = *createTIMCoverage();
     
     REQUIRE((*timCoverage.lookupTable)[3].size()==10);
+    REQUIRE(timCoverage.countForVertex(3)==10);
+    
     timCoverage.decrementCountForVertex(3, 0);
     REQUIRE((*timCoverage.lookupTable)[3].size()==9);
+    REQUIRE(timCoverage.countForVertex(3)==9);
     REQUIRE((*timCoverage.lookupTable)[3][0]==1);
     
     timCoverage.incrementCountForVertex(2, 40);

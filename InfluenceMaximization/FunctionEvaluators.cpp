@@ -164,9 +164,21 @@ pair<int, int> TIMEvaluator::findInfluence(set<int> *seedSet) {
             targetsInfluenced = 0;
             break;
         }
+        case setting4: {
+            for(int seed:*seedSet) {
+                targetsInfluenced+= findSingleNodeTargetsInfluence(seed);
+            }
+            nonTargetsInfluenced = findInfluenceOnNonTargets(seedSet);
+            break;
+        }
     }
     
     return make_pair(targetsInfluenced, nonTargetsInfluenced);
+}
+
+int TIMEvaluator::findSingleNodeTargetsInfluence(int vertex) {
+    int rrSetsCovered = this->timCoverage->countForVertex(vertex);
+    return getScalingFactorTargets() * rrSetsCovered;
 }
 
 int TIMEvaluator::findSingleNodeNonTargetsInfluence(int vertex) {

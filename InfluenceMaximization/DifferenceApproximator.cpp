@@ -203,6 +203,7 @@ set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunction(Approx
         timCoverageTargets->offsetCoverage(i, nonTargetsEstimateNegated * reverseScale);
     }
     
+    delete approximation;
     seedSet = timCoverageTargets->findTopKNodes(k);
     
     return seedSet;
