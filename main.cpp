@@ -47,7 +47,7 @@ void setupLogger() {
 
 void testApprox(DifferenceApproximator *difference, Graph *graph, ModularApproximation *modularApprox , int budget) {
 //    set<int> seedSet = difference->executeGreedyAlgorithm(graph, modularApprox, budget);
-    set<int> seedSet = difference->executeAlgorithmApproximatingOneFunction(setting3, budget);
+    set<int> seedSet = difference->executeAlgorithmApproximatingOneFunctionExtendPermutation(setting3, budget);
     int approximationValue = modularApprox->evaluateFunction(seedSet);
     pair<int, int> influence = findInfluenceUsingDiffusion(graph, seedSet, NULL);
     cout <<"\n Results Approximation: ";

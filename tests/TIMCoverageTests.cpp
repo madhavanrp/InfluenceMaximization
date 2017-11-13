@@ -227,6 +227,32 @@ TEST_CASE("Offset coverage", "TIMCoverage") {
     delete timCoverage;
 }
 
+TEST_CASE("Add to seed", "TIMCoverage") {
+    vector<vector<int>> rrSets = vector<vector<int>>();
+    int R = 50;
+    for (int i=0; i< R; i++) {
+        rrSets.push_back(vector<int>());
+        for(int j=0; j< (R-i) ; j++) {
+            rrSets[i].push_back(j);
+        }
+    }
+    vector<vector<int>> lookupTable;
+    TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
+    int n = R;
+    timCoverage->initializeLookupTable(rrSets, n);
+    timCoverage->initializeDataStructures(R, n);
+    timCoverage->offsetCoverage(0, -10);
+    // 0 should not be the top
+    int nodeToAdd = 4;
+    vector<int> rrSetsCovered = timCoverage->getRRSetsCoveredByVertex(nodeToAdd);
+    timCoverage->addToSeed(nodeToAdd, &rrSets);
+    for(int rrSet: rrSetsCovered) {
+        REQUIRE(timCoverage->edgeMark[rrSet]);
+    }
+    REQUIRE(!timCoverage->nodeMark[nodeToAdd]);
+    delete timCoverage;
+}
+
 TEST_CASE("TIM Coverage queue copy", "TIMCoverage") {
     TIMCoverage *timCoverage = createTIMCoverage();
     int R = (int)timCoverage->lookupTable->size();

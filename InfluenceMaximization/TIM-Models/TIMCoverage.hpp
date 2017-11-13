@@ -132,6 +132,32 @@ public:
         return make_pair(maximumGainNode, scaledInfluence);
     }
     
+    pair<int, int> findMaxInfluentialNodeWithApproximations(set<int> *seedSet, vector<int> *approximationsScaled) {
+        priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queueCopy = new priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>(this->queue);
+        int maxValue = -1;
+        int maximumGainNode = -1;
+        while(!queueCopy->empty()) {
+            pair<int, int> topElement = queueCopy->top();
+            queueCopy->pop();
+            int scaledApproximation = (*approximationsScaled)[topElement.first];
+            if(this->coverage[topElement.first] - scaledApproximation > maxValue) {
+                if(seedSet->find(topElement.first)==seedSet->end()) {
+                    maxValue = this->coverage[topElement.first] - scaledApproximation;
+                    maximumGainNode = topElement.first;
+//                    cout << "\n Max value is : " << this->coverage[topElement.first] << " - " << scaledApproximation;
+//                    cout << "\n Max node is:  " << topElement.first;
+                }
+            }
+        }
+            
+        int R = this->R;
+        double scaledInfluence = (double) maxValue * this->nodeMark.size()/R;
+        delete queueCopy;
+//        cout << "\nMax gain node : " << maximumGainNode << " Scaled influence: " << scaledInfluence;
+        return make_pair(maximumGainNode, scaledInfluence);
+        
+    }
+    
     set<pair<int, int>> findTopKNodesWithInfluence(int k) {
         set<pair<int, int>> topKNodesWithInfluence;
         for(int i=0; i< k; i++) {

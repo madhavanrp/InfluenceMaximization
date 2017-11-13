@@ -208,6 +208,46 @@ set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunction(Approx
     return seedSet;
 }
 
+// Call this function with setting 3. This will approximate only g while optimizing: f - g_aprox and extend permutation
+set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunctionExtendPermutation(ApproximationSetting setting, int k) {
+    set<int> seedSet;
+    vector<int> permutation;
+    vector<int> startingVector;
+    
+    for (int i=0; i<k; i++) {
+        permutation = generatePermutation(startingVector);
+        ModularApproximation *approximation = new ModularApproximation(permutation, setting);
+        approximation->createTIMEvaluator(graph);
+        approximation->findAllApproximations();
+        TIMCoverage *timCoverageTargets = approximation->getTIMEvaluator()->getTIMCoverage();
+        
+        for(int seed: seedSet) {
+            timCoverageTargets->addToSeed(seed, approximation->getTIMEvaluator()->getRRSetsTargets());
+        }
+        
+        
+        TIMEvaluator *timEvaluator = approximation->getTIMEvaluator();
+        double reverseScale = (double)1/timEvaluator->getScalingFactorNonTargets();
+        
+        vector<int> scaledApproximations;
+        for (int j=0; j<this->n; j++) {
+            int gValue = approximation->evaluateFunction(j);
+            scaledApproximations.push_back(gValue * reverseScale * -1);
+        }
+//        pair<int, int> maxNodeAndInfluence = timCoverageTargets->findMaxInfluentialNodeAndUpdateModel();
+        pair<int, int> maxNodeAndInfluence = timCoverageTargets->findMaxInfluentialNodeWithApproximations(&seedSet, &scaledApproximations);
+        assert(maxNodeAndInfluence.first!=-1);
+        assert(seedSet.find(maxNodeAndInfluence.first)==seedSet.end());
+        
+        seedSet.insert(maxNodeAndInfluence.first);
+        startingVector.push_back(maxNodeAndInfluence.first);
+        
+        delete approximation;
+    }
+    
+    return seedSet;
+}
+
 DifferenceApproximator::~DifferenceApproximator() {
     if(this->permutation!=NULL) {
         delete this->permutation;
