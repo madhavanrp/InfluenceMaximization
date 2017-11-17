@@ -202,10 +202,9 @@ set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunction(Approx
         double reverseScale = (double)1/timEvaluator->getScalingFactorNonTargets();
         timCoverageTargets->offsetCoverage(i, nonTargetsEstimateNegated * reverseScale);
     }
+    seedSet = timCoverageTargets->findTopKNodes(k, approximation->getTIMEvaluator()->getRRSetsTargets());
     
     delete approximation;
-    seedSet = timCoverageTargets->findTopKNodes(k);
-    
     return seedSet;
 }
 
@@ -235,7 +234,7 @@ set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunctionExtendP
             int gValue = approximation->evaluateFunction(j);
             scaledApproximations.push_back(gValue * reverseScale * -1);
         }
-//        pair<int, int> maxNodeAndInfluence = timCoverageTargets->findMaxInfluentialNodeAndUpdateModel();
+        
         pair<int, int> maxNodeAndInfluence = timCoverageTargets->findMaxInfluentialNodeWithApproximations(&seedSet, &scaledApproximations);
         assert(maxNodeAndInfluence.first!=-1);
         assert(seedSet.find(maxNodeAndInfluence.first)==seedSet.end());

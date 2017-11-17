@@ -47,8 +47,8 @@ void setupLogger() {
 
 void testApprox(DifferenceApproximator *difference, Graph *graph, ModularApproximation *modularApprox , int budget) {
 //    set<int> seedSet = difference->executeGreedyAlgorithm(graph, modularApprox, budget);
-//    set<int> seedSet = difference->executeAlgorithmApproximatingOneFunctionExtendPermutation(setting3, budget);
-    set<int> seedSet = difference->executeGreedyAlgorithmAdjustingPermutation(setting4, budget);
+    set<int> seedSet = difference->executeAlgorithmApproximatingOneFunction(setting3, budget);
+//    set<int> seedSet = difference->executeGreedyAlgorithmAdjustingPermutation(setting4, budget);
     int approximationValue = modularApprox->evaluateFunction(seedSet);
     pair<int, int> influence = findInfluenceUsingDiffusion(graph, seedSet, NULL);
     cout <<"\n Results Approximation: ";
@@ -213,7 +213,7 @@ int main(int argc, const char * argv[]) {
     DifferenceApproximator differenceApproximator(graph);
     differenceApproximator.setN(graph->n);
     vector<int> permutation = differenceApproximator.generatePermutation();
-    ModularApproximation modularApprox(permutation, setting4);
+    ModularApproximation modularApprox(permutation, setting3);
     modularApprox.createTIMEvaluator(graph);
     modularApprox.findAllApproximations();
 

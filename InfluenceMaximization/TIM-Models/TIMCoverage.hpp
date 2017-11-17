@@ -92,7 +92,6 @@ public:
         for (int i = 0; i < n; i++) {
             
             numberCovered = this->countForVertex(i);
-//            cout << "\n Vertex " << i << " appears in " << numberCovered << " RR Sets";
             queue.push(make_pair(i, numberCovered));
             coverage[i] = numberCovered;
             nodeMark[i] = true;
@@ -101,7 +100,7 @@ public:
         
     }
     
-    pair<int, int> findMaxInfluentialNodeAndUpdateModel() {
+    pair<int, int> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) {
         priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queueCopy = &this->queue;
         
         vector<int> *coverage = &this->coverage;
@@ -129,6 +128,25 @@ public:
         
         int R = this->R;
         double scaledInfluence = (double) influence * nodeMark->size()/R;
+        
+        vector<bool> *edgeMark = &this->edgeMark;
+        (*nodeMark)[maximumGainNode] = false;
+        int numberCovered = this->countForVertex(maximumGainNode);
+        vector<int> edgeInfluence = (*this->lookupTable)[maximumGainNode];
+        
+        for (int i = 0; i < numberCovered; i++) {
+            if ((*edgeMark)[edgeInfluence[i]]) continue;
+            
+            vector<int> nList = (*rrSets)[edgeInfluence[i]];
+            for (int l :
+                 nList) {
+                if ((*nodeMark)[l]) {
+                    (*coverage)[l]--;
+                }
+            }
+            (*edgeMark)[edgeInfluence[i]] = true;
+        }
+        
         return make_pair(maximumGainNode, scaledInfluence);
     }
     
@@ -144,8 +162,6 @@ public:
                 if(seedSet->find(topElement.first)==seedSet->end()) {
                     maxValue = this->coverage[topElement.first] - scaledApproximation;
                     maximumGainNode = topElement.first;
-//                    cout << "\n Max value is : " << this->coverage[topElement.first] << " - " << scaledApproximation;
-//                    cout << "\n Max node is:  " << topElement.first;
                 }
             }
         }
@@ -153,23 +169,23 @@ public:
         int R = this->R;
         double scaledInfluence = (double) maxValue * this->nodeMark.size()/R;
         delete queueCopy;
-//        cout << "\nMax gain node : " << maximumGainNode << " Scaled influence: " << scaledInfluence;
+        
         return make_pair(maximumGainNode, scaledInfluence);
         
     }
     
-    set<pair<int, int>> findTopKNodesWithInfluence(int k) {
+    set<pair<int, int>> findTopKNodesWithInfluence(int k, vector<vector<int>> *rrSets) {
         set<pair<int, int>> topKNodesWithInfluence;
         for(int i=0; i< k; i++) {
-            topKNodesWithInfluence.insert(findMaxInfluentialNodeAndUpdateModel());
+            topKNodesWithInfluence.insert(findMaxInfluentialNodeAndUpdateModel(rrSets));
         }
         return topKNodesWithInfluence;
     }
     
-    set<int> findTopKNodes(int k) {
+    set<int> findTopKNodes(int k, vector<vector<int>> *rrSets) {
         set<int> topKNodes;
         for(int i=0; i< k; i++) {
-            topKNodes.insert(findMaxInfluentialNodeAndUpdateModel().first);
+            topKNodes.insert(findMaxInfluentialNodeAndUpdateModel(rrSets).first);
         }
         return topKNodes;
     }

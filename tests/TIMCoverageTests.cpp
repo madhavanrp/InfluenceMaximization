@@ -140,73 +140,6 @@ TEST_CASE("Initialize Data Structures", "TIMCoverage") {
 //    REQUIRE(timCoverage->queue.size()==n);
 //}
 
-TEST_CASE("Pick max influential node" , "TIMCoverage") {
-    vector<vector<int>> rrSets = vector<vector<int>>();
-    int R = 50;
-    for (int i=0; i< R; i++) {
-        rrSets.push_back(vector<int>());
-        for(int j=0; j< (R-i) ; j++) {
-            rrSets[i].push_back(j);
-        }
-    }
-    vector<vector<int>> lookupTable;
-    TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
-    int n = R;
-    timCoverage->initializeLookupTable(rrSets, n);
-    timCoverage->initializeDataStructures(R, n);
-    bool correctMaxInfluentialNodePicked = true;
-    for(int i=0; i<n; i++) {
-        pair<int, int> nodeWithInfluence = timCoverage->findMaxInfluentialNodeAndUpdateModel();
-        if(nodeWithInfluence.first!=i) {
-            correctMaxInfluentialNodePicked = false;
-        }
-    }
-    delete timCoverage;
-    REQUIRE(correctMaxInfluentialNodePicked);
-}
-
-TEST_CASE("Top K Nodes" , "TIMCoverage") {
-    vector<vector<int>> rrSets = vector<vector<int>>();
-    int R = 50;
-    for (int i=0; i< R; i++) {
-        rrSets.push_back(vector<int>());
-        for(int j=0; j< (R-i) ; j++) {
-            rrSets[i].push_back(j);
-        }
-    }
-    vector<vector<int>> lookupTable;
-    TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
-    int n = R;
-    timCoverage->initializeLookupTable(rrSets, n);
-    timCoverage->initializeDataStructures(R, n);
-    bool topKNodesCorrect = true;
-    int k = 20;
-    set<pair<int, int>> topKNodesWithInfluence = timCoverage->findTopKNodesWithInfluence(k);
-    REQUIRE(topKNodesWithInfluence.size()==k);
-    for(pair<int, int> nodeWithInfluence: topKNodesWithInfluence) {
-        if(nodeWithInfluence.first==-1 || nodeWithInfluence.first>=k) {
-            topKNodesCorrect = false;
-        }
-    }
-    
-    REQUIRE(topKNodesCorrect);
-    
-    delete timCoverage;
-    
-    timCoverage = new TIMCoverage(&lookupTable);
-    n = R;
-    timCoverage->initializeLookupTable(rrSets, n);
-    timCoverage->initializeDataStructures(R, n);
-    set<int> topKNodes = timCoverage->findTopKNodes(k);
-    REQUIRE(topKNodes.size()==k);
-    for(int node: topKNodes) {
-        if(node==-1 || node>=20) {
-            topKNodesCorrect = false;
-        }
-    }
-    delete timCoverage;
-    REQUIRE(topKNodesCorrect);
-}
 
 TEST_CASE("Offset coverage", "TIMCoverage") {
     vector<vector<int>> rrSets = vector<vector<int>>();
@@ -224,7 +157,7 @@ TEST_CASE("Offset coverage", "TIMCoverage") {
     timCoverage->initializeDataStructures(R, n);
     timCoverage->offsetCoverage(0, -10);
     // 0 should not be the top
-    set<int> topNodes = timCoverage->findTopKNodes(1);
+    set<int> topNodes = timCoverage->findTopKNodes(1, &rrSets);
     REQUIRE(topNodes.size()==1);
     REQUIRE(topNodes.find(0)==topNodes.end());
     delete timCoverage;
