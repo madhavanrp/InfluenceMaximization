@@ -67,7 +67,10 @@ void ModularApproximation::calculateApproximation(int element, set<int> *vertice
 void ModularApproximation::findAllApproximations() {
     set<int> *vertices = new set<int>();
     for (int i=0; i<this->n; i++) {
-        int vertex = (*this->reverseMap)[i];
+        int vertex = (*this->permutation)[i];
+        if(i==0) {
+            cout << "\n First vertex is : "<< vertex;
+        }
         calculateApproximation(vertex, vertices);
         vertices->insert(vertex);
         assert(vertices->size()==i+1);
@@ -158,6 +161,7 @@ set<int> DifferenceApproximator::executeGreedyAlgorithmAdjustingPermutation(Appr
         for(int j = 0; j<i; j++) {
             assert(seedSet.find(permutation[j])!=seedSet.end());
         }
+        assert(permutation.size()==this->graph->n);
         ModularApproximation *approximation = new ModularApproximation(permutation, setting);
         approximation->createTIMEvaluator(graph);
         approximation->findAllApproximations();

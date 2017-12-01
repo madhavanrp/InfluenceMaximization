@@ -85,7 +85,6 @@ void TIMEvaluator::calculateTargets() {
 int TIMEvaluator::findInfluenceOnTargets(set<int> *seedSet) {
     //Don't create copy for now. TODO: Complete this correctly
     TIMCoverage *timCoverage = this->timCoverage;
-    vector<bool> *nodeMark = &timCoverage->nodeMark;
     double scalingFactor = getScalingFactorTargets();
     int scaledInfluence =
     findGenericInfluence(seedSet, timCoverage, &this->rrSetsTargets, scalingFactor);
@@ -148,15 +147,6 @@ pair<int, int> TIMEvaluator::findInfluence(set<int> *seedSet) {
             
             targetsInfluenced = findInfluenceOnTargets(seedSet);
             nonTargetsInfluenced = findInfluenceOnNonTargets(seedSet);
-            vector<bool> *nodeMark = &timCoverageNonTargets->nodeMark;
-            vector<bool> *edgeMark = &timCoverageNonTargets->edgeMark;
-            for(int seed: *seedSet) {
-                assert(!(*nodeMark)[seed]);
-                vector<int> edgeInfluence = (*timCoverageNonTargets->lookupTable)[seed];
-                for (int rrSetID: edgeInfluence) {
-                    assert((*edgeMark)[rrSetID]);
-                }
-            }
             break;
         }
         case setting3: {
@@ -178,7 +168,7 @@ pair<int, int> TIMEvaluator::findInfluence(set<int> *seedSet) {
 
 int TIMEvaluator::findSingleNodeTargetsInfluence(int vertex) {
     int rrSetsCovered = this->timCoverage->countForVertex(vertex);
-    return getScalingFactorTargets() * rrSetsCovered;
+    return round(getScalingFactorTargets() * rrSetsCovered);
 }
 
 int TIMEvaluator::findSingleNodeNonTargetsInfluence(int vertex) {
