@@ -10,6 +10,7 @@
 #define IMResults_h
 
 #include "../IMTree.hpp"
+#include "../ApproximationSetting.hpp"
 using json = nlohmann::json;
 
 using namespace std;
@@ -95,6 +96,12 @@ public:
     }
     void setApproximationTime(double value) {
         data["approximationTime"] = value;
+    }
+    void setApproximationSetting(ApproximationSetting setting) {
+        data["approximationSetting"] = static_cast<int>(setting);
+    }
+    void setExtendingPermutation(bool extend) {
+        data["extend"] = extend;
     }
 };
 #endif /* IMResults_h */

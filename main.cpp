@@ -55,11 +55,9 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
     modularApprox.createTIMEvaluator(graph);
     modularApprox.findAllApproximations();
     if(setting==setting3) {
-        cout << "\n Setting is 3 and extend is " << extendPermutation << flush;
         if(!extendPermutation) {
             seedSet = differenceApproximator.executeAlgorithmApproximatingOneFunction(setting, budget);
         } else {
-            cout << "\n Trying herre  " << flush;
             seedSet = differenceApproximator.executeAlgorithmApproximatingOneFunctionExtendPermutation(setting, budget);
         }
     } else {
@@ -70,7 +68,7 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
         }
     }
     pair<int, int> influence = findInfluenceUsingDiffusion(graph, seedSet, NULL);
-    cout <<"\n Results Approximation: ";
+    cout <<"\n Results after Diffusion: ";
     cout << "\nInfluence Targets: " << influence.first;
     cout << "\nInfluence NT: " << influence.second;
     IMResults::getInstance().setApproximationInfluence(influence);
@@ -78,7 +76,7 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
 }
 
 void executeTIMTIM(cxxopts::ParseResult result) {
-    cout << "begin execution tim tim ";
+    cout << "\n begin execution tim tim ";
     int budget;
     int nonTargetThreshold;
     string graphFileName;
@@ -92,7 +90,6 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     nonTargetThreshold = result["threshold"].as<int>();
     graphFileName = result["graph"].as<std::string>();
     percentageTargets = result["percentage"].as<int>();
-    cout << "Done all";
     if(result.count("method")>0) {
         method = result["method"].as<int>();
     }
@@ -221,6 +218,17 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     FILE_LOG(logDEBUG) << "Writing results to file " << resultFileName;
 }
 
+string constructResultFileName(string graphFileName, int budget, int nonTargetThreshold, int percentageTargets) {
+    string resultFileName = "results/" + graphFileName;
+    resultFileName+="_" + to_string(budget);
+    resultFileName+="_" + to_string(nonTargetThreshold);
+    resultFileName+="_" + to_string(percentageTargets);
+    resultFileName+="_" + to_string(rand() % 1000000);
+    resultFileName+="_1";
+    resultFileName+=".json";
+    return resultFileName;
+}
+
 void executeDifferenceAlgorithms(cxxopts::ParseResult result) {
     cout << "\n Executing difference" << flush;
     int budget = result["budget"].as<int>();
@@ -249,6 +257,11 @@ void executeDifferenceAlgorithms(cxxopts::ParseResult result) {
     clock_t differenceEndTime = clock();
     double differenceTimeTaken = double(differenceEndTime - differenceStartTime) / CLOCKS_PER_SEC;
     IMResults::getInstance().setApproximationTime(differenceTimeTaken);
+    IMResults::getInstance().setApproximationSetting(setting);
+    IMResults::getInstance().setExtendingPermutation(extendPermutation);
+    // Setting 1000 as NT threshold. Actually not applicable. TODO: do this better.
+    string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargetsFloat);
+    IMResults::getInstance().writeToFile(resultFile);
 }
 int main(int argc, char **argv) {
     cout << "Starting program\n";
@@ -269,7 +282,7 @@ int main(int argc, char **argv) {
     ("e,extend", "Extend the permutation");
     auto result = options.parse(argc, argv);
     string algorithm = result["algorithm"].as<string>();
-    if(algorithm.compare("timtim")==0) {
+    if(result["algorithm"].count()>0 && algorithm.compare("timtim")==0) {
         executeTIMTIM(result);
     }
     else {
