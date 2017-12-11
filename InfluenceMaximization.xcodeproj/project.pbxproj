@@ -26,6 +26,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		310E6A111FDE0FAB00D72424 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		31FC36851F354892005CAFEB /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -38,6 +47,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		310E6A131FDE0FAB00D72424 /* jsonexperimenter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jsonexperimenter; sourceTree = BUILT_PRODUCTS_DIR; };
 		311423111F6F4AA7001BA3FA /* memoryusage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memoryusage.h; sourceTree = "<group>"; };
 		31279D6C1F58EBD900FC4D9B /* Phase2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Phase2.cpp; sourceTree = "<group>"; };
 		31279D6D1F58EBD900FC4D9B /* Phase2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Phase2.hpp; sourceTree = "<group>"; };
@@ -75,6 +85,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		310E6A101FDE0FAB00D72424 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		31FC36841F354892005CAFEB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -133,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				31FC36871F354892005CAFEB /* InfluenceMaximization */,
+				310E6A131FDE0FAB00D72424 /* jsonexperimenter */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -168,6 +186,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		310E6A121FDE0FAB00D72424 /* jsonexperimenter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 310E6A191FDE0FAB00D72424 /* Build configuration list for PBXNativeTarget "jsonexperimenter" */;
+			buildPhases = (
+				310E6A0F1FDE0FAB00D72424 /* Sources */,
+				310E6A101FDE0FAB00D72424 /* Frameworks */,
+				310E6A111FDE0FAB00D72424 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = jsonexperimenter;
+			productName = jsonexperimenter;
+			productReference = 310E6A131FDE0FAB00D72424 /* jsonexperimenter */;
+			productType = "com.apple.product-type.tool";
+		};
 		31FC36861F354892005CAFEB /* InfluenceMaximization */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 31FC368E1F354892005CAFEB /* Build configuration list for PBXNativeTarget "InfluenceMaximization" */;
@@ -194,6 +229,10 @@
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Madhavan R.P";
 				TargetAttributes = {
+					310E6A121FDE0FAB00D72424 = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+					};
 					31FC36861F354892005CAFEB = {
 						CreatedOnToolsVersion = 8.3.3;
 						ProvisioningStyle = Automatic;
@@ -213,11 +252,19 @@
 			projectRoot = "";
 			targets = (
 				31FC36861F354892005CAFEB /* InfluenceMaximization */,
+				310E6A121FDE0FAB00D72424 /* jsonexperimenter */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		310E6A0F1FDE0FAB00D72424 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		31FC36831F354892005CAFEB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -244,6 +291,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		310E6A171FDE0FAB00D72424 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		310E6A181FDE0FAB00D72424 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		31FC368C1F354892005CAFEB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -352,6 +413,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		310E6A191FDE0FAB00D72424 /* Build configuration list for PBXNativeTarget "jsonexperimenter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				310E6A171FDE0FAB00D72424 /* Debug */,
+				310E6A181FDE0FAB00D72424 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		31FC36821F354892005CAFEB /* Build configuration list for PBXProject "InfluenceMaximization" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

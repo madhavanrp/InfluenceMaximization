@@ -218,13 +218,13 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     FILE_LOG(logDEBUG) << "Writing results to file " << resultFileName;
 }
 
-string constructResultFileName(string graphFileName, int budget, int nonTargetThreshold, int percentageTargets) {
+string constructResultFileName(string graphFileName, int budget, int nonTargetThreshold, int percentageTargets, ApproximationSetting setting) {
     string resultFileName = "results/" + graphFileName;
     resultFileName+="_" + to_string(budget);
     resultFileName+="_" + to_string(nonTargetThreshold);
     resultFileName+="_" + to_string(percentageTargets);
     resultFileName+="_" + to_string(rand() % 1000000);
-    resultFileName+="_1";
+    resultFileName+="_" + to_string(setting);
     resultFileName+=".json";
     return resultFileName;
 }
@@ -244,7 +244,8 @@ void executeDifferenceAlgorithms(cxxopts::ParseResult result) {
     cout <<" Graph: " << graphFileName;
     cout << "\t Budget: " << budget;
     cout << "\t Percentage:  " << percentageTargets;
-    cout << "\t PercentageFloat:  " << percentageTargetsFloat;
+    cout << "\t Approximation setting: " << setting;
+    cout << "\t Extend: " << extendPermutation;
     cout << flush;
 
     Graph *graph = new Graph;
@@ -260,7 +261,43 @@ void executeDifferenceAlgorithms(cxxopts::ParseResult result) {
     IMResults::getInstance().setApproximationSetting(setting);
     IMResults::getInstance().setExtendingPermutation(extendPermutation);
     // Setting 1000 as NT threshold. Actually not applicable. TODO: do this better.
-    string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargetsFloat);
+    string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting);
+    IMResults::getInstance().writeToFile(resultFile);
+}
+
+void executeTIMOnLabelledGraph(cxxopts::ParseResult result) {
+    int budget = result["budget"].as<int>();
+    string graphFileName = result["graph"].as<std::string>();
+    int percentageTargets = result["percentage"].as<int>();
+    float percentageTargetsFloat = (float)percentageTargets/(float)100;
+    Graph *unlabelledGraph = new Graph;
+    unlabelledGraph->readGraph(graphFileName, 1.0f);
+    int n = unlabelledGraph->n;
+    double epsilon = (double)EPSILON;
+    int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
+    //    R = 23648871;
+    unlabelledGraph->generateRandomRRSets(R, true);
+    vector<vector<int>> rrSets = unlabelledGraph->getRandomRRSets();
+    
+    vector<vector<int>> lookupTable;
+    TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
+    timCoverage->initializeLookupTable(rrSets, n);
+    timCoverage->initializeDataStructures(R, n);
+    timCoverage->offsetCoverage(0, -10);
+    // 0 should not be the top
+    set<int> topNodes = timCoverage->findTopKNodes(budget, &rrSets);
+    delete timCoverage;
+    
+    Graph *labelledGraph = new Graph;
+    labelledGraph->readGraph(graphFileName, percentageTargetsFloat);
+    pair<int, int> influence = findInfluenceUsingDiffusion(labelledGraph, topNodes);
+    int targetsActivated = influence.first;
+    int nonTargetsActivated = influence.second;
+    
+    cout << "\n Targets activated = " << targetsActivated;
+    cout << "\n Non targets activated = " << nonTargetsActivated;
+    IMResults::getInstance().setExpectedTargets(influence);
+    string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting1);
     IMResults::getInstance().writeToFile(resultFile);
 }
 int main(int argc, char **argv) {
@@ -284,6 +321,10 @@ int main(int argc, char **argv) {
     string algorithm = result["algorithm"].as<string>();
     if(result["algorithm"].count()>0 && algorithm.compare("timtim")==0) {
         executeTIMTIM(result);
+    } else if(result["algorithm"].count()>0 && algorithm.compare("tim")==0) {
+        cout << "\n Executing just TIM";
+        executeTIMOnLabelledGraph(result);
+        
     }
     else {
         executeDifferenceAlgorithms(result);

@@ -9,9 +9,19 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>jsonexperimenter.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>310E6A121FDE0FAB00D72424</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>31FC36861F354892005CAFEB</key>
 		<dict>
 			<key>primary</key>
