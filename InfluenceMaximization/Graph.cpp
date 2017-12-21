@@ -46,6 +46,8 @@ bool Graph:: flipCoinOnEdge(int u, int v) {
 }
 
 void Graph::readGraph(string fileName, float percentage) {
+    this->graphName = fileName;
+    this->percentageTargets = percentage;
     ifstream myFile("graphs/" + fileName);
     string s;
     if(myFile.is_open()) {
@@ -96,6 +98,36 @@ void Graph::readLabels(string fileName) {
         }
         myFile.close();
     }
+}
+
+void Graph::writeLabels() {
+    string s;
+    stringstream stream;
+    stream << fixed << setprecision(2) << this->percentageTargets;
+    s = stream.str();
+    string labelFileName ="graphs/" + this->graphName + "_" + s + "_labels.txt";
+    
+    ofstream myfile;
+    string fileName = labelFileName;
+    myfile.open (fileName);
+    string targetLabel = "A";
+    string nonTargetLabel = "B";
+    for(int i=0; i<this->n; i++) {
+        if(this->labels[i]) {
+            myfile << i << " " << targetLabel << "\n";
+            cout << i << " " << targetLabel << "\n";
+        } else {
+            myfile << i << " " << nonTargetLabel << "\n";
+            cout << i << " " << nonTargetLabel << "\n";
+        }
+        
+    }
+    myfile.close();
+}
+
+void Graph::setLabels(vector<bool> labels, float percentageTargets) {
+    this->labels = labels;
+    this->percentageTargets = percentageTargets;
 }
 
 void Graph::generateRandomRRSets(int R, bool label) {

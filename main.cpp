@@ -20,6 +20,7 @@
 #include <chrono>
 #include "InfluenceMaximization/log.h"
 #include "InfluenceMaximization/DifferenceApproximator.hpp"
+#include "InfluenceMaximization/GenerateGraphLabels.hpp"
 
 #include <iomanip>
 #include <ctime>
@@ -300,6 +301,15 @@ void executeTIMOnLabelledGraph(cxxopts::ParseResult result) {
     string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting1);
     IMResults::getInstance().writeToFile(resultFile);
 }
+void generateGraphLabels(cxxopts::ParseResult result) {
+    string graphFileName = result["graph"].as<std::string>();
+    int percentageTargets = result["percentage"].as<int>();
+    float percentageTargetsFloat = (float)percentageTargets/(float)100;
+    Graph *graph = new Graph;
+    graph->readGraph(graphFileName, percentageTargetsFloat);
+    GenerateGraphLabels(graph, percentageTargetsFloat);
+}
+
 int main(int argc, char **argv) {
     cout << "Starting program\n";
     srand(time(0));
@@ -319,14 +329,15 @@ int main(int argc, char **argv) {
     ("e,extend", "Extend the permutation");
     auto result = options.parse(argc, argv);
     string algorithm = result["algorithm"].as<string>();
-    if(result["algorithm"].count()>0 && algorithm.compare("timtim")==0) {
+    if(result["algorithm"].count()>0 && algorithm.compare("generate")==0) {
+        generateGraphLabels(result);
+    } else if(result["algorithm"].count()>0 && algorithm.compare("timtim")==0) {
         executeTIMTIM(result);
     } else if(result["algorithm"].count()>0 && algorithm.compare("tim")==0) {
         cout << "\n Executing just TIM";
         executeTIMOnLabelledGraph(result);
         
-    }
-    else {
+    } else {
         executeDifferenceAlgorithms(result);
     }
     
