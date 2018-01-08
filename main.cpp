@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include "cxxopts.hpp"
 #include "InfluenceMaximization/Graph.hpp"
 #include "InfluenceMaximization/IMTree.hpp"
 #include "InfluenceMaximization/EstimateNonTargets.hpp"
@@ -18,6 +19,8 @@
 #include <string>
 #include <chrono>
 #include "InfluenceMaximization/log.h"
+#include "InfluenceMaximization/DifferenceApproximator.hpp"
+#include "InfluenceMaximization/GenerateGraphLabels.hpp"
 
 #include <iomanip>
 #include <ctime>
@@ -43,50 +46,70 @@ void setupLogger() {
     FILE* log_fd = fopen( logFileName.c_str(), "w" );
     Output2FILE::Stream() = log_fd;
 }
-int main(int argc, const char * argv[]) {
-    setupLogger();
-    
-    srand(time(0));
+
+void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool extendPermutation) {
+    DifferenceApproximator differenceApproximator(graph);
+    differenceApproximator.setN(graph->n);
+    set<int> seedSet;
+    vector<int> permutation = differenceApproximator.generatePermutation();
+    ModularApproximation modularApprox(permutation, setting);
+    modularApprox.createTIMEvaluator(graph);
+    modularApprox.findAllApproximations();
+    if(setting==setting3) {
+        if(!extendPermutation) {
+            seedSet = differenceApproximator.executeAlgorithmApproximatingOneFunction(setting, budget);
+        } else {
+            seedSet = differenceApproximator.executeAlgorithmApproximatingOneFunctionExtendPermutation(setting, budget);
+        }
+    } else {
+        if(!extendPermutation) {
+            seedSet = differenceApproximator.executeGreedyAlgorithm(graph, &modularApprox, budget);
+        } else {
+            seedSet = differenceApproximator.executeGreedyAlgorithmAdjustingPermutation(setting, budget);
+        }
+    }
+    pair<int, int> influence = findInfluenceUsingDiffusion(graph, seedSet, NULL);
+    cout <<"\n Results after Diffusion: ";
+    cout << "\nInfluence Targets: " << influence.first;
+    cout << "\nInfluence NT: " << influence.second;
+    IMResults::getInstance().setApproximationInfluence(influence);
+
+}
+
+void executeTIMTIM(cxxopts::ParseResult result) {
+    cout << "\n begin execution tim tim ";
     int budget;
     int nonTargetThreshold;
     string graphFileName;
-    int percentagetNonTargets;
+    int percentageTargets;
     bool fromFile = false;
     string nonTargetsFileName;
-    int method;
+    int method = PHASE1TIM_PHASE2TIM;
     bool useIndegree = true;
     float probability = 0;
-    if(argc<=1) {
-        budget=20;
-        nonTargetThreshold = 10;
-        graphFileName = "graph_ic.inf";
-        percentagetNonTargets = 80;
-        method = PHASE1TIM_PHASE2TIM;
-        
-    } else {
-        budget = atoi(argv[2]);
-        nonTargetThreshold = atoi(argv[3]);
-        graphFileName = argv[1];
-        percentagetNonTargets = atoi(argv[4]);
-        method = atoi(argv[5]);
-        if(argc>6) {
-            probability = atof(argv[6]);
-            if(probability<1) {
-                useIndegree = false;
-            }
-        }
-        if(argc>7) {
-            nonTargetsFileName = argv[7];
-            fromFile = true;
-        }
+    budget = result["budget"].as<int>();
+    nonTargetThreshold = result["threshold"].as<int>();
+    graphFileName = result["graph"].as<std::string>();
+    percentageTargets = result["percentage"].as<int>();
+    if(result.count("method")>0) {
+        method = result["method"].as<int>();
+    }
+    if(result.count("p")>0) {
+        probability = result["p"].as<double>();
+        useIndegree = false;
+    }
+    if(result.count("ntfile")>0) {
+        nonTargetsFileName = result["ntfile"].as<std::string>();
+        fromFile = true;
     }
     
+    // Log information
     cout << "\n Conducting experiments for:\n";
     cout <<" Graph: " << graphFileName;
     cout << "\t Budget: " << budget;
     cout << "\t Non Target Threshod: " << nonTargetThreshold;
-    cout << "\t Percentage:  " << percentagetNonTargets;
-    cout << "\t Method: " <<method;
+    cout << "\t Percentage:  " << percentageTargets;
+    cout << "\t Method: " << method;
     if(useIndegree) {
         cout << "\t Probability: Indegree";
     } else {
@@ -100,17 +123,17 @@ int main(int argc, const char * argv[]) {
     FILE_LOG(logDEBUG) <<" Graph: " << graphFileName;
     FILE_LOG(logDEBUG) << "\t Budget: " << budget;
     FILE_LOG(logDEBUG) << "\t Non Target Threshod: " << nonTargetThreshold;
-    FILE_LOG(logDEBUG) << "\t Percentage:  " << percentagetNonTargets;
-    FILE_LOG(logDEBUG) << "\t Method: " <<method;
+    FILE_LOG(logDEBUG) << "\t Percentage:  " << percentageTargets;
+    FILE_LOG(logDEBUG) << "\t Method: " << method;
     if(fromFile) {
         FILE_LOG(logDEBUG) << "\n Reading Non targets from file: " << nonTargetsFileName;
     }
-    
+
     IMResults::getInstance().setFromFile(fromFile);
     // insert code here...
-    float percentageNonTargetsFloat = (float)percentagetNonTargets/(float)100;
+    float percentageTargetsFloat = (float)percentageTargets/(float)100;
     Graph *graph = new Graph;
-    graph->readGraph(graphFileName, percentageNonTargetsFloat);
+    graph->readGraph(graphFileName, percentageTargetsFloat);
     if(!useIndegree) {
         graph->setPropogationProbability(probability);
     }
@@ -139,7 +162,7 @@ int main(int argc, const char * argv[]) {
         nonTargetsFileName = graphFileName;
         nonTargetsFileName+="_" + to_string(budget);
         nonTargetsFileName+="_" + to_string(nonTargetThreshold);
-        nonTargetsFileName+="_" + to_string(percentagetNonTargets);
+        nonTargetsFileName+="_" + to_string(percentageTargets);
         nonTargetsFileName+="_" + to_string(rand() % 1000000);
         nonTargetsFileName+="_1";
         nonTargetsFileName+=".txt";
@@ -166,7 +189,7 @@ int main(int argc, const char * argv[]) {
     double phase2TimeTaken = double(phase2EndTime - phase2StartTime) / CLOCKS_PER_SEC;
     FILE_LOG(logDEBUG) << "Completed phase 2";
     IMResults::getInstance().setPhase2Time(phase2TimeTaken);
-
+    
     
     
     vector<IMSeedSet> allSeedSets = phase2->getTree()->getAllSeeds(budget);
@@ -176,7 +199,7 @@ int main(int argc, const char * argv[]) {
     string resultFileName = "results/" + graphFileName;
     resultFileName+="_" + to_string(budget);
     resultFileName+="_" + to_string(nonTargetThreshold);
-    resultFileName+="_" + to_string(80);
+    resultFileName+="_" + to_string(percentageTargets);
     resultFileName+="_" + to_string(rand() % 1000000);
     resultFileName+="_1";
     resultFileName+=".json";
@@ -194,6 +217,130 @@ int main(int argc, const char * argv[]) {
     IMResults::getInstance().setExpectedTargets(make_pair(targetsActivated, nonTargetsActivated));
     IMResults::getInstance().writeToFile(resultFileName);
     FILE_LOG(logDEBUG) << "Writing results to file " << resultFileName;
+}
+
+string constructResultFileName(string graphFileName, int budget, int nonTargetThreshold, int percentageTargets, ApproximationSetting setting) {
+    string resultFileName = "results/" + graphFileName;
+    resultFileName+="_" + to_string(budget);
+    resultFileName+="_" + to_string(nonTargetThreshold);
+    resultFileName+="_" + to_string(percentageTargets);
+    resultFileName+="_" + to_string(rand() % 1000000);
+    resultFileName+="_" + to_string(setting);
+    resultFileName+=".json";
+    return resultFileName;
+}
+
+void executeDifferenceAlgorithms(cxxopts::ParseResult result) {
+    cout << "\n Executing difference" << flush;
+    int budget = result["budget"].as<int>();
+    string graphFileName = result["graph"].as<std::string>();
+    int percentageTargets = result["percentage"].as<int>();
+    float percentageTargetsFloat = (float)percentageTargets/(float)100;
+    ApproximationSetting setting = static_cast<ApproximationSetting>(result["approximation"].as<int>());
+    bool extendPermutation = false;
+    if(result.count("extend")>0) {
+        extendPermutation = result["extend"].as<bool>();
+    }
+    cout << "\n Conducting experiments for:\n";
+    cout <<" Graph: " << graphFileName;
+    cout << "\t Budget: " << budget;
+    cout << "\t Percentage:  " << percentageTargets;
+    cout << "\t Approximation setting: " << setting;
+    cout << "\t Extend: " << extendPermutation;
+    cout << flush;
+
+    Graph *graph = new Graph;
+    graph->readGraph(graphFileName, percentageTargetsFloat);
+//    Begin f-g
+    clock_t differenceStartTime = clock();
+    
+
+    testApprox(graph, budget, setting, extendPermutation);
+    clock_t differenceEndTime = clock();
+    double differenceTimeTaken = double(differenceEndTime - differenceStartTime) / CLOCKS_PER_SEC;
+    IMResults::getInstance().setApproximationTime(differenceTimeTaken);
+    IMResults::getInstance().setApproximationSetting(setting);
+    IMResults::getInstance().setExtendingPermutation(extendPermutation);
+    // Setting 1000 as NT threshold. Actually not applicable. TODO: do this better.
+    string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting);
+    IMResults::getInstance().writeToFile(resultFile);
+}
+
+void executeTIMOnLabelledGraph(cxxopts::ParseResult result) {
+    int budget = result["budget"].as<int>();
+    string graphFileName = result["graph"].as<std::string>();
+    int percentageTargets = result["percentage"].as<int>();
+    float percentageTargetsFloat = (float)percentageTargets/(float)100;
+    Graph *unlabelledGraph = new Graph;
+    unlabelledGraph->readGraph(graphFileName, 1.0f);
+    int n = unlabelledGraph->n;
+    double epsilon = (double)EPSILON;
+    int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
+    //    R = 23648871;
+    unlabelledGraph->generateRandomRRSets(R, true);
+    vector<vector<int>> rrSets = unlabelledGraph->getRandomRRSets();
+    
+    vector<vector<int>> lookupTable;
+    TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
+    timCoverage->initializeLookupTable(rrSets, n);
+    timCoverage->initializeDataStructures(R, n);
+    timCoverage->offsetCoverage(0, -10);
+    // 0 should not be the top
+    set<int> topNodes = timCoverage->findTopKNodes(budget, &rrSets);
+    delete timCoverage;
+    
+    Graph *labelledGraph = new Graph;
+    labelledGraph->readGraph(graphFileName, percentageTargetsFloat);
+    pair<int, int> influence = findInfluenceUsingDiffusion(labelledGraph, topNodes);
+    int targetsActivated = influence.first;
+    int nonTargetsActivated = influence.second;
+    
+    cout << "\n Targets activated = " << targetsActivated;
+    cout << "\n Non targets activated = " << nonTargetsActivated;
+    IMResults::getInstance().setExpectedTargets(influence);
+    string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting1);
+    IMResults::getInstance().writeToFile(resultFile);
+}
+void generateGraphLabels(cxxopts::ParseResult result) {
+    string graphFileName = result["graph"].as<std::string>();
+    int percentageTargets = result["percentage"].as<int>();
+    float percentageTargetsFloat = (float)percentageTargets/(float)100;
+    Graph *graph = new Graph;
+    graph->readGraph(graphFileName, percentageTargetsFloat);
+    GenerateGraphLabels(graph, percentageTargetsFloat);
+}
+
+int main(int argc, char **argv) {
+    cout << "Starting program\n";
+    srand(time(0));
+    setupLogger();
+    cout << "Setup logger \n";
+    cxxopts::Options options("Targeted Influence Maximization", "Experiments and research.");
+    options.add_options()
+    ("algorithm", "Choose which algorithm to run", cxxopts::value<std::string>())
+    ("graph", "Graph file name", cxxopts::value<std::string>())
+    ("b,budget", "Budget size", cxxopts::value<int>())
+    ("t,threshold", "NT threshold", cxxopts::value<int>())
+    ("m,method", "TIM-TIM or SIM-SIM", cxxopts::value<int>())
+    ("percentage", "Percentage of Targets", cxxopts::value<int>())
+    ("n,ntfile", "Non Targets File name", cxxopts::value<int>())
+    ("p,probability", "Propogation probability", cxxopts::value<double>())
+    ("approximation", " Approximation Settings", cxxopts::value<int>())
+    ("e,extend", "Extend the permutation");
+    auto result = options.parse(argc, argv);
+    string algorithm = result["algorithm"].as<string>();
+    if(result["algorithm"].count()>0 && algorithm.compare("generate")==0) {
+        generateGraphLabels(result);
+    } else if(result["algorithm"].count()>0 && algorithm.compare("timtim")==0) {
+        executeTIMTIM(result);
+    } else if(result["algorithm"].count()>0 && algorithm.compare("tim")==0) {
+        cout << "\n Executing just TIM";
+        executeTIMOnLabelledGraph(result);
+        
+    } else {
+        executeDifferenceAlgorithms(result);
+    }
+    
     disp_mem_usage("");
     return 0;
 }

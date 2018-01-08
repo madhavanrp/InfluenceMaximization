@@ -10,6 +10,7 @@
 #define IMResults_h
 
 #include "../IMTree.hpp"
+#include "../ApproximationSetting.hpp"
 using json = nlohmann::json;
 
 using namespace std;
@@ -86,5 +87,21 @@ public:
         data["expectedNonTargets"] = influence.second;
     }
     
+    void setApproximationInfluence(pair<int, int> influence) {
+        data["approximationTargetsExpected"] = influence.first;
+        data["approximationNonTargetsExpected"] = influence.second;
+    }
+    void setApproximationValue(int value) {
+        data["approximationValue"] = value;
+    }
+    void setApproximationTime(double value) {
+        data["approximationTime"] = value;
+    }
+    void setApproximationSetting(ApproximationSetting setting) {
+        data["approximationSetting"] = static_cast<int>(setting);
+    }
+    void setExtendingPermutation(bool extend) {
+        data["extend"] = extend;
+    }
 };
 #endif /* IMResults_h */

@@ -34,8 +34,9 @@ public:
     vector<int> getNonTargetsUsingTIM();
     vector<int> getNonTargetsUsingSIM();
     vector<int> generateRandomRRSet(int randomVertex, int rrSetID);
-    void generateRandomRRSets(int R, bool label);
+    vector<vector<int>>* generateRandomRRSets(int R, bool label);
     vector<vector<int>> rrSets;
+    vector<vector<int>> *getRandomRRSets();
     deque<int> q;
     vector<bool> visited;
     vector<int> visitMark;

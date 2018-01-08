@@ -55,8 +55,11 @@ TEST_CASE("TIM Data Structures operations", "TIMCoverage") {
     TIMCoverage timCoverage = *createTIMCoverage();
     
     REQUIRE((*timCoverage.lookupTable)[3].size()==10);
+    REQUIRE(timCoverage.countForVertex(3)==10);
+    
     timCoverage.decrementCountForVertex(3, 0);
     REQUIRE((*timCoverage.lookupTable)[3].size()==9);
+    REQUIRE(timCoverage.countForVertex(3)==9);
     REQUIRE((*timCoverage.lookupTable)[3][0]==1);
     
     timCoverage.incrementCountForVertex(2, 40);
@@ -125,16 +128,65 @@ TEST_CASE("Initialize Data Structures", "TIMCoverage") {
     REQUIRE(timCoverage->queue.size()==n);
 }
 
-TEST_CASE("Copy larget tim coverage", "TIMCoverage") {
-    TIMCoverage *timCoverage = createLargetTIMCoverage();
-    int R = (int)timCoverage->lookupTable->size();
-    int n = 613586;
+//TEST_CASE("Copy larget tim coverage", "TIMCoverage") {
+//    TIMCoverage *timCoverage = createLargetTIMCoverage();
+//    int R = (int)timCoverage->lookupTable->size();
+//    int n = 613586;
+//    timCoverage->initializeDataStructures(R, n);
+//    
+//    REQUIRE(timCoverage->edgeMark.size()==R);
+//    REQUIRE(timCoverage->nodeMark.size()==n);
+//    REQUIRE(timCoverage->coverage.size()==n);
+//    REQUIRE(timCoverage->queue.size()==n);
+//}
+
+
+TEST_CASE("Offset coverage", "TIMCoverage") {
+    vector<vector<int>> rrSets = vector<vector<int>>();
+    int R = 50;
+    for (int i=0; i< R; i++) {
+        rrSets.push_back(vector<int>());
+        for(int j=0; j< (R-i) ; j++) {
+            rrSets[i].push_back(j);
+        }
+    }
+    vector<vector<int>> lookupTable;
+    TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
+    int n = R;
+    timCoverage->initializeLookupTable(rrSets, n);
     timCoverage->initializeDataStructures(R, n);
-    
-    REQUIRE(timCoverage->edgeMark.size()==R);
-    REQUIRE(timCoverage->nodeMark.size()==n);
-    REQUIRE(timCoverage->coverage.size()==n);
-    REQUIRE(timCoverage->queue.size()==n);
+    timCoverage->offsetCoverage(0, -10);
+    // 0 should not be the top
+    set<int> topNodes = timCoverage->findTopKNodes(1, &rrSets);
+    REQUIRE(topNodes.size()==1);
+    REQUIRE(topNodes.find(0)==topNodes.end());
+    delete timCoverage;
+}
+
+TEST_CASE("Add to seed", "TIMCoverage") {
+    vector<vector<int>> rrSets = vector<vector<int>>();
+    int R = 50;
+    for (int i=0; i< R; i++) {
+        rrSets.push_back(vector<int>());
+        for(int j=0; j< (R-i) ; j++) {
+            rrSets[i].push_back(j);
+        }
+    }
+    vector<vector<int>> lookupTable;
+    TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
+    int n = R;
+    timCoverage->initializeLookupTable(rrSets, n);
+    timCoverage->initializeDataStructures(R, n);
+    timCoverage->offsetCoverage(0, -10);
+    // 0 should not be the top
+    int nodeToAdd = 4;
+    vector<int> rrSetsCovered = timCoverage->getRRSetsCoveredByVertex(nodeToAdd);
+    timCoverage->addToSeed(nodeToAdd, &rrSets);
+    for(int rrSet: rrSetsCovered) {
+        REQUIRE(timCoverage->edgeMark[rrSet]);
+    }
+    REQUIRE(!timCoverage->nodeMark[nodeToAdd]);
+    delete timCoverage;
 }
 
 TEST_CASE("TIM Coverage queue copy", "TIMCoverage") {

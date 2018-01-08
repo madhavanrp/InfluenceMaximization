@@ -25,6 +25,8 @@ private:
     float propogationProbability;
     int propogationProbabilityNumber;
     bool standardProbability;
+    string graphName;
+    float percentageTargets;
 public:
     Graph();
     int n, m;
@@ -40,6 +42,8 @@ public:
     void readGraph(string fileName);
     void readGraph(string fileName, float percentage);
     void readLabels(string fileName);
+    void writeLabels();
+    void setLabels(vector<bool> labels, float percentageTargets);
     vector<vector<int> > constructTranspose(vector<vector<int> > aGraph);
     void generateRandomRRSets(int R, bool label);
     vector<int> generateRandomRRSet(int randomVertex, int rrSetID);
