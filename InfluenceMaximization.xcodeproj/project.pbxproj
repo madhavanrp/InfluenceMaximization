@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3107F0A01FE4661900EA0135 /* GenerateGraphLabels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3107F09E1FE4661900EA0135 /* GenerateGraphLabels.cpp */; };
+		311FFDFC20041C5900F68590 /* BaselineGreedy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */; };
+		311FFDFE20041D1500F68590 /* BaselineGreedyTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 311FFDFD20041D1500F68590 /* BaselineGreedyTests.cpp */; };
 		31279D6E1F58EBD900FC4D9B /* Phase2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D6C1F58EBD900FC4D9B /* Phase2.cpp */; };
 		31279D711F63472700FC4D9B /* TIMCoverage.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D701F63472700FC4D9B /* TIMCoverage.hpp */; };
 		31279D731F63485200FC4D9B /* TIMCoverageTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D721F63485200FC4D9B /* TIMCoverageTests.cpp */; };
@@ -53,6 +55,9 @@
 		310E6A131FDE0FAB00D72424 /* jsonexperimenter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jsonexperimenter; sourceTree = BUILT_PRODUCTS_DIR; };
 		310E6A821FE07AF000D72424 /* experiments.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = experiments.py; sourceTree = "<group>"; };
 		311423111F6F4AA7001BA3FA /* memoryusage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memoryusage.h; sourceTree = "<group>"; };
+		311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaselineGreedy.cpp; sourceTree = "<group>"; };
+		311FFDFB20041C5900F68590 /* BaselineGreedy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BaselineGreedy.hpp; sourceTree = "<group>"; };
+		311FFDFD20041D1500F68590 /* BaselineGreedyTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaselineGreedyTests.cpp; sourceTree = "<group>"; };
 		31279D6C1F58EBD900FC4D9B /* Phase2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Phase2.cpp; sourceTree = "<group>"; };
 		31279D6D1F58EBD900FC4D9B /* Phase2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Phase2.hpp; sourceTree = "<group>"; };
 		31279D701F63472700FC4D9B /* TIMCoverage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TIMCoverage.hpp; path = "TIM-Models/TIMCoverage.hpp"; sourceTree = "<group>"; };
@@ -132,6 +137,7 @@
 				3141B0F51F86BE1500B4F1D2 /* GraphTests.cpp */,
 				3159634E1F9E8797000EB2F4 /* ApproximationTests.cpp */,
 				315963571F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp */,
+				311FFDFD20041D1500F68590 /* BaselineGreedyTests.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -163,6 +169,8 @@
 		31FC36891F354892005CAFEB /* InfluenceMaximization */ = {
 			isa = PBXGroup;
 			children = (
+				311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */,
+				311FFDFB20041C5900F68590 /* BaselineGreedy.hpp */,
 				31C4ADA01F787C610077D6BF /* log.h */,
 				31C4ADA11F787C610077D6BF /* log1.h */,
 				311423121F733720001BA3FA /* IMResults */,
@@ -280,6 +288,7 @@
 				3159634D1F9E756C000EB2F4 /* DifferenceApproximator.cpp in Sources */,
 				31A494A41F55D54700745401 /* catchTest.cpp in Sources */,
 				313A589D1F4E072300F86148 /* Makefile in Sources */,
+				311FFDFE20041D1500F68590 /* BaselineGreedyTests.cpp in Sources */,
 				31D871691FD1ED7D00F51E73 /* differencemain.cpp in Sources */,
 				31A494A91F55E92700745401 /* EstimateNonTargets.cpp in Sources */,
 				31A4949B1F510CBF00745401 /* IMTree.cpp in Sources */,
@@ -288,6 +297,7 @@
 				31279D711F63472700FC4D9B /* TIMCoverage.hpp in Sources */,
 				31279D6E1F58EBD900FC4D9B /* Phase2.cpp in Sources */,
 				31279D731F63485200FC4D9B /* TIMCoverageTests.cpp in Sources */,
+				311FFDFC20041C5900F68590 /* BaselineGreedy.cpp in Sources */,
 				3141B0F61F86BE1500B4F1D2 /* GraphTests.cpp in Sources */,
 				31A494A61F55D88B00745401 /* main.cpp in Sources */,
 				31FC36931F354E56005CAFEB /* Graph.cpp in Sources */,

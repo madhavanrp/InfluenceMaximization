@@ -21,6 +21,7 @@
 #include "InfluenceMaximization/log.h"
 #include "InfluenceMaximization/DifferenceApproximator.hpp"
 #include "InfluenceMaximization/GenerateGraphLabels.hpp"
+#include "InfluenceMaximization/BaselineGreedy.hpp"
 
 #include <iomanip>
 #include <ctime>
@@ -301,6 +302,51 @@ void executeTIMOnLabelledGraph(cxxopts::ParseResult result) {
     string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting1);
     IMResults::getInstance().writeToFile(resultFile);
 }
+
+void executeBaselineGreedy(cxxopts::ParseResult result) {
+    cout << "\n Executing baseline greedy";
+    int budget = result["budget"].as<int>();
+    string graphFileName = result["graph"].as<std::string>();
+    int percentageTargets = result["percentage"].as<int>();
+    float percentageTargetsFloat = (float)percentageTargets/(float)100;
+    int nonTargetThreshold = result["threshold"].as<int>();
+    Graph *graph = new Graph;
+    graph->readGraph(graphFileName, percentageTargetsFloat);
+    if(result.count("p")>0) {
+        double probability = result["p"].as<double>();
+        graph->setPropogationProbability(probability);
+    }
+    
+    clock_t baselineStartTime = clock();
+    BaselineGreedy baselineGreedy;
+    set<int> seedSet = baselineGreedy.findSeedSet(graph, budget, nonTargetThreshold);
+    clock_t baselineEndTime = clock();
+    double baselineTimeTaken = double(baselineEndTime - baselineStartTime) / CLOCKS_PER_SEC;
+    
+    pair<int, int> influence = findInfluenceUsingDiffusion(graph, seedSet, NULL);
+    cout <<"\n Results after Diffusion: ";
+    cout << "\nInfluence Targets: " << influence.first;
+    cout << "\nInfluence NT: " << influence.second;
+    FILE_LOG(logDEBUG) << "\n Time Taken: " << baselineTimeTaken;
+    vector<int> orderedSeed = baselineGreedy.getOrderedSeed();
+    set<int> greedySeedSet;
+    vector<IMSeedSet> allSeedSets;
+    for (int i=0; i<orderedSeed.size(); i++) {
+        greedySeedSet.insert(orderedSeed[i]);
+        pair<int, int> seedSetInfluence = findInfluenceUsingDiffusion(graph, greedySeedSet, NULL);
+        IMSeedSet imSeedSet;
+        imSeedSet.setSeedSet(greedySeedSet);
+        imSeedSet.setTargets(seedSetInfluence.first);
+        imSeedSet.setNonTargets(seedSetInfluence.second);
+        allSeedSets.push_back(imSeedSet);
+    }
+    IMResults::getInstance().addSeedSets(allSeedSets);
+    string resultFile = constructResultFileName(graphFileName, budget, nonTargetThreshold, percentageTargets, setting1);
+    IMResults::getInstance().setExpectedTargets(influence);
+    IMResults::getInstance().writeToFile(resultFile);
+    delete graph;
+}
+
 void generateGraphLabels(cxxopts::ParseResult result) {
     string graphFileName = result["graph"].as<std::string>();
     int percentageTargets = result["percentage"].as<int>();
@@ -337,7 +383,9 @@ int main(int argc, char **argv) {
         cout << "\n Executing just TIM";
         executeTIMOnLabelledGraph(result);
         
-    } else {
+    } else if(result["algorithm"].count()>0 && algorithm.compare("baseline")==0 ) {
+        executeBaselineGreedy(result);
+    }else {
         executeDifferenceAlgorithms(result);
     }
     

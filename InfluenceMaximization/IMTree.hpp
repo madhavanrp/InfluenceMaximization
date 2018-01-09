@@ -49,6 +49,9 @@ public:
     int getTargets();
     int getNonTargets();
     
+    void setSeedSet(set<int> seedSet);
+    void setTargets(int targets);
+    void setNonTargets(int nonTargets);
 };
 
 class IMTree {

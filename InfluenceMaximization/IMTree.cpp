@@ -144,6 +144,18 @@ IMSeedSet::IMSeedSet() {
     this->nonTargets = 0;
 }
 
+void IMSeedSet::setSeedSet(set<int> seedSet) {
+    this->seedSet = seedSet;
+}
+
+void IMSeedSet::setTargets(int targets) {
+    this->targets = targets;
+}
+
+void IMSeedSet::setNonTargets(int nonTargets) {
+    this->nonTargets = nonTargets;
+}
+
 vector<IMSeedSet> IMTree::getAllSeeds(int depth) {
     vector<struct node*> leafNodes = getLeafNodes(depth);
     vector<IMSeedSet> seedSets;
