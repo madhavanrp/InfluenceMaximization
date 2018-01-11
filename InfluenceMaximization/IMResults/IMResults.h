@@ -103,5 +103,42 @@ public:
     void setExtendingPermutation(bool extend) {
         data["extend"] = extend;
     }
+    
+    void setPropagationProbability(double value) {
+        data["propagationProbability"] = value;
+    }
+    
+    void setPropagationProbability(string value) {
+        data["propagationProbability"] = value;
+    }
+    
+    void setBudget(int budget) {
+        data["budget"] = budget;
+    }
+    
+    void setNonTargetThreshold(int threshold) {
+        data["nonTargetThreshold"] = threshold;
+    }
+    
+    void setPercentageTargets(int percentage) {
+        data["percentageTargets"] = percentage;
+    }
+    
+    void setPercentageNonTargets(int percentage) {
+        data["percentageNonTargets"] = percentage;
+    }
+    
+    void setAlgorithm(string algorithm) {
+        data["algorithm"] = algorithm;
+    }
+    
+    void setTotalTimeTaken(double timeTaken) {
+        data["totalTimeTaken"] = timeTaken;
+    }
+    
+    void setGraphName(string graphName) {
+        data["graphName"] = graphName;
+    }
+    
 };
 #endif /* IMResults_h */

@@ -304,17 +304,26 @@ void executeTIMOnLabelledGraph(cxxopts::ParseResult result) {
 }
 
 void executeBaselineGreedy(cxxopts::ParseResult result) {
-    cout << "\n Executing baseline greedy";
+    cout << "\n Executing baseline greedy" << flush;
     int budget = result["budget"].as<int>();
     string graphFileName = result["graph"].as<std::string>();
     int percentageTargets = result["percentage"].as<int>();
     float percentageTargetsFloat = (float)percentageTargets/(float)100;
     int nonTargetThreshold = result["threshold"].as<int>();
+    
+    IMResults::getInstance().setBudget(budget);
+    IMResults::getInstance().setGraphName(graphFileName);
+    IMResults::getInstance().setPercentageTargets(percentageTargets);
+    IMResults::getInstance().setNonTargetThreshold(nonTargetThreshold);
+    IMResults::getInstance().setAlgorithm("baseline");
+    IMResults::getInstance().setPropagationProbability("inDegree");
+    
     Graph *graph = new Graph;
     graph->readGraph(graphFileName, percentageTargetsFloat);
     if(result.count("p")>0) {
         double probability = result["p"].as<double>();
         graph->setPropogationProbability(probability);
+        IMResults::getInstance().setPropagationProbability(probability);
     }
     
     clock_t baselineStartTime = clock();
