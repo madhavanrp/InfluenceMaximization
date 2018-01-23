@@ -16,6 +16,7 @@
 #include <cmath>
 #include <set>
 #include "Diffusion.hpp"
+#include "TIMInfluenceCalculator.hpp"
 
 #define EPSLON_TARGETS 2
 
@@ -24,9 +25,12 @@ protected:
     IMTree tree;
     Graph *graph;
     vector<vector<int>> rrSets;
+    TIMInfluenceCalculator *timInfluenceCalculator;
 public:
     Phase2(Graph *graph);
     virtual struct node* addChild(struct node* parent, int childNodeID, int targets, int nonTargets);
+    
+    double getScalingFactorTargets();
     void doPhase2(int budget, int threshold, vector<int> nonTargetEstimates);
     virtual pair<int,int> findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet);
     void deleteUnexpandedNodes(vector<pair<struct node*, bool>> expandedNodes);
@@ -46,7 +50,7 @@ public:
     Phase2TIM(Graph *graph);
     struct node* addChild(struct node* parent, int childNodeID, int targets, int nonTargets);
     pair<int,int> findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet);
-    void addToSeed(int vertex, TIMCoverage *timCoverage);
+    int addToSeed(int vertex, TIMCoverage *timCoverage);
     pair<int, int> findMaxInfluentialNode(set<int> candidateNodes, TIMCoverage *timCoverage);
 };
 #endif /* Phase2_hpp */

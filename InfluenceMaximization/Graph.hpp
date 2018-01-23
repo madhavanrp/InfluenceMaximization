@@ -44,6 +44,9 @@ public:
     void readLabels(string fileName);
     void writeLabels();
     void setLabels(vector<bool> labels, float percentageTargets);
+    int getNumberOfVertices();
+    int getNumberOfEdges();
+    
     vector<vector<int> > constructTranspose(vector<vector<int> > aGraph);
     void generateRandomRRSets(int R, bool label);
     vector<int> generateRandomRRSet(int randomVertex, int rrSetID);

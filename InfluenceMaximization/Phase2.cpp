@@ -11,7 +11,6 @@
 #include "log.h"
 int TIMCoverage::totalCount=0;
 void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates) {
-    
     vector<set<int>> nonTargetMap;
     for(int i=0;i<=threshold;i++) {
         nonTargetMap.push_back(set<int>());
@@ -73,6 +72,8 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
                     
                     if(nodesByNonTargetCount[totalNonTargets+i].first.second.first + currentTotalInfluence.first < targets + totalTargets) {
                         nodesByNonTargetCount[totalNonTargets+i] = make_pair(make_pair(nextNode, nodeInfluence), leaf);
+                        int targetsHitByNode = round(leaf->coverage->getNumberOfRRSetsCovered() * getScalingFactorTargets());
+//                        assert(currentTotalInfluence.first + targetsHitByNode)
                         
                     }
                 }
@@ -89,11 +90,10 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
             int nodeID = nodesByNonTargetCount[i].first.first;
             int targets = nodesByNonTargetCount[i].first.second.first;
             int nonTargets = nodesByNonTargetCount[i].first.second.second;
-//            cout << "\n Adding child node with  " << targets << " targets and " << nonTargets << " Non Targets" << " and child ID is " << nodeID;
+            FILE_LOG(logDEBUG) << "\n Adding child node with  " << targets << " targets and " << nonTargets << " Non Targets" << " and child ID is " << nodeID << " Non target count: " << i;
             struct node* newChild = addChild(nodesByNonTargetCount[i].second, nodeID, targets, nonTargets);
             
-//            cout << "\n Expected " << i;
-//            cout << " Actual " << tree.influenceAlongPath(newChild).second;
+            
             assert(tree.influenceAlongPath(newChild).second==i);
             for(int j=0;j<expandedNodes.size();j++) {
                 if(expandedNodes[j].first==nodesByNonTargetCount[i].second && !expandedNodes[j].second) {
@@ -111,10 +111,9 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
                 assert(expandedNode.first->children.size()==0);
             }
         }
-        FILE_LOG(logDEBUG) << "Finishing depth " << depth;
         depth++;
+        FILE_LOG(logDEBUG) << "Finishing depth " << depth;
     }
-   
 }
 
 IMTree* Phase2::getTree() {
@@ -142,6 +141,9 @@ struct node* Phase2::addChild(struct node* parent, int childNodeID, int targets,
     return newChild;
 }
 
+double Phase2::getScalingFactorTargets() {
+    return (double)graph->n/(double)rrSets.size();
+}
 
 pair<int,int> Phase2::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet) {
     assert(false);
@@ -190,10 +192,11 @@ struct node* Phase2TIM::addChild(struct node* parent, int childNodeID, int targe
     } else {
         assert(parent->coverage!=NULL);
         newChild = tree.addChild(parent, childNodeID, targets, nonTargets);
-        newChild->coverage = parent->coverage;
+        newChild->coverage = parent->coverage->createCopy();
         newChild->coverage->retain();
     }
     addToSeed(childNodeID, newChild->coverage);
+    
     return newChild;
 }
 
@@ -231,11 +234,11 @@ pair<int, int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, TIMCov
     
     delete queueCopy;
     assert(timCoverage->queue.size()==originalSize);
-    if(maximumGainNode!=-1)
+    if(maximumGainNode!=-1) {
         assert(candidateNodes.find(maximumGainNode)!=candidateNodes.end());
-    //     TODO: Scale this.
-    double scaledInfluence = (double) influence * nodeMark->size()/(int)this->rrSets.size();
-    return make_pair(maximumGainNode, scaledInfluence);
+    }
+    double scaledInfluence = (double) influence * (double)nodeMark->size()/(double)this->rrSets.size();
+    return make_pair(maximumGainNode, round(scaledInfluence));
 }
 pair<int,int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet) {
     
@@ -254,10 +257,11 @@ pair<int,int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, vector<
         leaf = tree.root;
     }
     TIMCoverage *timCoverage = leaf->coverage;
-    return findMaxInfluentialNode(candidateNodes, timCoverage);
+    pair<int, int> maxNodeAndMarginalInfluence = findMaxInfluentialNode(candidateNodes, timCoverage);
+    return maxNodeAndMarginalInfluence;
 }
 
-void Phase2TIM::addToSeed(int vertex, TIMCoverage *timCoverage) {
+int Phase2TIM::addToSeed(int vertex, TIMCoverage *timCoverage) {
     
     vector<int> *coverage = &timCoverage->coverage;
     vector<bool> *nodeMark = &timCoverage->nodeMark;
@@ -265,7 +269,7 @@ void Phase2TIM::addToSeed(int vertex, TIMCoverage *timCoverage) {
     (*nodeMark)[vertex] = false;
     int numberCovered = timCoverage->countForVertex(vertex);
     vector<int> edgeInfluence = (*timCoverage->lookupTable)[vertex];
-    
+    int numberOfNewRRSetsCovered = 0;
     for (int i = 0; i < numberCovered; i++) {
         if ((*edgeMark)[edgeInfluence[i]]) continue;
         
@@ -277,7 +281,9 @@ void Phase2TIM::addToSeed(int vertex, TIMCoverage *timCoverage) {
             }
         }
         (*edgeMark)[edgeInfluence[i]] = true;
+        numberOfNewRRSetsCovered++;
     }
+    return numberOfNewRRSetsCovered;
 }
 
 pair<int,int> Phase2SIM::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet) {

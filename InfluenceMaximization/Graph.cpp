@@ -130,6 +130,14 @@ void Graph::setLabels(vector<bool> labels, float percentageTargets) {
     this->percentageTargets = percentageTargets;
 }
 
+int Graph::getNumberOfVertices() {
+    return this->n;
+}
+
+int Graph::getNumberOfEdges() {
+    return this->m;
+}
+
 void Graph::generateRandomRRSets(int R, bool label) {
     this->rrSets = *(new vector<vector<int>>());
     int totalSize = 0;
