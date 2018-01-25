@@ -1,5 +1,5 @@
 CXX = /usr/local/bin/g++-4.9
-core_SRC = InfluenceMaximization/*.cpp
+core_SRC = InfluenceMaximization/*.cpp InfluenceMaximization/TIM-Models/*.cpp
 influence_SRC = -Iplog $(core_SRC) main.cpp cxxopts.hpp
 influence_tests_SRC = $(core_SRC) tests/*.cpp
 

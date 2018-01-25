@@ -112,7 +112,7 @@ void TIMInfluenceCalculator::generateRandomRRSet(int randomVertex, int rrSetID, 
 }
 
 double TIMInfluenceCalculator::getScalingFactorTargets() {
-    double scalingFactor = (double)this->graph->n/(int)this->rrSetsTargets.size();
+    double scalingFactor = (double)this->graph->getNumberOfTargets()/(int)this->rrSetsTargets.size();
     return scalingFactor;
 }
 
