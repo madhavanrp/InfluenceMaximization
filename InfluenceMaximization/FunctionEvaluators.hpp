@@ -24,7 +24,7 @@ class TIMEvaluator {
 private:
     Graph *graph;
     EstimateNonTargets estimateNonTargets;
-    vector<int> nonTargets;
+    vector<double> nonTargets;
     vector<vector<int>> rrSetsTargets;
     vector<vector<int>> rrSetsNonTargets;
     TIMCoverage *timCoverage;

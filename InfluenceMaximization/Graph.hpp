@@ -27,6 +27,9 @@ private:
     bool standardProbability;
     string graphName;
     float percentageTargets;
+    vector<int> nonTargets;
+    int numberOfTargets;
+    int numberOfNonTargets;
 public:
     Graph();
     int n, m;
@@ -34,7 +37,6 @@ public:
     vector<vector<int> > graphTranspose;
     vector<vector<int>> rrSets;
     vector<bool> labels;
-    vector<int> nonTargets;
     deque<int> q;
     vector<int> inDegree;
     vector<bool> visited;
@@ -44,8 +46,15 @@ public:
     void readLabels(string fileName);
     void writeLabels();
     void setLabels(vector<bool> labels, float percentageTargets);
+    
+    //Numbers
     int getNumberOfVertices();
     int getNumberOfEdges();
+    int getNumberOfTargets();
+    int getNumberOfNonTargets();
+    
+    //Data Structure
+    vector<int> *getNonTargets();
     
     vector<vector<int> > constructTranspose(vector<vector<int> > aGraph);
     void generateRandomRRSets(int R, bool label);

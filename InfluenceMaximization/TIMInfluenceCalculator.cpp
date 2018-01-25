@@ -69,9 +69,10 @@ void TIMInfluenceCalculator::generateRandomRRSetsTargets(int R) {
 
 void TIMInfluenceCalculator::generateRandomRRSetsNonTargets(int R) {
     int randomVertex;
-    if(graph->nonTargets.size()>0) {
+    vector<int> *nonTargets = graph->getNonTargets();
+    if(graph->getNumberOfNonTargets()>0) {
         for(int i=0;i<R;i++) {
-            randomVertex = graph->nonTargets[rand() % graph->nonTargets.size()];
+            randomVertex = (*nonTargets)[rand() % graph->getNumberOfNonTargets()];
             assert(!graph->labels[randomVertex]);
             generateRandomRRSet(randomVertex, i, &rrSetsNonTargets, &nonTargetCounts);
         }
@@ -116,7 +117,7 @@ double TIMInfluenceCalculator::getScalingFactorTargets() {
 }
 
 double TIMInfluenceCalculator::getScalingFactorNonTargets() {
-    double scalingFactor = (double)this->graph->nonTargets.size()/(int)this->rrSetsNonTargets.size();
+    double scalingFactor = (double)this->graph->getNumberOfNonTargets()/(int)this->rrSetsNonTargets.size();
     return scalingFactor;
 }
 

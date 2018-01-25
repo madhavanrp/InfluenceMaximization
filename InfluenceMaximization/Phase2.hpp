@@ -26,13 +26,14 @@ protected:
     Graph *graph;
     vector<vector<int>> rrSets;
     TIMInfluenceCalculator *timInfluenceCalculator;
+    vector<double> *nonTargetEstimates;
 public:
     Phase2(Graph *graph);
-    virtual struct node* addChild(struct node* parent, int childNodeID, int targets, int nonTargets);
+    virtual struct node* addChild(struct node* parent, int childNodeID, double targets, double nonTargets);
     
     double getScalingFactorTargets();
-    void doPhase2(int budget, int threshold, vector<int> nonTargetEstimates);
-    virtual pair<int,int> findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet);
+    void doPhase2(int budget, int threshold, vector<double> nonTargetEstimates);
+    virtual pair<int,int> findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet, double totalNonTargets, int nonTargetThreshold);
     void deleteUnexpandedNodes(vector<pair<struct node*, bool>> expandedNodes);
     IMTree* getTree();
 };
@@ -42,15 +43,15 @@ protected:
     
 public:
     Phase2SIM(Graph *graph);
-    virtual pair<int,int> findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet);
+    virtual pair<int,int> findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet, double totalNonTargets, int nonTargetThreshold);
 };
 
 class Phase2TIM: public Phase2 {
 public:
     Phase2TIM(Graph *graph);
-    struct node* addChild(struct node* parent, int childNodeID, int targets, int nonTargets);
-    pair<int,int> findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet);
+    struct node* addChild(struct node* parent, int childNodeID, double targets, double nonTargets);
+    pair<int,int> findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet, double totalNonTargets, int nonTargetThreshold);
     int addToSeed(int vertex, TIMCoverage *timCoverage);
-    pair<int, int> findMaxInfluentialNode(set<int> candidateNodes, TIMCoverage *timCoverage);
+    pair<int, int> findMaxInfluentialNode(set<int> candidateNodes, TIMCoverage *timCoverage, double totalNonTargets, int nonTargetThreshold);
 };
 #endif /* Phase2_hpp */

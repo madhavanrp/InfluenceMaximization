@@ -23,8 +23,8 @@
 using namespace std;
 struct node {
     int nodeID;
-    int targets;
-    int nonTargets;
+    double targets;
+    double nonTargets;
     struct node *parent;
     vector<struct node*> children;
     int depth;
@@ -62,9 +62,10 @@ public:
     vector<struct node*> getLeafNodes(int depth);
     void printTree();
     vector<struct node*> findSeedSetInPath(struct node *aNode);
+    struct node* addChild(struct node* parent, int childNode, double targets, double nonTargets);
     struct node* addChild(struct node* parent, int childNode, int targets, int nonTargets);
-    struct node* makeNode(struct node *parent, struct node *child, int nodeId, int targets, int nonTargets);
-    pair<int,int> influenceAlongPath(struct node* leaf);
+    struct node* makeNode(struct node *parent, struct node *child, int nodeId, double targets, double nonTargets);
+    pair<double,double> influenceAlongPath(struct node* leaf);
     void removeLeaf(struct node* leaf);
     void removeBranch(struct node* leaf);
     int getTotalNodes();

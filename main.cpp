@@ -138,11 +138,11 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     if(!useIndegree) {
         graph->setPropogationProbability(probability);
     }
-    vector<int> nodeCounts;
+    vector<double> nodeCounts;
     clock_t phase1StartTime = clock();
     EstimateNonTargets *estimateNonTargets = NULL;
     if(!fromFile) {
-        estimateNonTargets = new EstimateNonTargets(*graph);
+        estimateNonTargets = new EstimateNonTargets(graph);
         if(method==1) {
             nodeCounts = estimateNonTargets->getNonTargetsUsingTIM();
         } else {
@@ -151,7 +151,7 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     } else {
         estimateNonTargets = new EstimateNonTargets();
         estimateNonTargets->readFromFile(nonTargetsFileName);
-        nodeCounts = estimateNonTargets->nodeCounts;
+        nodeCounts = *estimateNonTargets->getAllNonTargetsCount();
         delete estimateNonTargets;
     }
     
@@ -208,7 +208,8 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     IMSeedSet bestSeedSet = phase2->getTree()->getBestSeedSet(budget);
     delete phase2;
     
-    pair<int, int> influenceOfBestSeedSet = findInfluenceUsingDiffusion(graph, bestSeedSet.getSeedSet());
+    TIMInfluenceCalculator  timInfluenceCalculator(graph, 2);
+    pair<int, int> influenceOfBestSeedSet = timInfluenceCalculator.findInfluence(bestSeedSet.getSeedSet());
     int targetsActivated = influenceOfBestSeedSet.first;
     int nonTargetsActivated = influenceOfBestSeedSet.second;
     

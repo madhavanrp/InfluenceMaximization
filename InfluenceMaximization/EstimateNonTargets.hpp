@@ -21,21 +21,22 @@
 
 class EstimateNonTargets {
     int n;
+    vector<double> nodeCounts;
+    vector<vector<int>> rrSets;
+    Graph *graph;
     
 public:
-    Graph graph;
-    vector<int> nodeCounts;
     
     
-    EstimateNonTargets(Graph graph);
+    EstimateNonTargets(Graph *graph);
     EstimateNonTargets();
     int getNonTargets(int vertex);
     void writeToFile(string fileName);
-    vector<int> getNonTargetsUsingTIM();
-    vector<int> getNonTargetsUsingSIM();
+    vector<double> getNonTargetsUsingTIM();
+    vector<double> getNonTargetsUsingSIM();
+    vector<double> *getAllNonTargetsCount();
     vector<int> generateRandomRRSet(int randomVertex, int rrSetID);
     vector<vector<int>>* generateRandomRRSets(int R, bool label);
-    vector<vector<int>> rrSets;
     vector<vector<int>> *getRandomRRSets();
     deque<int> q;
     vector<bool> visited;

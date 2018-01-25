@@ -8,14 +8,14 @@
 
 #include "EstimateNonTargets.hpp"
 
-EstimateNonTargets::EstimateNonTargets(Graph graph) {
+EstimateNonTargets::EstimateNonTargets(Graph *graph) {
     this->graph = graph;
-    for(int i=0;i<graph.n;i++) {
+    for(int i=0;i<graph->getNumberOfVertices();i++) {
         this->nodeCounts.push_back(0);
         this->visitMark.push_back(0);
         this->visited.push_back(false);
     }
-    n = graph.n;
+    n = graph->getNumberOfVertices();
 }
 
 EstimateNonTargets::EstimateNonTargets() {
@@ -29,25 +29,29 @@ int EstimateNonTargets::getNonTargets(int vertex) {
 //    return getNonTargetsUsingTIM();
     return 0;
 }
-vector<int> EstimateNonTargets::getNonTargetsUsingSIM() {
+vector<double> EstimateNonTargets::getNonTargetsUsingSIM() {
     set<int> seedSet;
     for(int i=0; i<n; i++) {
         seedSet.insert(i);
-        int nonTargets = findInfluenceUsingDiffusion(&graph, seedSet).second;
+        int nonTargets = findInfluenceUsingDiffusion(this->graph, seedSet).second;
         seedSet.clear();
         nodeCounts[i] = nonTargets;
     }
     return nodeCounts;
 }
 
-vector<int> EstimateNonTargets::getNonTargetsUsingTIM() {
-    int n = graph.n;
+vector<double> EstimateNonTargets::getNonTargetsUsingTIM() {
+    int n = graph->getNumberOfVertices();
     double epsilon = EPSILON;
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
     cout << "\n For phase 1: R is " << R;
-    cout << "\n Non targets number is " << graph.nonTargets.size();
+    cout << "\n Non targets number is " << graph->getNumberOfNonTargets();
     generateRandomRRSets(R, false);
     return nodeCounts;
+}
+
+vector<double>* EstimateNonTargets::getAllNonTargetsCount() {
+    return &this->nodeCounts;
 }
 
 vector<vector<int>>* EstimateNonTargets::generateRandomRRSets(int R, bool label) {
@@ -56,10 +60,11 @@ vector<vector<int>>* EstimateNonTargets::generateRandomRRSets(int R, bool label)
         rrSets.push_back(vector<int>());
     }
     int randomVertex;
-    if(graph.nonTargets.size()>0) {
+    if(graph->getNumberOfNonTargets()>0) {
+        vector<int> *nonTargets = graph->getNonTargets();
         for(int i=0;i<R;i++) {
-            randomVertex = graph.nonTargets[rand() % graph.nonTargets.size()];
-            assert(!graph.labels[randomVertex]);
+            randomVertex = (*nonTargets)[rand() % graph->getNumberOfNonTargets()];
+            assert(!graph->labels[randomVertex]);
             generateRandomRRSet(randomVertex, i);
         }
     }
@@ -68,10 +73,10 @@ vector<vector<int>>* EstimateNonTargets::generateRandomRRSets(int R, bool label)
     int maxInfluence = -1;
     while(i<n) {
 //        cout << "\n Phase1 : Vertex  " << i << " covered RR sets is " << nodeCounts[i];
-       nodeCounts[i] = round( (float)nodeCounts[i] * (float)graph.nonTargets.size()/(float)R);
+       nodeCounts[i] = (double)nodeCounts[i] * (double)graph->getNumberOfNonTargets()/(double)R;
         
         if(nodeCounts[i]==0) {
-            assert(graph.labels[i]);
+            assert(graph->labels[i]);
         }
         if(nodeCounts[i] > maxInfluence) {
             maxNode = i;
@@ -100,9 +105,9 @@ vector<int> EstimateNonTargets::generateRandomRRSet(int randomVertex, int rrSetI
     while(!q.empty()) {
         int u=q.front();
         q.pop_front();
-        for(int j=0; j<(int)graph.graphTranspose[u].size(); j++){
-            int v = graph.graphTranspose[u][j];
-            if(!graph.flipCoinOnEdge(v, u))
+        for(int j=0; j<(int)graph->graphTranspose[u].size(); j++){
+            int v = graph->graphTranspose[u][j];
+            if(!graph->flipCoinOnEdge(v, u))
                 continue;
             if(visited[v])
                 continue;

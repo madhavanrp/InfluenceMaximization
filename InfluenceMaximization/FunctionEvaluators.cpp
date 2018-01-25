@@ -51,12 +51,12 @@ double TIMEvaluator::getScalingFactorTargets() {
 }
 
 double TIMEvaluator::getScalingFactorNonTargets() {
-    double scalingFactor = (double)this->graph->nonTargets.size()/(int)this->rrSetsNonTargets.size();
+    double scalingFactor = (double)this->graph->getNumberOfNonTargets()/(int)this->rrSetsNonTargets.size();
     return scalingFactor;
 }
 
 void TIMEvaluator::calculateNonTargets() {
-    EstimateNonTargets estimateNonTargets(*this->graph);
+    EstimateNonTargets estimateNonTargets(this->graph);
     this->nonTargets = estimateNonTargets.getNonTargetsUsingTIM();
     this->rrSetsNonTargets = *estimateNonTargets.getRandomRRSets();
     

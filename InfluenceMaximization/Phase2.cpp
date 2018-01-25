@@ -10,7 +10,8 @@
 #include <assert.h>
 #include "log.h"
 int TIMCoverage::totalCount=0;
-void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates) {
+void Phase2::doPhase2(int budget, int threshold, vector<double> nonTargetEstimates) {
+    this->nonTargetEstimates = &nonTargetEstimates;
     vector<set<int>> nonTargetMap;
     for(int i=0;i<=threshold;i++) {
         nonTargetMap.push_back(set<int>());
@@ -20,14 +21,15 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
     
     for (int i=0; i<numberOfNodes; i++) {
         if(nonTargetEstimates[i]<=threshold) {
-            nonTargetMap[nonTargetEstimates[i]].insert(i);
+            
+            nonTargetMap[round(nonTargetEstimates[i])].insert(i);
             totalNodesLessThanThreshold++;
         }
     }
     
     int depth = 0;
-    int totalTargets = -1;
-    int totalNonTargets = -1;
+    double totalTargets = -1;
+    double totalNonTargets = -1;
     set<int> allNodesSet;
     for (int i=0; i<numberOfNodes; i++) {
         allNodesSet.insert(i);
@@ -42,7 +44,7 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
             totalNonTargets = 0;
             totalTargets = 0;
             vector<struct node *> seedSet = tree.findSeedSetInPath(leaf);
-            pair<int, int> influence = tree.influenceAlongPath(leaf);
+            pair<double, double> influence = tree.influenceAlongPath(leaf);
             totalTargets = influence.first;
             totalNonTargets = influence.second;
             assert(totalNonTargets<=threshold);
@@ -54,26 +56,26 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
             
             //Branch here
             for(int i=0;i<=(threshold-totalNonTargets);i++) {
-//                pair<int,int> nodePair = findMaxInfluentialNode(nonTargetMap[i], seedSet);
-                pair<int,int> nodePair = findMaxInfluentialNode(nonTargetMap[i], seedSet);
+                pair<int, double> nodePair = findMaxInfluentialNode(nonTargetMap[i], seedSet, totalNonTargets, threshold);
                 int nextNode = nodePair.first;
                 if(nextNode==-1) continue;
-                int targets = nodePair.second;
+                double targets = nodePair.second;
                 //The pruning happens here
                 
                 assert(totalNonTargets+i<=threshold);
+//                assert((*this->nonTargetEstimates)[nextNode]<=i);
                 pair<int,int> nodeInfluence = make_pair(targets, i);
-                if(nodesByNonTargetCount[totalNonTargets+i].second==NULL) {
-                    nodesByNonTargetCount[totalNonTargets+i] = make_pair(make_pair(nextNode, nodeInfluence), leaf);
+                if(nodesByNonTargetCount[(int)round(totalNonTargets)+i].second==NULL) {
+                    nodesByNonTargetCount[(int)round(totalNonTargets)+i] = make_pair(make_pair(nextNode, nodeInfluence), leaf);
                 } else {
-                    struct node* currentNodeParent = nodesByNonTargetCount[totalNonTargets+i].second;
-                    pair<int,int> currentTotalInfluence = tree.influenceAlongPath(currentNodeParent);
-                    assert(currentTotalInfluence.second + nodesByNonTargetCount[totalNonTargets+i].first.second.second==totalNonTargets+i);
+                    struct node* currentNodeParent = nodesByNonTargetCount[(int)round(totalNonTargets)+i].second;
+                    pair<double,double> currentTotalInfluence = tree.influenceAlongPath(currentNodeParent);
+//                    assert(currentTotalInfluence.second + nodesByNonTargetCount[(int)round(totalNonTargets)+i].first.second.second<=totalNonTargets+i);
                     
-                    if(nodesByNonTargetCount[totalNonTargets+i].first.second.first + currentTotalInfluence.first < targets + totalTargets) {
-                        nodesByNonTargetCount[totalNonTargets+i] = make_pair(make_pair(nextNode, nodeInfluence), leaf);
+                    if(nodesByNonTargetCount[(int)round(totalNonTargets)+i].first.second.first + currentTotalInfluence.first < targets + totalTargets) {
+                        nodesByNonTargetCount[(int)round(totalNonTargets)+i] = make_pair(make_pair(nextNode, nodeInfluence), leaf);
                         int targetsHitByNode = round(leaf->coverage->getNumberOfRRSetsCovered() * getScalingFactorTargets());
-//                        assert(currentTotalInfluence.first + targetsHitByNode)
+
                         
                     }
                 }
@@ -89,19 +91,23 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
             
             int nodeID = nodesByNonTargetCount[i].first.first;
             int targets = nodesByNonTargetCount[i].first.second.first;
-            int nonTargets = nodesByNonTargetCount[i].first.second.second;
+            double nonTargets = (*this->nonTargetEstimates)[nodeID];
+            
             FILE_LOG(logDEBUG) << "\n Adding child node with  " << targets << " targets and " << nonTargets << " Non Targets" << " and child ID is " << nodeID << " Non target count: " << i;
+            
             struct node* newChild = addChild(nodesByNonTargetCount[i].second, nodeID, targets, nonTargets);
             
             
-            assert(tree.influenceAlongPath(newChild).second==i);
+//            assert((int)round(tree.influenceAlongPath(newChild).second)==i);
             for(int j=0;j<expandedNodes.size();j++) {
                 if(expandedNodes[j].first==nodesByNonTargetCount[i].second && !expandedNodes[j].second) {
                     expandedNodes[j].second=true;
                     break;
                 }
             }
-            assert(tree.influenceAlongPath(newChild).second<=threshold);
+            pair<double, double> influenceAlongNewChild = tree.influenceAlongPath(newChild);
+            FILE_LOG(logDEBUG) << "\n Influence Along path T, NT : " << influenceAlongNewChild.first << " , " << influenceAlongNewChild.second;
+            assert(influenceAlongNewChild.second<=threshold);
         }
         int toRemove = 0;
         for(pair<struct node*, bool> expandedNode:expandedNodes) {
@@ -136,7 +142,7 @@ void Phase2::deleteUnexpandedNodes(vector<pair<struct node*, bool>> expandedNode
     }
 }
 
-struct node* Phase2::addChild(struct node* parent, int childNodeID, int targets, int nonTargets) {
+struct node* Phase2::addChild(struct node* parent, int childNodeID, double targets, double nonTargets) {
     struct node* newChild = tree.addChild(parent, childNodeID, targets, nonTargets);
     return newChild;
 }
@@ -145,7 +151,7 @@ double Phase2::getScalingFactorTargets() {
     return (double)graph->n/(double)rrSets.size();
 }
 
-pair<int,int> Phase2::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet) {
+pair<int,int> Phase2::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet, double totalNonTargets, int nonTargetThreshold) {
     assert(false);
     int numberOfCandidateNodes = (int)candidateNodes.size();
     if(numberOfCandidateNodes==0) return make_pair(-1,0);
@@ -178,7 +184,7 @@ Phase2TIM::Phase2TIM(Graph *graph): Phase2(graph) {
     tree.root->coverage = coverage;
     
 }
-struct node* Phase2TIM::addChild(struct node* parent, int childNodeID, int targets, int nonTargets) {
+struct node* Phase2TIM::addChild(struct node* parent, int childNodeID, double targets, double nonTargets) {
     struct node *newChild=NULL;
     if(parent->children.size()>0) {
         TIMCoverage *coverage = parent->coverage;
@@ -200,7 +206,7 @@ struct node* Phase2TIM::addChild(struct node* parent, int childNodeID, int targe
     return newChild;
 }
 
-pair<int, int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, TIMCoverage *timCoverage) {
+pair<int, int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, TIMCoverage *timCoverage, double totalNonTargets, int nonTargetThreshold) {
     int originalSize = (int)timCoverage->queue.size();
     priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queueCopy = new priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>(timCoverage->queue);
     
@@ -225,9 +231,12 @@ pair<int, int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, TIMCov
             continue;
         }
         if(candidateNodes.find(element.first)!=candidateNodes.end()) {
-            maximumGainNode = element.first;
-            influence = (*coverage)[element.first];
-            break;
+            // Also make sure that it does not go over threhold
+            if ((*this->nonTargetEstimates)[element.first] + totalNonTargets <= nonTargetThreshold) {
+                maximumGainNode = element.first;
+                influence = (*coverage)[element.first];
+                break;
+            }
         }
         
     }
@@ -240,7 +249,7 @@ pair<int, int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, TIMCov
     double scaledInfluence = (double) influence * (double)nodeMark->size()/(double)this->rrSets.size();
     return make_pair(maximumGainNode, round(scaledInfluence));
 }
-pair<int,int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet) {
+pair<int,int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet, double totalNonTargets, int nonTargetThreshold) {
     
     int numberOfCandidateNodes = (int)candidateNodes.size();
     
@@ -257,7 +266,7 @@ pair<int,int> Phase2TIM::findMaxInfluentialNode(set<int> candidateNodes, vector<
         leaf = tree.root;
     }
     TIMCoverage *timCoverage = leaf->coverage;
-    pair<int, int> maxNodeAndMarginalInfluence = findMaxInfluentialNode(candidateNodes, timCoverage);
+    pair<int, int> maxNodeAndMarginalInfluence = findMaxInfluentialNode(candidateNodes, timCoverage, totalNonTargets, nonTargetThreshold);
     return maxNodeAndMarginalInfluence;
 }
 
@@ -286,7 +295,7 @@ int Phase2TIM::addToSeed(int vertex, TIMCoverage *timCoverage) {
     return numberOfNewRRSetsCovered;
 }
 
-pair<int,int> Phase2SIM::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet) {
+pair<int,int> Phase2SIM::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet, double totalNonTargets, int nonTargetThreshold) {
     set<int> seeds;
     for (struct node *seed:seedSet) {
         seeds.insert(seed->nodeID);

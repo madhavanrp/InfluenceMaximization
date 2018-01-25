@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3107F0A01FE4661900EA0135 /* GenerateGraphLabels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3107F09E1FE4661900EA0135 /* GenerateGraphLabels.cpp */; };
+		310E789E200EB175000C70D9 /* TIMInfluenceCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E789C200EB175000C70D9 /* TIMInfluenceCalculator.cpp */; };
+		310E78A220103A04000C70D9 /* TIMCoverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A120103A04000C70D9 /* TIMCoverage.cpp */; };
 		311FFDFC20041C5900F68590 /* BaselineGreedy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */; };
 		311FFDFE20041D1500F68590 /* BaselineGreedyTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 311FFDFD20041D1500F68590 /* BaselineGreedyTests.cpp */; };
 		31279D6E1F58EBD900FC4D9B /* Phase2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D6C1F58EBD900FC4D9B /* Phase2.cpp */; };
@@ -54,6 +56,9 @@
 		3107F09F1FE4661900EA0135 /* GenerateGraphLabels.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GenerateGraphLabels.hpp; sourceTree = "<group>"; };
 		310E6A131FDE0FAB00D72424 /* jsonexperimenter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jsonexperimenter; sourceTree = BUILT_PRODUCTS_DIR; };
 		310E6A821FE07AF000D72424 /* experiments.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = experiments.py; sourceTree = "<group>"; };
+		310E789C200EB175000C70D9 /* TIMInfluenceCalculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMInfluenceCalculator.cpp; sourceTree = "<group>"; };
+		310E789D200EB175000C70D9 /* TIMInfluenceCalculator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TIMInfluenceCalculator.hpp; sourceTree = "<group>"; };
+		310E78A120103A04000C70D9 /* TIMCoverage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TIMCoverage.cpp; path = "TIM-Models/TIMCoverage.cpp"; sourceTree = "<group>"; };
 		311423111F6F4AA7001BA3FA /* memoryusage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memoryusage.h; sourceTree = "<group>"; };
 		311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaselineGreedy.cpp; sourceTree = "<group>"; };
 		311FFDFB20041C5900F68590 /* BaselineGreedy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BaselineGreedy.hpp; sourceTree = "<group>"; };
@@ -122,6 +127,7 @@
 		31279D6F1F63469F00FC4D9B /* TIM-Models */ = {
 			isa = PBXGroup;
 			children = (
+				310E78A120103A04000C70D9 /* TIMCoverage.cpp */,
 				31279D701F63472700FC4D9B /* TIMCoverage.hpp */,
 			);
 			name = "TIM-Models";
@@ -194,6 +200,8 @@
 				315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */,
 				3107F09E1FE4661900EA0135 /* GenerateGraphLabels.cpp */,
 				3107F09F1FE4661900EA0135 /* GenerateGraphLabels.hpp */,
+				310E789C200EB175000C70D9 /* TIMInfluenceCalculator.cpp */,
+				310E789D200EB175000C70D9 /* TIMInfluenceCalculator.hpp */,
 			);
 			path = InfluenceMaximization;
 			sourceTree = "<group>";
@@ -284,6 +292,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				310E789E200EB175000C70D9 /* TIMInfluenceCalculator.cpp in Sources */,
 				3107F0A01FE4661900EA0135 /* GenerateGraphLabels.cpp in Sources */,
 				3159634D1F9E756C000EB2F4 /* DifferenceApproximator.cpp in Sources */,
 				31A494A41F55D54700745401 /* catchTest.cpp in Sources */,
@@ -291,6 +300,7 @@
 				311FFDFE20041D1500F68590 /* BaselineGreedyTests.cpp in Sources */,
 				31D871691FD1ED7D00F51E73 /* differencemain.cpp in Sources */,
 				31A494A91F55E92700745401 /* EstimateNonTargets.cpp in Sources */,
+				310E78A220103A04000C70D9 /* TIMCoverage.cpp in Sources */,
 				31A4949B1F510CBF00745401 /* IMTree.cpp in Sources */,
 				315963561F9EC153000EB2F4 /* FunctionEvaluators.cpp in Sources */,
 				3159634F1F9E8797000EB2F4 /* ApproximationTests.cpp in Sources */,

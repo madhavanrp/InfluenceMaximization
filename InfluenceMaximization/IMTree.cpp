@@ -19,6 +19,15 @@ IMTree::IMTree() {
     this-> root = root;
 }
 
+struct node* IMTree::addChild(struct node* parent, int childNode, double targets, double nonTargets) {
+    struct node *child = new struct node();
+    struct node* newChild = makeNode(parent, child, childNode, targets, nonTargets);
+    parent->children.push_back(newChild);
+    tree.push_back(newChild);
+    return newChild;
+    
+}
+
 struct node* IMTree::addChild(struct node* parent, int childNode, int targets, int nonTargets) {
     struct node *child = new struct node();
     struct node* newChild = makeNode(parent, child, childNode, targets, nonTargets);
@@ -87,7 +96,7 @@ vector<struct node*> IMTree::findSeedSetInPath(struct node *aNode) {
     return seedSets;
 }
 
-struct node* IMTree:: makeNode(struct node *parent, struct node *child, int nodeId, int targets, int nonTargets) {
+struct node* IMTree:: makeNode(struct node *parent, struct node *child, int nodeId, double targets, double nonTargets) {
     (*child).nodeID = nodeId;
     (*child).parent = parent;
     (*child).targets = targets;
@@ -97,10 +106,10 @@ struct node* IMTree:: makeNode(struct node *parent, struct node *child, int node
     
 }
 
-pair<int,int> IMTree::influenceAlongPath(struct node* leaf) {
+pair<double,double> IMTree::influenceAlongPath(struct node* leaf) {
     vector<struct node *> seedSet = findSeedSetInPath(leaf);
-    int totalNonTargets = 0;
-    int totalTargets = 0;
+    double totalNonTargets = 0;
+    double totalTargets = 0;
     // Find non targets and targets along this path.
     for (int i=0; i<seedSet.size(); i++) {
         struct node* vertex = seedSet[i];

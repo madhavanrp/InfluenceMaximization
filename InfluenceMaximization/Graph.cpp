@@ -98,6 +98,8 @@ void Graph::readLabels(string fileName) {
         }
         myFile.close();
     }
+    this->numberOfTargets = this->getNumberOfVertices() - (int)nonTargets.size();
+    this->numberOfNonTargets = (int)nonTargets.size();
 }
 
 void Graph::writeLabels() {
@@ -136,6 +138,18 @@ int Graph::getNumberOfVertices() {
 
 int Graph::getNumberOfEdges() {
     return this->m;
+}
+
+int Graph::getNumberOfTargets() {
+    return this->numberOfTargets;
+}
+
+int Graph::getNumberOfNonTargets() {
+    return this->numberOfNonTargets;
+}
+
+vector<int>* Graph::getNonTargets() {
+    return &this->nonTargets;
 }
 
 void Graph::generateRandomRRSets(int R, bool label) {
