@@ -148,6 +148,14 @@ void IMSeedSet::setSeedSet(set<int> seedSet) {
     this->seedSet = seedSet;
 }
 
+void IMSeedSet::setSeedVector(vector<int> seedVector) {
+    this->seedVector = seedVector;
+}
+
+vector<int> IMSeedSet::getSeedVector() {
+    return this->seedVector;
+}
+
 void IMSeedSet::setTargets(int targets) {
     this->targets = targets;
 }
@@ -166,12 +174,17 @@ vector<IMSeedSet> IMTree::getAllSeeds(int depth) {
         while(current!=root) {
             imSeedSet.targets+= current->targets;
             imSeedSet.nonTargets+= current->nonTargets;
-            imSeedSet.seedSet.insert(current->nodeID);
+            imSeedSet.addSeed(current->nodeID);
             current = current->parent;
         };
         seedSets.push_back(imSeedSet);
     }
     return seedSets;
+}
+
+void IMSeedSet::addSeed(int nodeID) {
+    this->seedVector.push_back(nodeID);
+    this->seedSet.insert(nodeID);
 }
 
 IMSeedSet IMTree::getBestSeedSet(int depth) {

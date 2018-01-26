@@ -89,7 +89,7 @@ void Phase2::doPhase2(int budget, int threshold, vector<int> nonTargetEstimates)
             int nodeID = nodesByNonTargetCount[i].first.first;
             int targets = nodesByNonTargetCount[i].first.second.first;
             int nonTargets = nodesByNonTargetCount[i].first.second.second;
-//            cout << "\n Adding child node with  " << targets << " targets and " << nonTargets << " Non Targets" << " and child ID is " << nodeID;
+            FILE_LOG(logDEBUG) << "\n Adding child node with  " << targets << " targets and " << nonTargets << " Non Targets" << " and child ID is " << nodeID;
             struct node* newChild = addChild(nodesByNonTargetCount[i].second, nodeID, targets, nonTargets);
             
 //            cout << "\n Expected " << i;

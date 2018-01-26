@@ -344,7 +344,12 @@ void executeBaselineGreedy(cxxopts::ParseResult result) {
         greedySeedSet.insert(orderedSeed[i]);
         pair<int, int> seedSetInfluence = findInfluenceUsingDiffusion(graph, greedySeedSet, NULL);
         IMSeedSet imSeedSet;
-        imSeedSet.setSeedSet(greedySeedSet);
+        vector<int> seedVector(orderedSeed.begin(), orderedSeed.begin() + i + 1);
+        // Reverse this before adding so the last seed is first
+        reverse(seedVector.begin(), seedVector.end());
+        for (int s: seedVector) {
+            imSeedSet.addSeed(s);
+        }
         imSeedSet.setTargets(seedSetInfluence.first);
         imSeedSet.setNonTargets(seedSetInfluence.second);
         allSeedSets.push_back(imSeedSet);
