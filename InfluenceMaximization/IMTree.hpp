@@ -38,6 +38,7 @@ struct node {
 };
 
 class IMSeedSet {
+    vector<int> seedVector;
     
 public:
     IMSeedSet();
@@ -46,12 +47,17 @@ public:
     int nonTargets;
     
     set<int> getSeedSet();
+    vector<int> getSeedVector();
     int getTargets();
     int getNonTargets();
     
     void setSeedSet(set<int> seedSet);
+    void setSeedVector(vector<int> seedVector);
+    
     void setTargets(int targets);
     void setNonTargets(int nonTargets);
+    
+    void addSeed(int nodeID);
 };
 
 class IMTree {

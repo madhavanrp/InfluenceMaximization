@@ -49,7 +49,9 @@ public:
         vector<json> all;
         for(IMSeedSet seedSet:allSeedSets) {
             json s;
-            s["seedSet"] = seedSet.getSeedSet();
+            vector<int> seedVector = seedSet.getSeedVector();
+            reverse(seedVector.begin(), seedVector.end());
+            s["seedSet"] = seedVector;
             s["targets"] = seedSet.getTargets();
             s["nonTargets"] = seedSet.getNonTargets();
             all.push_back(s);
@@ -60,7 +62,9 @@ public:
     
     void addBestSeedSet(IMSeedSet bestSeedSet) {
         json best;
-        best["seedSet"] = bestSeedSet.getSeedSet();
+        vector<int> seedVector = bestSeedSet.getSeedVector();
+        reverse(seedVector.begin(), seedVector.end());
+        best["seedSet"] = seedVector;
         best["targets"] = bestSeedSet.getTargets();
         best["nonTargets"] = bestSeedSet.getNonTargets();
         data["bestSeedSet"] = best;
