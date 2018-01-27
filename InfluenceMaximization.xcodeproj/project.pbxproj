@@ -10,6 +10,7 @@
 		3107F0A01FE4661900EA0135 /* GenerateGraphLabels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3107F09E1FE4661900EA0135 /* GenerateGraphLabels.cpp */; };
 		310E789E200EB175000C70D9 /* TIMInfluenceCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E789C200EB175000C70D9 /* TIMInfluenceCalculator.cpp */; };
 		310E78A220103A04000C70D9 /* TIMCoverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A120103A04000C70D9 /* TIMCoverage.cpp */; };
+		310E78A5201BCE71000C70D9 /* BaselineGreedyTIM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */; };
 		311FFDFC20041C5900F68590 /* BaselineGreedy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */; };
 		311FFDFE20041D1500F68590 /* BaselineGreedyTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 311FFDFD20041D1500F68590 /* BaselineGreedyTests.cpp */; };
 		31279D6E1F58EBD900FC4D9B /* Phase2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D6C1F58EBD900FC4D9B /* Phase2.cpp */; };
@@ -59,6 +60,8 @@
 		310E789C200EB175000C70D9 /* TIMInfluenceCalculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMInfluenceCalculator.cpp; sourceTree = "<group>"; };
 		310E789D200EB175000C70D9 /* TIMInfluenceCalculator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TIMInfluenceCalculator.hpp; sourceTree = "<group>"; };
 		310E78A120103A04000C70D9 /* TIMCoverage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TIMCoverage.cpp; path = "TIM-Models/TIMCoverage.cpp"; sourceTree = "<group>"; };
+		310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaselineGreedyTIM.cpp; sourceTree = "<group>"; };
+		310E78A4201BCE71000C70D9 /* BaselineGreedyTIM.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BaselineGreedyTIM.hpp; sourceTree = "<group>"; };
 		311423111F6F4AA7001BA3FA /* memoryusage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memoryusage.h; sourceTree = "<group>"; };
 		311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaselineGreedy.cpp; sourceTree = "<group>"; };
 		311FFDFB20041C5900F68590 /* BaselineGreedy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BaselineGreedy.hpp; sourceTree = "<group>"; };
@@ -177,6 +180,8 @@
 			children = (
 				311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */,
 				311FFDFB20041C5900F68590 /* BaselineGreedy.hpp */,
+				310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */,
+				310E78A4201BCE71000C70D9 /* BaselineGreedyTIM.hpp */,
 				31C4ADA01F787C610077D6BF /* log.h */,
 				31C4ADA11F787C610077D6BF /* log1.h */,
 				311423121F733720001BA3FA /* IMResults */,
@@ -293,6 +298,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				310E789E200EB175000C70D9 /* TIMInfluenceCalculator.cpp in Sources */,
+				310E78A5201BCE71000C70D9 /* BaselineGreedyTIM.cpp in Sources */,
 				3107F0A01FE4661900EA0135 /* GenerateGraphLabels.cpp in Sources */,
 				3159634D1F9E756C000EB2F4 /* DifferenceApproximator.cpp in Sources */,
 				31A494A41F55D54700745401 /* catchTest.cpp in Sources */,

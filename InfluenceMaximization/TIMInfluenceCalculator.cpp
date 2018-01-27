@@ -156,4 +156,12 @@ shared_ptr<TIMCoverage> TIMInfluenceCalculator::getTimCoverageNonTargets() {
     return this->timCoverageNonTargets;
 }
 
+vector<vector<int>>* TIMInfluenceCalculator::getRRsetsTargets() {
+    return &this->rrSetsTargets;
+}
+
+vector<vector<int>>* TIMInfluenceCalculator::getRRsetsNonTargets() {
+    return &this->rrSetsNonTargets;
+}
+
 

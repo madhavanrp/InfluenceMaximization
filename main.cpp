@@ -22,6 +22,7 @@
 #include "InfluenceMaximization/DifferenceApproximator.hpp"
 #include "InfluenceMaximization/GenerateGraphLabels.hpp"
 #include "InfluenceMaximization/BaselineGreedy.hpp"
+#include "InfluenceMaximization/BaselineGreedyTIM.hpp"
 
 #include <iomanip>
 #include <ctime>
@@ -328,22 +329,25 @@ void executeBaselineGreedy(cxxopts::ParseResult result) {
     }
     
     clock_t baselineStartTime = clock();
-    BaselineGreedy baselineGreedy;
-    set<int> seedSet = baselineGreedy.findSeedSet(graph, budget, nonTargetThreshold);
+    BaselineGreedyTIM baselineGreedyTIM;
+    set<int> seedSet = baselineGreedyTIM.findSeedSet(graph, budget, nonTargetThreshold);
     clock_t baselineEndTime = clock();
     double baselineTimeTaken = double(baselineEndTime - baselineStartTime) / CLOCKS_PER_SEC;
     
-    pair<int, int> influence = findInfluenceUsingDiffusion(graph, seedSet, NULL);
+    
+    TIMInfluenceCalculator  timInfluenceCalculator(graph, 2);
+    pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
     cout <<"\n Results after Diffusion: ";
     cout << "\nInfluence Targets: " << influence.first;
     cout << "\nInfluence NT: " << influence.second;
     FILE_LOG(logDEBUG) << "\n Time Taken: " << baselineTimeTaken;
-    vector<int> orderedSeed = baselineGreedy.getOrderedSeed();
+    vector<int> orderedSeed = baselineGreedyTIM.getOrderedSeed();
     set<int> greedySeedSet;
     vector<IMSeedSet> allSeedSets;
     for (int i=0; i<orderedSeed.size(); i++) {
         greedySeedSet.insert(orderedSeed[i]);
-        pair<int, int> seedSetInfluence = findInfluenceUsingDiffusion(graph, greedySeedSet, NULL);
+        TIMInfluenceCalculator  timInfluenceCalculatorGreedy(graph, 2);
+        pair<int, int> seedSetInfluence = timInfluenceCalculatorGreedy.findInfluence(greedySeedSet);
         IMSeedSet imSeedSet;
         vector<int> seedVector(orderedSeed.begin(), orderedSeed.begin() + i + 1);
         // Reverse this before adding so the last seed is first

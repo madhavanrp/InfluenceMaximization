@@ -53,6 +53,10 @@ public:
     shared_ptr<TIMCoverage> getTimCoverageTargets();
     shared_ptr<TIMCoverage> getTimCoverageNonTargets();
     
+    //RR Sets getters
+    vector<vector<int>> *getRRsetsTargets();
+    vector<vector<int>> *getRRsetsNonTargets();
+    
     
     double getScalingFactorTargets();
     double getScalingFactorNonTargets();

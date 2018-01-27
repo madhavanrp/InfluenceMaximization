@@ -25,7 +25,13 @@ struct QueueComparator {
     }
 };
 
+class NodeChecker {
+public:
+    virtual bool isNodeValid(int nodeID)=0;
+};
+
 class TIMCoverage {
+    int numberOfRRSetsCovered;
 public:
     vector<bool> nodeMark;
     vector<bool> edgeMark;
@@ -44,6 +50,7 @@ public:
     void incrementCountForVertex(int u, int randomRRSetID);
     
     int countForVertex(int u);
+    int numberOfNewRRSetsCoveredByVertex(int vertex);
     
     vector<int> getRRSetsCoveredByVertex(int vertex);
     
@@ -54,6 +61,7 @@ public:
     void initializeDataStructures(int R, int n) ;
     
     pair<int, int> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) ;
+    pair<int, int> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets, NodeChecker *nodeChecker);
     
     pair<int, int> findMaxInfluentialNodeWithApproximations(set<int> *seedSet, vector<int> *approximationsScaled);
     

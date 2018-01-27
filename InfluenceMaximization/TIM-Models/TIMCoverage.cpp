@@ -9,6 +9,7 @@
 #include "TIMCoverage.hpp"
 TIMCoverage::TIMCoverage(vector<vector<int>> *lookupTable) {
     this->lookupTable = lookupTable;
+    this->numberOfRRSetsCovered = 0;
     retainCount++;
     assert(retainCount==1);
     TIMCoverage::totalCount++;
@@ -29,6 +30,10 @@ int TIMCoverage::countForVertex(int u) {
 
 vector<int> TIMCoverage::getRRSetsCoveredByVertex(int vertex) {
     return (*lookupTable)[vertex];
+}
+
+int TIMCoverage::numberOfNewRRSetsCoveredByVertex(int vertex) {
+    return this->coverage[vertex];
 }
 
 void TIMCoverage::offsetCoverage(int vertex, int offset) {
@@ -72,23 +77,26 @@ void TIMCoverage::initializeDataStructures(int R, int n) {
     
 }
 
-pair<int, int> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) {
-    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queueCopy = &this->queue;
+pair<int, int> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets, NodeChecker *nodeChecker) {
+    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queue = &this->queue;
     
     vector<int> *coverage = &this->coverage;
     vector<bool> *nodeMark = &this->nodeMark;
     int maximumGainNode = -1;
     int influence = 0;
-    while(!queueCopy->empty()) {
-        pair<int,int> element = queueCopy->top();
+    while(!queue->empty()) {
+        pair<int,int> element = queue->top();
         if(element.second > (*coverage)[element.first]) {
-            queueCopy->pop();
+            queue->pop();
             element.second = (*coverage)[element.first];
-            queueCopy->push(element);
+            queue->push(element);
             continue;
         }
         
-        queueCopy->pop();
+        queue->pop();
+        if (nodeChecker!=NULL && !nodeChecker->isNodeValid(element.first)) {
+            continue;
+        }
         if(!(*nodeMark)[element.first]) {
             continue;
         }
@@ -117,9 +125,14 @@ pair<int, int> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<i
             }
         }
         (*edgeMark)[edgeInfluence[i]] = true;
+        this->numberOfRRSetsCovered++;
     }
     
     return make_pair(maximumGainNode, scaledInfluence);
+}
+
+pair<int, int> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) {
+    return findMaxInfluentialNodeAndUpdateModel(rrSets, NULL);
 }
 
 pair<int, int> TIMCoverage::findMaxInfluentialNodeWithApproximations(set<int> *seedSet, vector<int> *approximationsScaled) {
@@ -182,6 +195,7 @@ void TIMCoverage::addToSeed(int vertex, vector<vector<int>> *rrSets) {
             }
         }
         (*edgeMark)[edgeInfluence[i]] = true;
+        this->numberOfRRSetsCovered++;
     }
 }
 
@@ -205,11 +219,12 @@ int TIMCoverage::findInfluence(set<int> seedSet, double scalingFactor) {
 }
 
 int TIMCoverage::getNumberOfRRSetsCovered() {
-    int count=0;
-    for(bool edge: edgeMark) {
-        if(edge) count++;
-    }
-    return count;
+//    int count=0;
+//    for(bool edge: edgeMark) {
+//        if(edge) count++;
+//    }
+//    assert(count==this->numberOfRRSetsCovered);
+    return this->numberOfRRSetsCovered;
 }
     
 TIMCoverage* TIMCoverage::createCopy() {
