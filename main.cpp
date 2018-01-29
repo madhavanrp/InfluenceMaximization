@@ -93,11 +93,15 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     nonTargetThreshold = result["threshold"].as<int>();
     graphFileName = result["graph"].as<std::string>();
     percentageTargets = result["percentage"].as<int>();
+    IMResults::getInstance().setAlgorithm("timtim");
+    IMResults::getInstance().setPropagationProbability("inDegree");
+    
     if(result.count("method")>0) {
         method = result["method"].as<int>();
     }
     if(result.count("p")>0) {
         probability = result["p"].as<double>();
+        IMResults::getInstance().setPropagationProbability(probability);
         useIndegree = false;
     }
     if(result.count("ntfile")>0) {
