@@ -78,6 +78,41 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
 
 }
 
+void loadResultsFileFrom(cxxopts::ParseResult result) {
+    // Necessary paramters
+    int budget = result["budget"].as<int>();
+    string graphFileName = result["graph"].as<std::string>();
+    int percentageTargets = result["percentage"].as<int>();
+    float percentageTargetsFloat = (float)percentageTargets/(float)100;
+    string algorithm = result["algorithm"].as<string>();
+    IMResults::getInstance().setBudget(budget);
+    IMResults::getInstance().setGraphName(graphFileName);
+    IMResults::getInstance().setPercentageTargets(percentageTargets);
+    IMResults::getInstance().setAlgorithm(algorithm);
+    
+    // Optional parameters
+    if(result["threshold"].count()>0) {
+        int nonTargetThreshold = result["threshold"].as<int>();
+        IMResults::getInstance().setNonTargetThreshold(nonTargetThreshold);
+    }
+    IMResults::getInstance().setPropagationProbability("inDegree");
+    if(result.count("p")>0) {
+        double probability = result["p"].as<double>();
+        IMResults::getInstance().setPropagationProbability(probability);
+    }
+    
+    if(result.count("ntfile")>0) {
+        string nonTargetsFileName = result["ntfile"].as<std::string>();
+        IMResults::getInstance().setFromFile(true);
+        IMResults::getInstance().setNonTargetFileName(nonTargetsFileName);
+    }
+}
+
+void loadGraphSizeToResults(Graph *graph) {
+    IMResults::getInstance().setNumberOfVertices(graph->getNumberOfVertices());
+    IMResults::getInstance().setNumberOfEdges(graph->getNumberOfEdges());
+}
+
 void executeTIMTIM(cxxopts::ParseResult result) {
     cout << "\n begin execution tim tim ";
     int budget;
@@ -93,15 +128,13 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     nonTargetThreshold = result["threshold"].as<int>();
     graphFileName = result["graph"].as<std::string>();
     percentageTargets = result["percentage"].as<int>();
-    IMResults::getInstance().setAlgorithm("timtim");
-    IMResults::getInstance().setPropagationProbability("inDegree");
+    loadResultsFileFrom(result);
     
     if(result.count("method")>0) {
         method = result["method"].as<int>();
     }
     if(result.count("p")>0) {
         probability = result["p"].as<double>();
-        IMResults::getInstance().setPropagationProbability(probability);
         useIndegree = false;
     }
     if(result.count("ntfile")>0) {
@@ -143,6 +176,7 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     if(!useIndegree) {
         graph->setPropogationProbability(probability);
     }
+    loadGraphSizeToResults(graph);
     vector<double> nodeCounts;
     clock_t phase1StartTime = clock();
     EstimateNonTargets *estimateNonTargets = NULL;
@@ -195,6 +229,7 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     double phase2TimeTaken = double(phase2EndTime - phase2StartTime) / CLOCKS_PER_SEC;
     FILE_LOG(logDEBUG) << "Completed phase 2";
     IMResults::getInstance().setPhase2Time(phase2TimeTaken);
+    IMResults::getInstance().setTotalTimeTaken(phase1TimeTaken + phase2TimeTaken);
     
     
     
@@ -317,20 +352,15 @@ void executeBaselineGreedy(cxxopts::ParseResult result) {
     float percentageTargetsFloat = (float)percentageTargets/(float)100;
     int nonTargetThreshold = result["threshold"].as<int>();
     
-    IMResults::getInstance().setBudget(budget);
-    IMResults::getInstance().setGraphName(graphFileName);
-    IMResults::getInstance().setPercentageTargets(percentageTargets);
-    IMResults::getInstance().setNonTargetThreshold(nonTargetThreshold);
-    IMResults::getInstance().setAlgorithm("baseline");
-    IMResults::getInstance().setPropagationProbability("inDegree");
+    loadResultsFileFrom(result);
     
     Graph *graph = new Graph;
     graph->readGraph(graphFileName, percentageTargetsFloat);
     if(result.count("p")>0) {
         double probability = result["p"].as<double>();
         graph->setPropogationProbability(probability);
-        IMResults::getInstance().setPropagationProbability(probability);
     }
+    loadGraphSizeToResults(graph);
     
     clock_t baselineStartTime = clock();
     BaselineGreedyTIM baselineGreedyTIM;
@@ -348,7 +378,7 @@ void executeBaselineGreedy(cxxopts::ParseResult result) {
     vector<int> orderedSeed = baselineGreedyTIM.getOrderedSeed();
     set<int> greedySeedSet;
     vector<IMSeedSet> allSeedSets;
-    for (int i=0; i<orderedSeed.size(); i++) {
+    for (int i=(int)(orderedSeed.size()-1); i<orderedSeed.size(); i++) {
         greedySeedSet.insert(orderedSeed[i]);
         TIMInfluenceCalculator  timInfluenceCalculatorGreedy(graph, 2);
         pair<int, int> seedSetInfluence = timInfluenceCalculatorGreedy.findInfluence(greedySeedSet);
@@ -364,6 +394,9 @@ void executeBaselineGreedy(cxxopts::ParseResult result) {
         allSeedSets.push_back(imSeedSet);
     }
     IMResults::getInstance().addSeedSets(allSeedSets);
+    IMResults::getInstance().addBestSeedSet(allSeedSets[0]);
+    
+    IMResults::getInstance().setTotalTimeTaken(baselineTimeTaken);
     string resultFile = constructResultFileName(graphFileName, budget, nonTargetThreshold, percentageTargets, setting1);
     IMResults::getInstance().setExpectedTargets(influence);
     IMResults::getInstance().writeToFile(resultFile);

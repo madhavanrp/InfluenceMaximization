@@ -144,5 +144,12 @@ public:
         data["graphName"] = graphName;
     }
     
+    void setNumberOfVertices(int n) {
+        data["numberOfVertices"] = n;
+    }
+    
+    void setNumberOfEdges(int m) {
+        data["numberOfEdges"] = m;
+    }
 };
 #endif /* IMResults_h */

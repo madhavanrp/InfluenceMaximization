@@ -207,7 +207,7 @@ IMSeedSet IMTree::getBestSeedSet(int depth) {
         while(current!=root) {
             imSeedSet.targets+= current->targets;
             imSeedSet.nonTargets+= current->nonTargets;
-            imSeedSet.seedSet.insert(current->nodeID);
+            imSeedSet.addSeed(current->nodeID);
             current = current->parent;
         };
         assert(imSeedSet.getTargets()==influenceAlongPath(leaf).first);
