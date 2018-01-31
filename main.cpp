@@ -425,7 +425,7 @@ int main(int argc, char **argv) {
     ("t,threshold", "NT threshold", cxxopts::value<int>())
     ("m,method", "TIM-TIM or SIM-SIM", cxxopts::value<int>())
     ("percentage", "Percentage of Targets", cxxopts::value<int>())
-    ("n,ntfile", "Non Targets File name", cxxopts::value<int>())
+    ("n,ntfile", "Non Targets File name", cxxopts::value<std::string>())
     ("p,probability", "Propogation probability", cxxopts::value<double>())
     ("approximation", " Approximation Settings", cxxopts::value<int>())
     ("e,extend", "Extend the permutation");
