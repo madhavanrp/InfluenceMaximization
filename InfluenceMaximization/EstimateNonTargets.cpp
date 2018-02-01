@@ -140,7 +140,7 @@ void EstimateNonTargets::writeToFile(string fileName) {
 
 void EstimateNonTargets::readFromFile(string fileName) {
     ifstream myFile("NonTargetsEstimateFiles/" + fileName);
-    int nonTargets;
+    double nonTargets;
     while (myFile >> nonTargets) {
         nodeCounts.push_back(nonTargets);
     }
