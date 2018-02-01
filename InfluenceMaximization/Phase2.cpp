@@ -30,10 +30,6 @@ void Phase2::doPhase2(int budget, int threshold, vector<double> nonTargetEstimat
     int depth = 0;
     double totalTargets = -1;
     double totalNonTargets = -1;
-    set<int> allNodesSet;
-    for (int i=0; i<numberOfNodes; i++) {
-        allNodesSet.insert(i);
-    }
     while(depth<budget) {
         FILE_LOG(logDEBUG) << "Starting depth " << depth;
         vector<struct node*> leafNodes = tree.getLeafNodes(depth);
