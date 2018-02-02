@@ -9,7 +9,7 @@
 
 IMTree createTestIMTree() {
     IMTree imTree;
-    struct node* root = imTree.root;
+    struct node* root = imTree.getRoot();
     imTree.addChild(root, 2, 4, 1);
     imTree.addChild(root, 4, 5, 10);
     imTree.addChild(root, 6, 5, 10);
@@ -18,7 +18,7 @@ IMTree createTestIMTree() {
 
 IMTree createTestIMTree(int depth) {
     IMTree imTree;
-    struct node* root = imTree.root;
+    struct node* root = imTree.getRoot();
     int nodeID = 0;
     int numberOfNodesPerLevel = 5;
     for (int i = 0; i<depth; i++) {
@@ -43,7 +43,7 @@ IMTree createTestIMTree(int depth) {
 
 IMTree createIMTreeWithVaryingBranchingFactor(int depth) {
     IMTree imTree;
-    struct node* root = imTree.root;
+    struct node* root = imTree.getRoot();
     int nodeID = 0;
     int nodesInLevel;
     int maxBranchingFactor = 10;
@@ -75,19 +75,11 @@ TEST_CASE("Creating Test IMTree With Depth", "IMTree") {
         REQUIRE(seed.size()==depth);
     }
     
-//    imTree = createIMTreeWithVaryingBranchingFactor(depth);
-//    
-//    leafNodes = imTree.getLeafNodes(depth);
-//    for(struct node* leaf:leafNodes) {
-//        vector<struct node*> seed = imTree.findSeedSetInPath(leaf);
-//        REQUIRE(seed.size()==depth);
-//    }
-    
 }
 
 TEST_CASE( "Nodes are added", "IMTree Nodes" ) {
     IMTree imTree = createTestIMTree();
-    for(struct node *aNode: imTree.tree) {
+    for(struct node *aNode: imTree.getTree()) {
         if ((*aNode).parent==NULL) {
             REQUIRE(aNode-> nodeID == -1);
         } else {
@@ -98,7 +90,7 @@ TEST_CASE( "Nodes are added", "IMTree Nodes" ) {
 
 TEST_CASE("Nodes are created with correct ID", "IMTree Node") {
     IMTree imTree;
-    struct node* parent = imTree.root;
+    struct node* parent = imTree.getRoot();
     int i =0;
     int depth = 1;
     while(i<10) {
@@ -120,7 +112,7 @@ TEST_CASE("Nodes are created with correct ID", "IMTree Node") {
 
 TEST_CASE("Influence along a path", "IMTree Path" ) {
     IMTree imTree = createTestIMTree(10);
-    struct node* parent = imTree.root;
+    struct node* parent = imTree.getRoot();
     for (int i =0; i<10; i++) {
         parent = imTree.addChild(parent, i, 10, 5);
     }
@@ -131,7 +123,8 @@ TEST_CASE("Influence along a path", "IMTree Path" ) {
 
 TEST_CASE("Seed sets for a node", "IMTree Seed Sets") {
     IMTree imTree = createTestIMTree();
-    struct node *leafNode = imTree.tree[imTree.tree.size()-1];
+    vector<struct node*> nodesVector = imTree.getTree();
+    struct node *leafNode = nodesVector[nodesVector.size()-1];
     vector<struct node*> seed = imTree.findSeedSetInPath(leafNode);
     REQUIRE(seed.size()==1);
     REQUIRE(seed[0]==leafNode);
@@ -139,7 +132,7 @@ TEST_CASE("Seed sets for a node", "IMTree Seed Sets") {
 
 TEST_CASE("Seed set along root node", "IMTree Seed Sets") {
     IMTree imTree = createTestIMTree();
-    struct node *root = imTree.root;
+    struct node *root = imTree.getRoot();
     vector<struct node*> seed = imTree.findSeedSetInPath(root);
     REQUIRE(seed.size()==0);
 }
@@ -152,8 +145,8 @@ TEST_CASE("Get proper leaf nodes", "IMTree leaf nodes") {
     REQUIRE(imTree.getLeafNodes(0).size()==1);
 }
 
-void deleteHere(IMTree tree, struct node *leaf) {
-    tree.removeLeaf(leaf);
+void deleteHere(IMTree *tree, struct node *leaf) {
+    tree->removeLeaf(leaf);
 }
 
 TEST_CASE("Removing leaves from IM Tree", "IMTree leaf nodes") {
@@ -166,8 +159,7 @@ TEST_CASE("Removing leaves from IM Tree", "IMTree leaf nodes") {
     int oldChildrenCount = (int)parent->children.size();
 
     struct node* anotherPointer = leaf;
-//    imTree.removeLeaf(anotherPointer);
-    deleteHere(imTree, anotherPointer);
+    deleteHere(&imTree, anotherPointer);
     int newChildrenCount = (int)parent->children.size();
     REQUIRE(oldChildrenCount==(newChildrenCount+1));
     

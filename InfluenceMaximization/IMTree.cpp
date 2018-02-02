@@ -19,6 +19,10 @@ IMTree::IMTree() {
     this-> root = root;
 }
 
+vector<struct node*> IMTree::getTree() {
+    return this->tree;
+}
+
 struct node* IMTree::addChild(struct node* parent, int childNode, double targets, double nonTargets) {
     struct node *child = new struct node();
     struct node* newChild = makeNode(parent, child, childNode, targets, nonTargets);
@@ -28,13 +32,18 @@ struct node* IMTree::addChild(struct node* parent, int childNode, double targets
     
 }
 
-struct node* IMTree::addChild(struct node* parent, int childNode, int targets, int nonTargets) {
-    struct node *child = new struct node();
-    struct node* newChild = makeNode(parent, child, childNode, targets, nonTargets);
-    parent->children.push_back(newChild);
-    tree.push_back(newChild);
-    return newChild;
-    
+struct node* IMTree::getRoot() {
+    return this->root;
+}
+void IMTree::recursivelyDeleteLeaves(struct node* aNode) {
+    for (struct node* n: aNode->children) {
+        recursivelyDeleteLeaves(n);
+    }
+    delete aNode;
+}
+
+IMTree::~IMTree() {
+    recursivelyDeleteLeaves(this->root);
 }
 
 int IMTree::getTotalNodes() {
@@ -89,7 +98,7 @@ vector<struct node*> IMTree::findSeedSetInPath(struct node *aNode) {
     if(aNode==root) return seedSets;
     seedSets.push_back(aNode);
     struct node* current = aNode;
-    while(current->parent!=tree[0]) {
+    while(current->parent!=this->root) {
         seedSets.push_back(current->parent);
         current = current->parent;
     };
@@ -122,6 +131,7 @@ pair<double,double> IMTree::influenceAlongPath(struct node* leaf) {
 void IMTree::removeLeaf(struct node* leaf) {
     vector<struct node*> *leaves = &(leaf->parent->children);
     (*leaves).erase(std::remove((*leaves).begin(), (*leaves).end(), leaf), (*leaves).end());
+    tree.erase(std::remove(tree.begin(), tree.end(), leaf), tree.end());
     delete leaf;
 }
 
@@ -129,6 +139,7 @@ void IMTree::removeBranch(struct node* leaf) {
     struct node* parent = leaf->parent;
     vector<struct node*> *leaves = &(leaf->parent->children);
     (*leaves).erase(std::remove((*leaves).begin(), (*leaves).end(), leaf), (*leaves).end());
+    tree.erase(std::remove(tree.begin(), tree.end(), leaf), tree.end());
     delete leaf;
     
     //Recursively remove leaf node
@@ -226,14 +237,7 @@ IMSeedSet IMTree::getBestSeedSet(int depth) {
     return maxSeedSet;
 }
 
-void IMTree::printTree() {
-//    cout <<"\nBegin printing tree\n";
-//    for(struct node *leaf: getLeafNodes()) {
-//        cout<<"\n";
-//        vector<struct node*> path = findSeedSetInPath(leaf);
-//        for(struct node* vertex:path) {
-//            cout << "\t:" << vertex->nodeID;
-//        }
-//        cout<<"\n";
-//    }
+IMTree::IMTree( const IMTree &obj) {
+    tree = obj.tree;
+    root = obj.root;
 }

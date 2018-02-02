@@ -46,10 +46,10 @@ void TIMInfluenceCalculator::constructCalculator(Graph *graph, double epsilon) {
     this->timCoverageTargets.reset(new TIMCoverage(this->lookupTableTargets.get()));
     this->timCoverageNonTargets.reset(new TIMCoverage(this->lookupTableNonTargets.get()));
     
-    this->timCoverageTargets->initializeLookupTable(rrSetsTargets, n);
+    this->timCoverageTargets->initializeLookupTable(&rrSetsTargets, n);
     this->timCoverageTargets->initializeDataStructures(R, n);
     
-    this->timCoverageNonTargets->initializeLookupTable(rrSetsNonTargets, n);
+    this->timCoverageNonTargets->initializeLookupTable(&rrSetsNonTargets, n);
     this->timCoverageNonTargets->initializeDataStructures(R, n);
     
     

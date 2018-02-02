@@ -153,11 +153,11 @@ vector<int>* Graph::getNonTargets() {
 }
 
 void Graph::generateRandomRRSets(int R, bool label) {
-    this->rrSets = *(new vector<vector<int>>());
+    this->rrSets = vector<vector<int>>();
     int totalSize = 0;
     clock_t begin = clock();
     while(rrSets.size()<R) {
-        rrSets.push_back(*new vector<int>());
+        rrSets.push_back(vector<int>());
     }
     for(int i=0;i<R;i++) {
         int randomVertex;
@@ -177,12 +177,8 @@ void Graph::generateRandomRRSets(int R, bool label) {
     cout<<"\n Average size is " << (float)totalSize/(float)R;
 }
 
-vector<vector<int>> Graph::getRandomRRSets() {
-    cout<<"\n";
-    
-    cout<<" RR Sets size is " << rrSets.size();
-    cout<<"\n";
-    return rrSets;
+vector<vector<int>>* Graph::getRandomRRSets() {
+    return &rrSets;
 }
 
 void Graph::clearRandomRRSets() {

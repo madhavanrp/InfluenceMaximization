@@ -24,7 +24,7 @@ class Phase2 {
 protected:
     IMTree tree;
     Graph *graph;
-    vector<vector<int>> rrSets;
+    vector<vector<int>>* rrSets;
     TIMInfluenceCalculator *timInfluenceCalculator;
     vector<double> *nonTargetEstimates;
 public:

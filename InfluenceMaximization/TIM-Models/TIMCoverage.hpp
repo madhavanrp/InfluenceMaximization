@@ -39,9 +39,7 @@ public:
     vector<vector<int>> *lookupTable;
     int R;
     priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> queue;
-    int retainCount = 0;
     
-    static int totalCount;
     
     TIMCoverage(vector<vector<int>> *lookupTable);
     
@@ -56,7 +54,7 @@ public:
     
     void offsetCoverage(int vertex, int offset) ;
     
-    void initializeLookupTable(vector<vector<int>> randomRRSets, int n) ;
+    void initializeLookupTable(vector<vector<int>>* randomRRSets, int n) ;
     
     void initializeDataStructures(int R, int n) ;
     
@@ -74,11 +72,8 @@ public:
     int findInfluence(set<int> seedSet, double scalingFactor);
     int getNumberOfRRSetsCovered();
     
-    TIMCoverage *createCopy();
-    
-    void release();
-    
-    void retain();
+    TIMCoverage( const TIMCoverage &obj);
+    ~TIMCoverage();
 };
 
 

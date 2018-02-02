@@ -78,7 +78,7 @@ TEST_CASE("TIM is copied", "TIMCoverage") {
         timCoverage->edgeMark.push_back(i%2==0);
         timCoverage->coverage.push_back(i);
     }
-    TIMCoverage *copy = timCoverage->createCopy();
+    TIMCoverage copy = *timCoverage;
     timCoverage->edgeMark.erase(timCoverage->edgeMark.begin());
     timCoverage->nodeMark.erase(timCoverage->nodeMark.begin());
     timCoverage->coverage.erase(timCoverage->coverage.begin());
@@ -87,35 +87,12 @@ TEST_CASE("TIM is copied", "TIMCoverage") {
     REQUIRE(timCoverage->nodeMark.size()==99);
     REQUIRE(timCoverage->coverage.size()==99);
 
-    REQUIRE(copy->edgeMark.size()==100);
-    REQUIRE(copy->nodeMark.size()==100);
-    REQUIRE(copy->coverage.size()==100);
+    REQUIRE(copy.edgeMark.size()==100);
+    REQUIRE(copy.nodeMark.size()==100);
+    REQUIRE(copy.coverage.size()==100);
     
 }
 
-TEST_CASE("Memory management", "TIMCoverage") {
-    int originalCount = TIMCoverage::totalCount;
-    TIMCoverage *timCoverage = createTIMCoverage();
-    
-    REQUIRE(TIMCoverage::totalCount==(originalCount+1));
-    REQUIRE(timCoverage -> retainCount==1);
-    for(int i=0;i<5;i++) {
-        timCoverage->retain();
-    }
-    
-    REQUIRE(timCoverage->retainCount==6);
-    for(int i=0;i<5;i++) {
-        timCoverage->release();
-    }
-    
-    REQUIRE(timCoverage->retainCount==1);
-    timCoverage->release();
-    REQUIRE(TIMCoverage::totalCount==(originalCount));
-    TIMCoverage *copy = timCoverage->createCopy();
-    REQUIRE(copy->retainCount==1);
-//    delete timCoverage;
-    
-}
 
 TEST_CASE("Initialize Data Structures", "TIMCoverage") {
     TIMCoverage *timCoverage = createTIMCoverage();
@@ -153,7 +130,7 @@ TEST_CASE("Offset coverage", "TIMCoverage") {
     vector<vector<int>> lookupTable;
     TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
     int n = R;
-    timCoverage->initializeLookupTable(rrSets, n);
+    timCoverage->initializeLookupTable(&rrSets, n);
     timCoverage->initializeDataStructures(R, n);
     timCoverage->offsetCoverage(0, -10);
     // 0 should not be the top
@@ -175,7 +152,7 @@ TEST_CASE("Add to seed", "TIMCoverage") {
     vector<vector<int>> lookupTable;
     TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
     int n = R;
-    timCoverage->initializeLookupTable(rrSets, n);
+    timCoverage->initializeLookupTable(&rrSets, n);
     timCoverage->initializeDataStructures(R, n);
     timCoverage->offsetCoverage(0, -10);
     // 0 should not be the top
