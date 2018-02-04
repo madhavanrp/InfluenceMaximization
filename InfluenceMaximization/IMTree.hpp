@@ -29,6 +29,31 @@ struct node {
     vector<struct node*> children;
     int depth;
     TIMCoverage *coverage;
+    node ( const node &obj) {
+        nodeID = obj.nodeID;
+        targets = obj.targets;
+        nonTargets = obj.nonTargets;
+        parent = obj.parent;
+        children = obj.children;
+        coverage = obj.coverage;
+    };
+    
+    node() {
+        nodeID = -1;
+        targets = 0;
+        nonTargets = 0;
+        parent = NULL;
+        children = vector<node*>();
+        depth = -1;
+        coverage = NULL;
+    }
+    
+    ~node() {
+        if(coverage !=NULL) {
+            delete coverage;
+        }
+    }
+    
 };
 
 class IMSeedSet {

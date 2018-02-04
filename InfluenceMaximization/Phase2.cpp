@@ -172,12 +172,17 @@ Phase2TIM::Phase2TIM(Graph *graph): Phase2(graph) {
     graph->generateRandomRRSets(R, true);
     rrSets = graph->getRandomRRSets();
     vector<vector<int>> *lookupTable = new vector<vector<int>>();
+    this->lookupTable = lookupTable;
     TIMCoverage *coverage = new TIMCoverage(lookupTable);
     coverage->initializeLookupTable(rrSets, n);
     coverage->initializeDataStructures(R, n);
     
     tree.getRoot()->coverage = coverage;
     
+}
+
+Phase2TIM::~Phase2TIM() {
+    delete this->lookupTable;
 }
 struct node* Phase2TIM::addChild(struct node* parent, int childNodeID, double targets, double nonTargets) {
     struct node *newChild=NULL;
