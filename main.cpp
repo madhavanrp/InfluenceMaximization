@@ -255,11 +255,13 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     
     IMSeedSet bestSeedSet = phase2->getTree()->getBestSeedSet(budget);
     delete phase2;
-    
-    TIMInfluenceCalculator  timInfluenceCalculator(graph, 2);
-    pair<int, int> influenceOfBestSeedSet = timInfluenceCalculator.findInfluence(bestSeedSet.getSeedSet());
+    graph->clearRandomRRSets();
+    TIMInfluenceCalculator  *timInfluenceCalculator = new TIMInfluenceCalculator(graph, 2);
+    pair<int, int> influenceOfBestSeedSet = timInfluenceCalculator->findInfluence(bestSeedSet.getSeedSet());
     int targetsActivated = influenceOfBestSeedSet.first;
     int nonTargetsActivated = influenceOfBestSeedSet.second;
+    delete timInfluenceCalculator;
+    delete graph;
     
     cout << "\n Targets activated = " << targetsActivated;
     cout << "\n Non targets activated = " << nonTargetsActivated;
