@@ -20,16 +20,28 @@ class BaselineGreedyTIM: public virtual NodeChecker {
     vector<int> orderedSeed; // For greedy algorithm.
     int budget;
     int threshold;
+    bool exceedThreshold;
     int rrSetsNonTargetsThreshold;
+    Graph *graph;
     vector<vector<int>> *rrSetTargets;
     vector<vector<int>> *rrSetNonTargets;
     shared_ptr<TIMCoverage> timCoverageTargets;
     shared_ptr<TIMCoverage> timCoverageNonTargets;
-    
+    vector<double> bestThetaGainSummations;
+    vector<double> bestThetaGains;
+    double bestThetaGain;
+    double bestThetaGainSummation;
 public:
     vector<int> getOrderedSeed();
     set<int> findSeedSet(Graph *graph, int budget, int nonTargetThreshold);
+    double getBestThetaGain();
+    vector<double> getBestThetaGains();
+    
+    double getBestThetaGainSummation();
+    vector<double> getBestThetaGainSummations();
+    
     virtual bool isNodeValid(int nodeID);
+    virtual double getScalingFactor();
     
 };
 

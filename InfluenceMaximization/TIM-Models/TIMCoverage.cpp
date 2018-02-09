@@ -52,6 +52,7 @@ void TIMCoverage::initializeLookupTable(vector<vector<int>>* randomRRSets, int n
 }
 
 void TIMCoverage::initializeDataStructures(int R, int n) {
+    this->numberOfNodesToCover = n;
     int numberCovered;
     for (int i = 0; i < n; i++) {
         nodeMark.push_back(false);
@@ -71,7 +72,7 @@ void TIMCoverage::initializeDataStructures(int R, int n) {
     
 }
 
-pair<int, int> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets, NodeChecker *nodeChecker) {
+pair<int, double> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets, NodeChecker *nodeChecker) {
     priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queue = &this->queue;
     
     vector<int> *coverage = &this->coverage;
@@ -100,8 +101,8 @@ pair<int, int> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<i
         break;
     }
     
-    int R = this->R;
-    double scaledInfluence = (double) influence * nodeMark->size()/R;
+    double scalingFactor = (double)this->numberOfNodesToCover/rrSets->size();
+    double scaledInfluence = (double) influence * scalingFactor;
     
     vector<bool> *edgeMark = &this->edgeMark;
     (*nodeMark)[maximumGainNode] = false;
@@ -125,7 +126,42 @@ pair<int, int> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<i
     return make_pair(maximumGainNode, scaledInfluence);
 }
 
-pair<int, int> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) {
+
+pair<int, double> TIMCoverage::findMaxInfluentialNodeWithNoUpdates(vector<vector<int>> *rrSets, NodeChecker *nodeChecker) {
+    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queueCopy = new priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>(this->queue);
+    
+    vector<int> *coverage = &this->coverage;
+    vector<bool> *nodeMark = &this->nodeMark;
+    int maximumGainNode = -1;
+    int influence = 0;
+    while(!queueCopy->empty()) {
+        pair<int,int> element = queueCopy->top();
+        if(element.second > (*coverage)[element.first]) {
+            queueCopy->pop();
+            element.second = (*coverage)[element.first];
+            queueCopy->push(element);
+            continue;
+        }
+        
+        queueCopy->pop();
+        if (nodeChecker!=NULL && !nodeChecker->isNodeValid(element.first)) {
+            continue;
+        }
+        if(!(*nodeMark)[element.first]) {
+            continue;
+        }
+        
+        maximumGainNode = element.first;
+        influence = (*coverage)[element.first];
+        break;
+    }
+    delete queueCopy;
+    double scalingFactor = (double)this->numberOfNodesToCover/rrSets->size();
+    double scaledInfluence = (double) influence * scalingFactor;
+    return make_pair(maximumGainNode, scaledInfluence);
+}
+
+pair<int, double> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) {
     return findMaxInfluentialNodeAndUpdateModel(rrSets, NULL);
 }
 
@@ -221,7 +257,9 @@ int TIMCoverage::getNumberOfRRSetsCovered() {
     return this->numberOfRRSetsCovered;
 }
     
-
+void TIMCoverage::setNumberOfNodesToCover(int number) {
+    this->numberOfNodesToCover = number;
+}
 
 TIMCoverage::TIMCoverage( const TIMCoverage &obj) {
     queue = obj.queue;

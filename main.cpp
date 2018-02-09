@@ -406,6 +406,13 @@ void executeBaselineGreedy(cxxopts::ParseResult result) {
     IMResults::getInstance().addSeedSets(allSeedSets);
     IMResults::getInstance().addBestSeedSet(allSeedSets[0]);
     
+    IMResults::getInstance().setBestThetaGain(baselineGreedyTIM.getBestThetaGain());
+    IMResults::getInstance().setBestThetaGains(baselineGreedyTIM.getBestThetaGains());
+    
+    IMResults::getInstance().setBestThetaGainSummation(baselineGreedyTIM.getBestThetaGainSummation());
+    IMResults::getInstance().setBestThetaGainSummations(baselineGreedyTIM.getBestThetaGainSummations());
+    
+//    IMResults::getInstance().set
     IMResults::getInstance().setTotalTimeTaken(baselineTimeTaken);
     string resultFile = constructResultFileName(graphFileName, budget, nonTargetThreshold, percentageTargets, setting1);
     IMResults::getInstance().setExpectedTargets(influence);

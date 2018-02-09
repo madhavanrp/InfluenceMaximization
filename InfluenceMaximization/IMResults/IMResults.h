@@ -151,5 +151,21 @@ public:
     void setNumberOfEdges(int m) {
         data["numberOfEdges"] = m;
     }
+    
+    void setBestThetaGain(double bestThetaGain) {
+        data["bestThetaGain"] = bestThetaGain;
+    }
+    
+    void setBestThetaGains(vector<double> bestThetaGains) {
+        data["bestThetaGains"] = bestThetaGains;
+    }
+    
+    void setBestThetaGainSummation(double sum) {
+        data["bestThetaGainSummation"] = sum;
+    }
+    
+    void setBestThetaGainSummations(vector<double> summations) {
+        data["bestThetaGainSummations"] = summations;
+    }
 };
 #endif /* IMResults_h */

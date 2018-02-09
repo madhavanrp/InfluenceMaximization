@@ -32,6 +32,7 @@ public:
 
 class TIMCoverage {
     int numberOfRRSetsCovered;
+    int numberOfNodesToCover;
 public:
     vector<bool> nodeMark;
     vector<bool> edgeMark;
@@ -58,8 +59,9 @@ public:
     
     void initializeDataStructures(int R, int n) ;
     
-    pair<int, int> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) ;
-    pair<int, int> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets, NodeChecker *nodeChecker);
+    pair<int, double> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) ;
+    pair<int, double> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets, NodeChecker *nodeChecker);
+    pair<int, double> findMaxInfluentialNodeWithNoUpdates(vector<vector<int>> *rrSets, NodeChecker *nodeChecker);
     
     pair<int, int> findMaxInfluentialNodeWithApproximations(set<int> *seedSet, vector<int> *approximationsScaled);
     
@@ -71,6 +73,8 @@ public:
 
     int findInfluence(set<int> seedSet, double scalingFactor);
     int getNumberOfRRSetsCovered();
+    
+    void setNumberOfNodesToCover(int number);
     
     TIMCoverage( const TIMCoverage &obj);
     ~TIMCoverage();
