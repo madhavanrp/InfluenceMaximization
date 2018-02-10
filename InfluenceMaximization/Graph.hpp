@@ -72,6 +72,10 @@ public:
     int getPropogationProbabilityNumber();
     
     
+    // For heuristics
+    void generateRandomRRSetsWithoutVisitingNonTargets(int R);
+    vector<int> generateRandomRRSetWithoutVisitingNonTargets(int randomVertex, int rrSetID);
+    
 };
 
 #endif /* Graph_hpp */
