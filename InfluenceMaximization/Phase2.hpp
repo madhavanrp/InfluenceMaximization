@@ -24,7 +24,7 @@ class Phase2 {
 protected:
     IMTree tree;
     Graph *graph;
-    vector<vector<int>> rrSets;
+    vector<vector<int>>* rrSets;
     TIMInfluenceCalculator *timInfluenceCalculator;
     vector<double> *nonTargetEstimates;
 public:
@@ -47,8 +47,10 @@ public:
 };
 
 class Phase2TIM: public Phase2 {
+    vector<vector<int>> *lookupTable;
 public:
     Phase2TIM(Graph *graph);
+    ~Phase2TIM();
     struct node* addChild(struct node* parent, int childNodeID, double targets, double nonTargets);
     pair<int,int> findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet, double totalNonTargets, int nonTargetThreshold);
     int addToSeed(int vertex, TIMCoverage *timCoverage);

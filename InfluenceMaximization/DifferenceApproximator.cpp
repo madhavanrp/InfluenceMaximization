@@ -88,6 +88,7 @@ int ModularApproximation::evaluateFunction(int element) {
 
 DifferenceApproximator::DifferenceApproximator(Graph *graph) {
     this->graph = graph;
+    this->permutation = NULL;
 }
 
 void DifferenceApproximator::setN(int n) {

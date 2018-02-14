@@ -64,7 +64,7 @@ void TIMEvaluator::calculateNonTargets() {
     int R = (int)this->rrSetsNonTargets.size();
     vector<vector<int>> *lookupTable = new vector<vector<int>>();
     this->timCoverageNonTargets = new TIMCoverage(lookupTable);
-    this->timCoverageNonTargets->initializeLookupTable(this->rrSetsNonTargets, n);
+    this->timCoverageNonTargets->initializeLookupTable(&this->rrSetsNonTargets, n);
     this->timCoverageNonTargets->initializeDataStructures(R, n);
     
 }
@@ -75,10 +75,10 @@ void TIMEvaluator::calculateTargets() {
     double epsilon = TIM_EPSILON_TARGETS;
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
     graph->generateRandomRRSets(R, true);
-    rrSetsTargets = graph->getRandomRRSets();
+    rrSetsTargets = (*graph->getRandomRRSets());
     vector<vector<int>> *lookupTable = new vector<vector<int>>();
     this->timCoverage = new TIMCoverage(lookupTable);
-    this->timCoverage->initializeLookupTable(rrSetsTargets, n);
+    this->timCoverage->initializeLookupTable(&rrSetsTargets, n);
     this->timCoverage->initializeDataStructures(R, n);
 }
 

@@ -10,9 +10,6 @@
 TIMCoverage::TIMCoverage(vector<vector<int>> *lookupTable) {
     this->lookupTable = lookupTable;
     this->numberOfRRSetsCovered = 0;
-    retainCount++;
-    assert(retainCount==1);
-    TIMCoverage::totalCount++;
 }
 
 void TIMCoverage::decrementCountForVertex(int u, int setID) {
@@ -40,15 +37,15 @@ void TIMCoverage::offsetCoverage(int vertex, int offset) {
     this->coverage[vertex] = this->coverage[vertex] + offset;
 }
 
-void TIMCoverage::initializeLookupTable(vector<vector<int>> randomRRSets, int n) {
+void TIMCoverage::initializeLookupTable(vector<vector<int>>* randomRRSets, int n) {
     
     for(int i=0;i<n; i++) {
         (*lookupTable).push_back(vector<int>());
     }
     
-    for(int rrSetID=0; rrSetID<randomRRSets.size();rrSetID++) {
+    for(int rrSetID=0; rrSetID<randomRRSets->size();rrSetID++) {
         
-        for(int vertex: randomRRSets[rrSetID]) {
+        for(int vertex: (*randomRRSets)[rrSetID]) {
             incrementCountForVertex(vertex, rrSetID);
         }
     }
@@ -60,12 +57,9 @@ void TIMCoverage::initializeDataStructures(int R, int n) {
         nodeMark.push_back(false);
         coverage.push_back(0);
     }
-    assert(nodeMark.size()==n);
-    assert(coverage.size()==n);
     for (int i = 0; i < R; i++) {
         edgeMark.push_back(false);
     }
-    assert(edgeMark.size()==R);
     for (int i = 0; i < n; i++) {
         
         numberCovered = this->countForVertex(i);
@@ -227,38 +221,25 @@ int TIMCoverage::getNumberOfRRSetsCovered() {
     return this->numberOfRRSetsCovered;
 }
     
-TIMCoverage* TIMCoverage::createCopy() {
-    vector<bool> nodeMarkCopy;
-    vector<bool> edgeMarkCopy;
-    vector<int> coverageCopy;
-    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> queueCopy = queue;
-    TIMCoverage *timCoverageCopy = new TIMCoverage(lookupTable);
 
-    for(bool x:nodeMark) {
-        nodeMarkCopy.push_back(x);
-    }
 
-    for(bool x:edgeMark) {
-        edgeMarkCopy.push_back(x);
+TIMCoverage::TIMCoverage( const TIMCoverage &obj) {
+    queue = obj.queue;
+    lookupTable = obj.lookupTable;
+    R = obj.R;
+    numberOfRRSetsCovered = obj.numberOfRRSetsCovered;
+    for(bool x: obj.nodeMark) {
+        nodeMark.push_back(x);
     }
-    for(int x:coverage) {
-        coverageCopy.push_back(x);
+    
+    for(bool x: obj.edgeMark) {
+        edgeMark.push_back(x);
     }
-    timCoverageCopy->nodeMark = nodeMarkCopy;
-    timCoverageCopy->edgeMark = edgeMarkCopy;
-    timCoverageCopy->coverage = coverageCopy;
-    timCoverageCopy->queue = queueCopy;
-    return timCoverageCopy;
-}
-
-void TIMCoverage::release() {
-    retainCount--;
-    if(retainCount==0) {
-        TIMCoverage::totalCount--;
-        delete this;
+    for(int x: obj.coverage) {
+        coverage.push_back(x);
     }
 }
 
-void TIMCoverage::retain() {
-    retainCount++;
+TIMCoverage::~TIMCoverage() {
+    this->lookupTable = NULL;
 }

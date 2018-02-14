@@ -179,6 +179,9 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     loadGraphSizeToResults(graph);
     vector<double> nodeCounts;
     clock_t phase1StartTime = clock();
+    cout << "\n Before any estimate non targets creation:";
+    disp_mem_usage("");
+    
     EstimateNonTargets *estimateNonTargets = NULL;
     if(!fromFile) {
         estimateNonTargets = new EstimateNonTargets(graph);
@@ -193,7 +196,8 @@ void executeTIMTIM(cxxopts::ParseResult result) {
         nodeCounts = *estimateNonTargets->getAllNonTargetsCount();
         delete estimateNonTargets;
     }
-    
+    cout << "\n Non targets file is alive ";
+    disp_mem_usage("");
     clock_t phase1EndTime = clock();
     FILE_LOG(logDEBUG) << "Completed Phase 1";
     double phase1TimeTaken = double(phase1EndTime - phase1StartTime) / CLOCKS_PER_SEC;
@@ -212,6 +216,10 @@ void executeTIMTIM(cxxopts::ParseResult result) {
         IMResults::getInstance().setNonTargetFileName(nonTargetsFileName);
         delete estimateNonTargets;
     }
+    
+    cout << "\n Non Target file is dead";
+    disp_mem_usage("");
+    cout << "\n Should be same as before" << flush;
     
     //Start phase 2
     FILE_LOG(logDEBUG) << "Starting phase 2";
@@ -247,11 +255,13 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     
     IMSeedSet bestSeedSet = phase2->getTree()->getBestSeedSet(budget);
     delete phase2;
-    
-    TIMInfluenceCalculator  timInfluenceCalculator(graph, 2);
-    pair<int, int> influenceOfBestSeedSet = timInfluenceCalculator.findInfluence(bestSeedSet.getSeedSet());
+    graph->clearRandomRRSets();
+    TIMInfluenceCalculator  *timInfluenceCalculator = new TIMInfluenceCalculator(graph, 2);
+    pair<int, int> influenceOfBestSeedSet = timInfluenceCalculator->findInfluence(bestSeedSet.getSeedSet());
     int targetsActivated = influenceOfBestSeedSet.first;
     int nonTargetsActivated = influenceOfBestSeedSet.second;
+    delete timInfluenceCalculator;
+    delete graph;
     
     cout << "\n Targets activated = " << targetsActivated;
     cout << "\n Non targets activated = " << nonTargetsActivated;
@@ -320,7 +330,7 @@ void executeTIMOnLabelledGraph(cxxopts::ParseResult result) {
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
     //    R = 23648871;
     unlabelledGraph->generateRandomRRSets(R, true);
-    vector<vector<int>> rrSets = unlabelledGraph->getRandomRRSets();
+    vector<vector<int>>* rrSets = unlabelledGraph->getRandomRRSets();
     
     vector<vector<int>> lookupTable;
     TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
@@ -328,7 +338,7 @@ void executeTIMOnLabelledGraph(cxxopts::ParseResult result) {
     timCoverage->initializeDataStructures(R, n);
     timCoverage->offsetCoverage(0, -10);
     // 0 should not be the top
-    set<int> topNodes = timCoverage->findTopKNodes(budget, &rrSets);
+    set<int> topNodes = timCoverage->findTopKNodes(budget, rrSets);
     delete timCoverage;
     
     Graph *labelledGraph = new Graph;
@@ -425,7 +435,7 @@ int main(int argc, char **argv) {
     ("t,threshold", "NT threshold", cxxopts::value<int>())
     ("m,method", "TIM-TIM or SIM-SIM", cxxopts::value<int>())
     ("percentage", "Percentage of Targets", cxxopts::value<int>())
-    ("n,ntfile", "Non Targets File name", cxxopts::value<int>())
+    ("n,ntfile", "Non Targets File name", cxxopts::value<std::string>())
     ("p,probability", "Propogation probability", cxxopts::value<double>())
     ("approximation", " Approximation Settings", cxxopts::value<int>())
     ("e,extend", "Extend the permutation");
