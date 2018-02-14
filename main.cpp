@@ -325,6 +325,8 @@ void executeTIMOnLabelledGraph(cxxopts::ParseResult result) {
     float percentageTargetsFloat = (float)percentageTargets/(float)100;
     Graph *unlabelledGraph = new Graph;
     unlabelledGraph->readGraph(graphFileName, 1.0f);
+    
+    clock_t timStartTime = clock();
     int n = unlabelledGraph->n;
     double epsilon = (double)EPSILON;
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
@@ -336,20 +338,36 @@ void executeTIMOnLabelledGraph(cxxopts::ParseResult result) {
     TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
     timCoverage->initializeLookupTable(rrSets, n);
     timCoverage->initializeDataStructures(R, n);
-    timCoverage->offsetCoverage(0, -10);
-    // 0 should not be the top
-    set<int> topNodes = timCoverage->findTopKNodes(budget, rrSets);
+    set<int> seedSet = timCoverage->findTopKNodes(budget, rrSets);
+    
+    clock_t timEndTime = clock();
+    double timTimeTaken = double(timEndTime - timStartTime) / CLOCKS_PER_SEC;
+    
     delete timCoverage;
+    delete unlabelledGraph;
     
     Graph *labelledGraph = new Graph;
     labelledGraph->readGraph(graphFileName, percentageTargetsFloat);
-    pair<int, int> influence = findInfluenceUsingDiffusion(labelledGraph, topNodes);
+    loadResultsFileFrom(result);
+    
+    TIMInfluenceCalculator  timInfluenceCalculator(labelledGraph, 2);
+    pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
     int targetsActivated = influence.first;
     int nonTargetsActivated = influence.second;
     
     cout << "\n Targets activated = " << targetsActivated;
     cout << "\n Non targets activated = " << nonTargetsActivated;
+    IMSeedSet imSeedSet;
+    for(int s: seedSet) {
+        imSeedSet.addSeed(s);
+    }
+    imSeedSet.setTargets(influence.first);
+    imSeedSet.setNonTargets(influence.second);
+    
+    IMResults::getInstance().setTotalTimeTaken(timTimeTaken);
     IMResults::getInstance().setExpectedTargets(influence);
+    IMResults::getInstance().addBestSeedSet(imSeedSet);
+    
     string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting1);
     IMResults::getInstance().writeToFile(resultFile);
 }
@@ -413,6 +431,50 @@ void executeBaselineGreedy(cxxopts::ParseResult result) {
     delete graph;
 }
 
+void executeHeuristic2(cxxopts::ParseResult result) {
+    cout << "\n Executing Heuristic 2" << flush;
+    int budget = result["budget"].as<int>();
+    string graphFileName = result["graph"].as<std::string>();
+    int percentageTargets = result["percentage"].as<int>();
+    float percentageTargetsFloat = (float)percentageTargets/(float)100;
+    
+    loadResultsFileFrom(result);
+    
+    Graph *graph = new Graph;
+    graph->readGraph(graphFileName, percentageTargetsFloat);
+    if(result.count("p")>0) {
+        double probability = result["p"].as<double>();
+        graph->setPropogationProbability(probability);
+    }
+    loadGraphSizeToResults(graph);
+    
+    
+    int n = graph->getNumberOfVertices();
+    double epsilon = (double)2;
+    int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
+    graph->generateRandomRRSetsWithoutVisitingNonTargets(R);
+    vector<vector<int>>* rrSets = graph->getRandomRRSets();
+    vector<vector<int>> lookupTable;
+    TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
+    timCoverage->initializeLookupTable(rrSets, n);
+    timCoverage->initializeDataStructures(R, n);
+    
+    set<int> seedSet = timCoverage->findTopKNodes(budget, rrSets);
+    delete timCoverage;
+    graph->clearRandomRRSets();
+    assert(graph->getRandomRRSets()->size()==0);
+    TIMInfluenceCalculator  timInfluenceCalculator(graph, 2);
+    
+    pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
+    cout << "\n Influence: ";
+    cout << "\n Targets: " << influence.first;
+    cout << "\n Non Targets: " << influence.second;
+}
+
+void executeHeuristic3(cxxopts::ParseResult result) {
+    cout << "\n Executing Heuristic 2" << flush;
+}
+
 void generateGraphLabels(cxxopts::ParseResult result) {
     string graphFileName = result["graph"].as<std::string>();
     int percentageTargets = result["percentage"].as<int>();
@@ -451,6 +513,10 @@ int main(int argc, char **argv) {
         
     } else if(result["algorithm"].count()>0 && algorithm.compare("baseline")==0 ) {
         executeBaselineGreedy(result);
+    } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic2")==0 ) {
+        executeHeuristic2(result);
+    } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic3")==0 ) {
+        executeHeuristic3(result);
     }else {
         executeDifferenceAlgorithms(result);
     }

@@ -10,7 +10,12 @@
 
 set<int> BaselineGreedyTIM::findSeedSet(Graph *graph, int budget, int nonTargetThreshold) {
     TIMInfluenceCalculator timInfluenceCalculator(graph, 2);
-    this->rrSetsNonTargetsThreshold = ((double)1/timInfluenceCalculator.getScalingFactorNonTargets()) * nonTargetThreshold;
+    double scalingFactorNonTargets = timInfluenceCalculator.getScalingFactorNonTargets();
+    if(scalingFactorNonTargets==0) {
+        this->rrSetsNonTargetsThreshold = INT_MAX;
+    } else {
+        this->rrSetsNonTargetsThreshold = ((double)1/timInfluenceCalculator.getScalingFactorNonTargets()) * nonTargetThreshold;
+    }
     this->budget = budget;
     this->threshold = nonTargetThreshold;
     
@@ -24,7 +29,6 @@ set<int> BaselineGreedyTIM::findSeedSet(Graph *graph, int budget, int nonTargetT
     this->rrSetNonTargets = rrSetNonTargets;
     this->timCoverageTargets = timCoverageTargets;
     this->timCoverageNonTargets = timCoverageNonTargets;
-    
     for (int i=0; i<budget; i++) {
         int maxNode = timCoverageTargets.get()->findMaxInfluentialNodeAndUpdateModel(rrSetTargets, this).first;
         timCoverageNonTargets.get()->addToSeed(maxNode, rrSetNonTargets);
@@ -44,8 +48,8 @@ set<int> BaselineGreedyTIM::findSeedSet(Graph *graph, int budget, int nonTargetT
 
 bool BaselineGreedyTIM::isNodeValid(int nodeID) {
     int numberOfNonTargetRRSetsCovered = this->timCoverageNonTargets.get()->numberOfNewRRSetsCoveredByVertex(nodeID);
-//    cout << "\n Calling here to check validity";
-//    cout << "\n " << numberOfNonTargetRRSetsCovered + this->timCoverageNonTargets.get()->getNumberOfRRSetsCovered() << " and  " << this->rrSetsNonTargetsThreshold;
+//    cout << "\n Calling here to check validity" << flush;
+//    cout << "\n " << numberOfNonTargetRRSetsCovered + this->timCoverageNonTargets.get()->getNumberOfRRSetsCovered() << " and  " << this->rrSetsNonTargetsThreshold << flush;
     return (numberOfNonTargetRRSetsCovered + this->timCoverageNonTargets.get()->getNumberOfRRSetsCovered() <=this->rrSetsNonTargetsThreshold);
 }
 

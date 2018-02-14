@@ -15,6 +15,7 @@
 #include "TIMInfluenceCalculator.hpp"
 #include "TIM-Models/TIMCoverage.hpp"
 #include "log.h"
+#include <limits.h>
 
 class BaselineGreedyTIM: public virtual NodeChecker {
     vector<int> orderedSeed; // For greedy algorithm.

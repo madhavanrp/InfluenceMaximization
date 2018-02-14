@@ -77,9 +77,18 @@ void Graph::readGraph(string fileName, float percentage) {
     stringstream stream;
     stream << fixed << setprecision(2) << percentage;
     s = stream.str();
-    cout << "\n Reading graph: " << fileName;
-    cout << "\n Reading labels file name: " << "graphs/" + fileName + "_" + s + "_labels.txt";
-    readLabels("graphs/" + fileName + "_" + s + "_labels.txt");
+    if(percentage!=1) {
+        cout << "\n Reading graph: " << fileName;
+        cout << "\n Reading labels file name: " << "graphs/" + fileName + "_" + s + "_labels.txt";
+        readLabels("graphs/" + fileName + "_" + s + "_labels.txt");
+    }
+    else {
+        for (int i=0; i<n; i++) {
+            labels[i] = true;
+        }
+        this->numberOfNonTargets = 0;
+        this->numberOfTargets = n;
+    }
 }
 
 
@@ -213,6 +222,68 @@ vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
     for(int i=0;i<nVisitMark;i++) {
         visited[visitMark[i]] = false;
         
+    }
+    return rrSets[rrSetID];
+    
+}
+
+void Graph::generateRandomRRSetsWithoutVisitingNonTargets(int R) {
+    this->rrSets = vector<vector<int>>();
+    int totalSize = 0;
+    clock_t begin = clock();
+    while(rrSets.size()<R) {
+        rrSets.push_back(vector<int>());
+    }
+    for(int i=0;i<R;i++) {
+        int randomVertex;
+        randomVertex = rand() % n;
+        while(!labels[randomVertex]) {
+            randomVertex = rand() % n;
+        }
+        generateRandomRRSetWithoutVisitingNonTargets(randomVertex, i);
+        totalSize+=rrSets[i].size();
+    }
+    clock_t end = clock();
+    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+    cout <<"\n Generated " << R << " RR sets\n";
+    cout << "Elapsed time " << elapsed_secs;
+    cout<< " \n Time per RR Set is " << elapsed_secs/R;
+    cout<< "\n Total Size is " << totalSize;
+    cout<<"\n Average size is " << (float)totalSize/(float)R;
+}
+
+vector<int> Graph::generateRandomRRSetWithoutVisitingNonTargets(int randomVertex, int rrSetID) {
+    q.clear();
+    rrSets[rrSetID].push_back(randomVertex);
+    q.push_back(randomVertex);
+    int nVisitMark = 0;
+    visitMark[nVisitMark++] = randomVertex;
+    visited[randomVertex] = true;
+    while(!q.empty()) {
+        int expand=q.front();
+        q.pop_front();
+        for(int j=0; j<(int)graphTranspose[expand].size(); j++){
+            int v=graphTranspose[expand][j];
+            if(!labels[v]) continue;
+            if(!this->flipCoinOnEdge(v, expand))
+                continue;
+            if(visited[v])
+                continue;
+            if(!visited[v])
+            {
+                visitMark[nVisitMark++]=v;
+                visited[v]=true;
+            }
+            q.push_back(v);
+            rrSets[rrSetID].push_back(v);
+        }
+    }
+    for(int i=0;i<nVisitMark;i++) {
+        visited[visitMark[i]] = false;
+        
+    }
+    for(int v: rrSets[rrSetID]) {
+        assert(labels[v]);
     }
     return rrSets[rrSetID];
     
