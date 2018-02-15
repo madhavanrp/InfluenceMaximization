@@ -17,7 +17,7 @@ TEST_CASE("Graph is read correctly " , "Graph") {
     
     int randomV = rand() % n;
     int inDegree = graph->inDegree[randomV];
-    int randomU = graph->graphTranspose[randomV][rand() % graph->graphTranspose[randomV].size()];
+    int randomU = (*graph->getGraphTranspose())[randomV][rand() % (*graph->getGraphTranspose())[randomV].size()];
     int randomNumber = graph->generateRandomNumber(randomU, randomV);
     REQUIRE(randomNumber>=0);
     REQUIRE(randomNumber<inDegree);

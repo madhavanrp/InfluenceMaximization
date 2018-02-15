@@ -41,7 +41,7 @@ inline void singleDiffusion(set<int> *activatedSet, Graph *graph, set<int> *seed
             nVisitMark++;
             queue->pop_front();
             activatedSet->insert(u);
-            for (int v : graph->graph[u]) {
+            for (int v : (*graph->getGraph())[u]) {
                 bool activeEdge = graph->flipCoinOnEdge(u, v);
                 if (activeEdge) {
                     if(!(*visited)[v])

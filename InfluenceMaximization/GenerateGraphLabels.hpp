@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "Graph.hpp"
 #include <math.h>
+#include <assert.h>
 
 enum LabelSetting {
     LabelSetting1
@@ -21,8 +22,12 @@ class GenerateGraphLabels {
     Graph *graph;
     LabelSetting setting;
     float percentage;
+    int numberOfTargetsToLabel, numberOfNonTargetsToLabel;
+    int totalNumberOfNonTargets;
+    vector<bool> labels;
     GenerateGraphLabels(Graph *graph, float percentage, LabelSetting setting);
     void generate();
+    void doDFSWithLabel(int currentNode, int currentDepth, int depthLimit);
 public:
     GenerateGraphLabels(Graph *graph, float percentage);
 };

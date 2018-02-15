@@ -102,11 +102,12 @@ vector<int> EstimateNonTargets::generateRandomRRSet(int randomVertex, int rrSetI
     visitMark[nVisitMark++] = randomVertex;
     visited[randomVertex] = true;
     nodeCounts[randomVertex]++;
+    vector<vector<int>> *graphTranspose = graph->getGraphTranspose();
     while(!q.empty()) {
         int u=q.front();
         q.pop_front();
-        for(int j=0; j<(int)graph->graphTranspose[u].size(); j++){
-            int v = graph->graphTranspose[u][j];
+        for(int j=0; j<(int)(*graphTranspose)[u].size(); j++){
+            int v = (*graphTranspose)[u][j];
             if(!graph->flipCoinOnEdge(v, u))
                 continue;
             if(visited[v])

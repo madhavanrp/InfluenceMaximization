@@ -30,11 +30,12 @@ private:
     vector<int> nonTargets;
     int numberOfTargets;
     int numberOfNonTargets;
+    
+    vector<vector<int> > graph;
+    vector<vector<int> > graphTranspose;
 public:
     Graph();
     int n, m;
-    vector<vector<int> > graph;
-    vector<vector<int> > graphTranspose;
     vector<vector<int>> rrSets;
     vector<bool> labels;
     deque<int> q;
@@ -55,6 +56,8 @@ public:
     
     //Data Structure
     vector<int> *getNonTargets();
+    vector<vector<int>> *getGraph();
+    vector<vector<int>> *getGraphTranspose();
     
     vector<vector<int> > constructTranspose(vector<vector<int> > aGraph);
     void generateRandomRRSets(int R, bool label);

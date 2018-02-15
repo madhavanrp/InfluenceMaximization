@@ -126,10 +126,8 @@ void Graph::writeLabels() {
     for(int i=0; i<this->n; i++) {
         if(this->labels[i]) {
             myfile << i << " " << targetLabel << "\n";
-            cout << i << " " << targetLabel << "\n";
         } else {
             myfile << i << " " << nonTargetLabel << "\n";
-            cout << i << " " << nonTargetLabel << "\n";
         }
         
     }
@@ -192,6 +190,15 @@ vector<vector<int>>* Graph::getRandomRRSets() {
 
 void Graph::clearRandomRRSets() {
     rrSets.clear();
+    rrSets.swap(rrSets);
+}
+
+vector<vector<int>>* Graph::getGraph() {
+    return &this->graph;
+}
+
+vector<vector<int>>* Graph::getGraphTranspose() {
+    return &this->graphTranspose;
 }
 
 vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
