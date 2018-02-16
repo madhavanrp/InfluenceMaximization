@@ -45,4 +45,9 @@ The above command will execute the baseline greedy algorithm on Epinions, and pr
 
 
 # Download Graph Data
-The graphs that we have used, along with labels file can be downloaded [here](https://www.dropbox.com/s/qqr4a5k0irx7kgh/graph_data.zip?dl=0). Unzip them and place all files in graphs folder before running the program.
+The graphs that we have used, along with labels file can be downloaded [here](https://www.dropbox.com/s/qqr4a5k0irx7kgh/graph_data.zip?dl=0&raw=true). Unzip them and place all files in graphs folder before running the program.
+
+# Results
+![Expected Influence Image](experiment-results/influenceImage.png)
+
+For a full summary of results, click [here](experiment-results/experiment-results.pdf).
