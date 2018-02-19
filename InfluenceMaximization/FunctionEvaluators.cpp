@@ -18,12 +18,8 @@ TIMEvaluator::TIMEvaluator(Graph *graph, ApproximationSetting approximationSetti
 }
 
 TIMEvaluator::~TIMEvaluator() {
-    if(this->timCoverage!=NULL) {
-        delete this->timCoverage;
-    }
-    if(this->timCoverageNonTargets!=NULL) {
-        delete this->timCoverageNonTargets;
-    }
+    delete this->timCoverage;
+    delete this->timCoverageNonTargets;
 }
 
 TIMCoverage* TIMEvaluator::getTIMCoverage() {
@@ -46,7 +42,7 @@ int TIMEvaluator::getCount() {
 }
 
 double TIMEvaluator::getScalingFactorTargets() {
-    double scalingFactor = (double)this->graph->n/(int)this->rrSetsTargets.size();
+    double scalingFactor = (double)this->graph->getNumberOfTargets()/(int)this->rrSetsTargets.size();
     return scalingFactor;
 }
 
@@ -60,7 +56,7 @@ void TIMEvaluator::calculateNonTargets() {
     this->nonTargets = estimateNonTargets.getNonTargetsUsingTIM();
     this->rrSetsNonTargets = *estimateNonTargets.getRandomRRSets();
     
-    int n = this->graph->n;
+    int n = this->graph->getNumberOfVertices();
     int R = (int)this->rrSetsNonTargets.size();
     vector<vector<int>> *lookupTable = new vector<vector<int>>();
     this->timCoverageNonTargets = new TIMCoverage(lookupTable);
@@ -71,7 +67,7 @@ void TIMEvaluator::calculateNonTargets() {
 
 void TIMEvaluator::calculateTargets() {
     
-    int n = this->graph->n;
+    int n = this->graph->getNumberOfVertices();
     double epsilon = TIM_EPSILON_TARGETS;
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
     graph->generateRandomRRSets(R, true);

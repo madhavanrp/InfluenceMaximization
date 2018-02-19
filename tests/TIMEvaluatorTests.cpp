@@ -16,7 +16,7 @@ TEST_CASE("Value of Targets correctly calculated " , "Function Evaluation") {
     TIMEvaluator timEvaluator(graph, setting1);
     set<int> seedSet;
     for (int i=0; i<20; i++) {
-        int vertex = rand()%graph->n;
+        int vertex = rand()%graph->getNumberOfVertices();
         if(seedSet.find(vertex)!=seedSet.end()) continue;
         seedSet.insert(vertex);
         pair<int, int> influence = timEvaluator.findInfluence(&seedSet);
@@ -34,7 +34,7 @@ TEST_CASE("Value of Targets correctly calculated " , "Function Evaluation") {
     TIMCoverage *coverage = timEvaluator.getTIMCoverage();
     vector<bool> nodeMark = coverage->nodeMark;
     vector<bool> edgeMark = coverage->edgeMark;
-    for(int i=0; i<graph->n;i++) {
+    for(int i=0; i<graph->getNumberOfVertices();i++) {
         bool inSeed = true;
         if(seedSet.find(i)==seedSet.end()) {
             inSeed = false;

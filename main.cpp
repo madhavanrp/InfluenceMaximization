@@ -51,7 +51,7 @@ void setupLogger() {
 
 void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool extendPermutation) {
     DifferenceApproximator differenceApproximator(graph);
-    differenceApproximator.setN(graph->n);
+    differenceApproximator.setN(graph->getNumberOfVertices());
     set<int> seedSet;
     vector<int> permutation = differenceApproximator.generatePermutation();
     ModularApproximation modularApprox(permutation, setting);
@@ -327,7 +327,7 @@ void executeTIMOnLabelledGraph(cxxopts::ParseResult result) {
     unlabelledGraph->readGraph(graphFileName, 1.0f);
     
     clock_t timStartTime = clock();
-    int n = unlabelledGraph->n;
+    int n = unlabelledGraph->getNumberOfVertices();
     double epsilon = (double)EPSILON;
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
     //    R = 23648871;

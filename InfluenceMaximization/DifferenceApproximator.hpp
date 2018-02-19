@@ -30,6 +30,8 @@ class ModularApproximation {
 public:
     ModularApproximation(vector<int> permutation, ApproximationSetting approximationSetting);
     ~ModularApproximation();
+    ModularApproximation& operator=( const ModularApproximation &obj);
+    ModularApproximation( const ModularApproximation &obj);
     vector<int> getPerumutation();
     vector<int> getReverseMap();
     TIMEvaluator *getTIMEvaluator();
@@ -51,6 +53,8 @@ class DifferenceApproximator {
 public:
     DifferenceApproximator(Graph *graph);
     ~DifferenceApproximator();
+    DifferenceApproximator& operator=( const DifferenceApproximator &obj);
+    DifferenceApproximator( const DifferenceApproximator &obj);
     void setN(int n);
     vector<int> generatePermutation();
     vector<int> generatePermutation(vector<int> startingElements);

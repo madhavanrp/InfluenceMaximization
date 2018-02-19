@@ -13,7 +13,7 @@
 TEST_CASE("Graph is read correctly " , "Graph") {
     Graph *graph = new Graph;
     graph->readGraph("ca-GrQc-processed.txt");
-    int n = graph->n;
+    int n = graph->getNumberOfVertices();
     
     int randomV = rand() % n;
     int inDegree = graph->inDegree[randomV];

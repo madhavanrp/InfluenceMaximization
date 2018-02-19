@@ -10,11 +10,19 @@
 #include "catch.hpp"
 #include "../InfluenceMaximization/DifferenceApproximator.hpp"
 
+void testIFContainsALLVertices(vector<int> *permutation) {
+    set<int> aSet;
+    for(int v: *permutation) {
+        aSet.insert(v);
+    }
+    REQUIRE(aSet.size()==permutation->size());
+}
+
 TEST_CASE("Correct size permutation" , "Approx") {
     Graph *graph = new Graph;
     graph->readGraph("ca-GrQc-processed.txt");
     DifferenceApproximator differenceApproximator(graph);
-    int n = graph->n;
+    int n = graph->getNumberOfVertices();
     differenceApproximator.setN(n);
     vector<int> permutation = differenceApproximator.generatePermutation();
     REQUIRE(permutation.size()==n);
@@ -23,13 +31,14 @@ TEST_CASE("Correct size permutation" , "Approx") {
         verticesCovered.insert(v);
     }
     REQUIRE(verticesCovered.size()==n);
+    delete graph;
 }
 
 TEST_CASE("Permutation starting with some set", "Difference Approx") {
     Graph *graph = new Graph;
     graph->readGraph("ca-GrQc-processed.txt");
     DifferenceApproximator differenceApproximator(graph);
-    int n = graph->n;
+    int n = graph->getNumberOfVertices();
     differenceApproximator.setN(n);
     vector<int> permutation = differenceApproximator.generatePermutation();
     set<int> startingSet;
@@ -57,13 +66,14 @@ TEST_CASE("Permutation starting with some set", "Difference Approx") {
         }
     }
     REQUIRE(correctlyStarting);
+    delete graph;
 }
 
 TEST_CASE("Reverse map" , "Modular Approx") {
     Graph *graph = new Graph;
     graph->readGraph("ca-GrQc-processed.txt");
     DifferenceApproximator differenceApproximator(graph);
-    int n = graph->n;
+    int n = graph->getNumberOfVertices();
     differenceApproximator.setN(n);
     vector<int> permutation = differenceApproximator.generatePermutation();
     ModularApproximation modularApprox(permutation, setting1);
@@ -79,7 +89,7 @@ TEST_CASE("Reverse map" , "Modular Approx") {
         
     }
     REQUIRE(correct);
-    
+    delete graph;
     
 }
 
@@ -87,7 +97,7 @@ TEST_CASE("Function Eval - Data Structures" , "Modular Approx") {
     Graph *graph = new Graph;
     graph->readGraph("ca-GrQc-processed.txt");
     DifferenceApproximator differenceApproximator(graph);
-    int n = graph->n;
+    int n = graph->getNumberOfVertices();
     differenceApproximator.setN(n);
     vector<int> permutation = differenceApproximator.generatePermutation();
     ModularApproximation modularApprox(permutation, setting1);
@@ -115,13 +125,14 @@ TEST_CASE("Function Eval - Data Structures" , "Modular Approx") {
         }
     }
     REQUIRE(allEdgesMarked);
+    delete graph;
 }
 
 TEST_CASE("Function Eval" , "Modular Approx") {
     Graph *graph = new Graph;
     graph->readGraph("ca-GrQc-processed.txt");
     DifferenceApproximator differenceApproximator(graph);
-    int n = graph->n;
+    int n = graph->getNumberOfVertices();
     differenceApproximator.setN(n);
     vector<int> permutation = differenceApproximator.generatePermutation();
     ModularApproximation modularApprox(permutation, setting1);
@@ -141,13 +152,14 @@ TEST_CASE("Function Eval" , "Modular Approx") {
         if(evaluation!=approximation) allFunctionEvaluationsCorrect = false;
     }
     REQUIRE(allFunctionEvaluationsCorrect);
+    delete graph;
 }
 
 TEST_CASE("Non Targets evaluation", "Modular Approx") {
     Graph *graph = new Graph;
     graph->readGraph("ca-GrQc-processed.txt");
     DifferenceApproximator differenceApproximator(graph);
-    int n = graph->n;
+    int n = graph->getNumberOfVertices();
     differenceApproximator.setN(n);
     vector<int> permutation = differenceApproximator.generatePermutation();
     ModularApproximation modularApprox(permutation, setting2);
@@ -176,5 +188,6 @@ TEST_CASE("Non Targets evaluation", "Modular Approx") {
     
     REQUIRE(correctAdditionOfTargets);
     REQUIRE(correctAdditionOfNonTargets);
+    delete graph;
     
 }

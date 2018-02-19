@@ -10,6 +10,7 @@
 
 
 ModularApproximation::ModularApproximation(vector<int> permutation, ApproximationSetting approximationSetting) {
+    this->timEvaluator = NULL;
     this->permutation = new vector<int>(permutation);
     this->n = (int)permutation.size();
     this->reverseMap = new vector<int>(this->n);
@@ -22,14 +23,36 @@ void ModularApproximation::createTIMEvaluator(Graph *graph) {
     this->timEvaluator = new TIMEvaluator(graph, this->setting);
 }
 
+ModularApproximation::ModularApproximation( const ModularApproximation &obj) {
+    this->permutation = new vector<int>(*obj.permutation);
+    this->reverseMap = new vector<int>(*obj.reverseMap);
+    this->n = obj.n;
+    this->approximations = new int(*obj.approximations);
+    this->setting = obj.setting;
+}
+
+ModularApproximation& ModularApproximation::operator=( const ModularApproximation &obj) {
+    if(this==&obj) {
+        return *this;
+    }
+    delete this->permutation;
+    delete this->reverseMap;
+    delete[] this->approximations;
+    delete this->timEvaluator;
+    
+    this->permutation = new vector<int>(*obj.permutation);
+    this->reverseMap = new vector<int>(*obj.reverseMap);
+    this->n = obj.n;
+    this->approximations = new int(*obj.approximations);
+    this->setting = obj.setting;
+    return *this;
+}
 
 ModularApproximation::~ModularApproximation() {
     delete this->permutation;
     delete this->reverseMap;
-    delete this->approximations;
-    if(this->timEvaluator!=NULL) {
-        delete this->timEvaluator;
-    }
+    delete[] this->approximations;
+    delete this->timEvaluator;
 }
 
 vector<int> ModularApproximation::getPerumutation() {
@@ -135,7 +158,7 @@ vector<int> DifferenceApproximator::generatePermutation(vector<int> startingElem
 set<int> DifferenceApproximator::executeGreedyAlgorithm(Graph *graph, ModularApproximation *modularApproximation, int k) {
     
     priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> orderedNodes;
-    for(int i=0; i<graph->n; i++) {
+    for(int i=0; i<graph->getNumberOfVertices(); i++) {
         int evaluation = modularApproximation->evaluateFunction(i);
         orderedNodes.push(make_pair(i, evaluation));
     }
@@ -150,30 +173,31 @@ set<int> DifferenceApproximator::executeGreedyAlgorithm(Graph *graph, ModularApp
 
 set<int> DifferenceApproximator::executeGreedyAlgorithmAdjustingPermutation(ApproximationSetting setting, int k) {
     set<int> seedSet;
-    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> orderedNodes;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *orderedNodes;
     vector<int> permutation = generatePermutation();
     vector<int> startingVector;
     for (int i =0; i<k; i++) {
-        orderedNodes = priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>();
+        orderedNodes = new priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>();
         permutation = generatePermutation(startingVector);
         for(int j = 0; j<i; j++) {
             assert(seedSet.find(permutation[j])!=seedSet.end());
         }
-        assert(permutation.size()==this->graph->n);
+        assert(permutation.size()==this->graph->getNumberOfVertices());
         ModularApproximation *approximation = new ModularApproximation(permutation, setting);
         approximation->createTIMEvaluator(graph);
         approximation->findAllApproximations();
-        for(int i=0; i<graph->n; i++) {
+        for(int i=0; i<graph->getNumberOfVertices(); i++) {
             int evaluation = approximation->evaluateFunction(i);
-            orderedNodes.push(make_pair(i, evaluation));
+            orderedNodes->push(make_pair(i, evaluation));
         }
         delete approximation;
 
-        int top = orderedNodes.top().first;
+        int top = orderedNodes->top().first;
         while(seedSet.find(top)!=seedSet.end()) {
-            orderedNodes.pop();
-            top = orderedNodes.top().first;
+            orderedNodes->pop();
+            top = orderedNodes->top().first;
         }
+        delete orderedNodes;
         seedSet.insert(top);
         startingVector.push_back(top);
     }
@@ -192,7 +216,7 @@ set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunction(Approx
     approximation->findAllApproximations();
     TIMCoverage *timCoverageTargets = approximation->getTIMEvaluator()->getTIMCoverage();
     
-    for (int i=0; i<graph->n; i++) {
+    for (int i=0; i<graph->getNumberOfVertices(); i++) {
         /* 
          Get g(i) and update coverage so that its value is now f(i) - g(i).
          If you add i to the seed, and update the coverage of each node, its value will be TIM estimate of f(i|seed set) - g(i)
@@ -251,7 +275,22 @@ set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunctionExtendP
 }
 
 DifferenceApproximator::~DifferenceApproximator() {
-    if(this->permutation!=NULL) {
-        delete this->permutation;
+    delete this->permutation;
+}
+
+DifferenceApproximator& DifferenceApproximator::operator=( const DifferenceApproximator &obj) {
+    if (&obj==this) {
+        return *this;
+    }
+    delete this->permutation;
+    if(obj.permutation!=NULL) {
+        this->permutation = new vector<int>(*obj.permutation);
+    }
+    return *this;
+}
+
+DifferenceApproximator::DifferenceApproximator( const DifferenceApproximator &obj) {
+    if(obj.permutation!=NULL) {
+        this->permutation = new vector<int>(*obj.permutation);
     }
 }

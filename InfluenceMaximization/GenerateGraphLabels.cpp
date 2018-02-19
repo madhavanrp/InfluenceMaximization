@@ -48,7 +48,7 @@ void GenerateGraphLabels::doDFSWithLabel(int currentNode, int currentDepth, int 
 
 void GenerateGraphLabels::generate() {
     //Assume setting 1
-    int n = this->graph->n;
+    int n = this->graph->getNumberOfVertices();
     int numberOfTargets = round((float)n * this->percentage);
     int numberOfNonTargets = n - numberOfTargets;
     vector<vector<int>> adjList = *graph->getGraph();

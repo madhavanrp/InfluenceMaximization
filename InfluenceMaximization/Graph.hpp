@@ -31,11 +31,11 @@ private:
     int numberOfTargets;
     int numberOfNonTargets;
     
+    int n, m;
     vector<vector<int> > graph;
     vector<vector<int> > graphTranspose;
 public:
     Graph();
-    int n, m;
     vector<vector<int>> rrSets;
     vector<bool> labels;
     deque<int> q;

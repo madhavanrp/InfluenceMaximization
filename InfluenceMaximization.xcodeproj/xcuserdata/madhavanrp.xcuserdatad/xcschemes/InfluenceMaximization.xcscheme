@@ -64,7 +64,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "--algorithm generate --graph epinions.txt --percentage 72"
+            argument = "--algorithm difference --graph ca-GrQc-processed.txt --percentage 80 --budget 20 --approximation 2"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

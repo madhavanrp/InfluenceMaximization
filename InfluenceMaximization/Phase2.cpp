@@ -143,7 +143,7 @@ struct node* Phase2::addChild(struct node* parent, int childNodeID, double targe
 }
 
 double Phase2::getScalingFactorTargets() {
-    return (double)graph->n/(double)rrSets->size();
+    return (double)graph->getNumberOfTargets()/(double)rrSets->size();
 }
 
 pair<int,int> Phase2::findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet, double totalNonTargets, int nonTargetThreshold) {
@@ -165,7 +165,7 @@ Phase2SIM::Phase2SIM(Graph *graph): Phase2(graph) {
 }
 
 Phase2TIM::Phase2TIM(Graph *graph): Phase2(graph) {
-    int n = graph->n;
+    int n = graph->getNumberOfVertices();
     double epsilon = EPSLON_TARGETS;
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
 //    R = 23648871;

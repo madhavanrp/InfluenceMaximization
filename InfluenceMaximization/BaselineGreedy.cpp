@@ -67,7 +67,7 @@ set<int> BaselineGreedy::findSeedSet(Graph *graph,int budget, int nonTargetThres
 }
 
 void BaselineGreedy::performInitialDiffusion(Graph *graph, int nonTargetThreshold) {
-    int n = graph->n;
+    int n = graph->getNumberOfVertices();
     set<int> *seedSet = new set<int>;
     pair<int, int> influence;
     int maxInfluence = -1;
