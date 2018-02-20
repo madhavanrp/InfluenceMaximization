@@ -155,11 +155,16 @@ vector<int> DifferenceApproximator::generatePermutation(vector<int> startingElem
     return *this->permutation;
 }
 
-set<int> DifferenceApproximator::executeGreedyAlgorithm(Graph *graph, ModularApproximation *modularApproximation, int k) {
+set<int> DifferenceApproximator::executeGreedyAlgorithm(ApproximationSetting setting, int k) {
+    
+    vector<int> permutation = generatePermutation();
+    ModularApproximation modularApproximation(permutation, setting);
+    modularApproximation.createTIMEvaluator(this->graph);
+    modularApproximation.findAllApproximations();
     
     priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> orderedNodes;
     for(int i=0; i<graph->getNumberOfVertices(); i++) {
-        int evaluation = modularApproximation->evaluateFunction(i);
+        int evaluation = modularApproximation.evaluateFunction(i);
         orderedNodes.push(make_pair(i, evaluation));
     }
     set<int> seedSet;

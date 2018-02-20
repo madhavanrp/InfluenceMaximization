@@ -32,8 +32,8 @@
 		3179B9322036309D00C80D9A /* json.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D791F6F052C00FC4D9B /* json.hpp */; };
 		3179B9332036309D00C80D9A /* DifferenceApproximator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3159634B1F9E756C000EB2F4 /* DifferenceApproximator.cpp */; };
 		3179B9342036309D00C80D9A /* DifferenceApproximator.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 3159634C1F9E756C000EB2F4 /* DifferenceApproximator.hpp */; };
-		3179B9352036309D00C80D9A /* FunctionEvaluators.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 315963541F9EC153000EB2F4 /* FunctionEvaluators.cpp */; };
-		3179B9362036309D00C80D9A /* FunctionEvaluators.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 315963551F9EC153000EB2F4 /* FunctionEvaluators.hpp */; };
+		3179B9352036309D00C80D9A /* TIMEvaluator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 315963541F9EC153000EB2F4 /* TIMEvaluator.cpp */; };
+		3179B9362036309D00C80D9A /* TIMEvaluator.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 315963551F9EC153000EB2F4 /* TIMEvaluator.hpp */; };
 		3179B9372036309D00C80D9A /* ApproximationSetting.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */; };
 		3179B9382036309D00C80D9A /* GenerateGraphLabels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3107F09E1FE4661900EA0135 /* GenerateGraphLabels.cpp */; };
 		3179B9392036309D00C80D9A /* GenerateGraphLabels.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 3107F09F1FE4661900EA0135 /* GenerateGraphLabels.hpp */; };
@@ -62,8 +62,8 @@
 		3179B95B2038E75500C80D9A /* json.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D791F6F052C00FC4D9B /* json.hpp */; };
 		3179B95C2038E75500C80D9A /* DifferenceApproximator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3159634B1F9E756C000EB2F4 /* DifferenceApproximator.cpp */; };
 		3179B95D2038E75500C80D9A /* DifferenceApproximator.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 3159634C1F9E756C000EB2F4 /* DifferenceApproximator.hpp */; };
-		3179B95E2038E75500C80D9A /* FunctionEvaluators.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 315963541F9EC153000EB2F4 /* FunctionEvaluators.cpp */; };
-		3179B95F2038E75500C80D9A /* FunctionEvaluators.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 315963551F9EC153000EB2F4 /* FunctionEvaluators.hpp */; };
+		3179B95E2038E75500C80D9A /* TIMEvaluator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 315963541F9EC153000EB2F4 /* TIMEvaluator.cpp */; };
+		3179B95F2038E75500C80D9A /* TIMEvaluator.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 315963551F9EC153000EB2F4 /* TIMEvaluator.hpp */; };
 		3179B9602038E75500C80D9A /* ApproximationSetting.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */; };
 		3179B9612038E75500C80D9A /* GenerateGraphLabels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3107F09E1FE4661900EA0135 /* GenerateGraphLabels.cpp */; };
 		3179B9622038E75500C80D9A /* GenerateGraphLabels.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 3107F09F1FE4661900EA0135 /* GenerateGraphLabels.hpp */; };
@@ -136,8 +136,8 @@
 		3159634B1F9E756C000EB2F4 /* DifferenceApproximator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DifferenceApproximator.cpp; sourceTree = "<group>"; };
 		3159634C1F9E756C000EB2F4 /* DifferenceApproximator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DifferenceApproximator.hpp; sourceTree = "<group>"; };
 		3159634E1F9E8797000EB2F4 /* ApproximationTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApproximationTests.cpp; sourceTree = "<group>"; };
-		315963541F9EC153000EB2F4 /* FunctionEvaluators.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FunctionEvaluators.cpp; sourceTree = "<group>"; };
-		315963551F9EC153000EB2F4 /* FunctionEvaluators.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FunctionEvaluators.hpp; sourceTree = "<group>"; };
+		315963541F9EC153000EB2F4 /* TIMEvaluator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMEvaluator.cpp; sourceTree = "<group>"; };
+		315963551F9EC153000EB2F4 /* TIMEvaluator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TIMEvaluator.hpp; sourceTree = "<group>"; };
 		315963571F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMEvaluatorTests.cpp; sourceTree = "<group>"; };
 		315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ApproximationSetting.hpp; sourceTree = "<group>"; };
 		3179B9402038E6F300C80D9A /* InfluenceTests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = InfluenceTests; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -266,8 +266,8 @@
 				31279D791F6F052C00FC4D9B /* json.hpp */,
 				3159634B1F9E756C000EB2F4 /* DifferenceApproximator.cpp */,
 				3159634C1F9E756C000EB2F4 /* DifferenceApproximator.hpp */,
-				315963541F9EC153000EB2F4 /* FunctionEvaluators.cpp */,
-				315963551F9EC153000EB2F4 /* FunctionEvaluators.hpp */,
+				315963541F9EC153000EB2F4 /* TIMEvaluator.cpp */,
+				315963551F9EC153000EB2F4 /* TIMEvaluator.hpp */,
 				315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */,
 				3107F09E1FE4661900EA0135 /* GenerateGraphLabels.cpp */,
 				3107F09F1FE4661900EA0135 /* GenerateGraphLabels.hpp */,
@@ -416,8 +416,8 @@
 				3179B95B2038E75500C80D9A /* json.hpp in Sources */,
 				3179B95C2038E75500C80D9A /* DifferenceApproximator.cpp in Sources */,
 				3179B95D2038E75500C80D9A /* DifferenceApproximator.hpp in Sources */,
-				3179B95E2038E75500C80D9A /* FunctionEvaluators.cpp in Sources */,
-				3179B95F2038E75500C80D9A /* FunctionEvaluators.hpp in Sources */,
+				3179B95E2038E75500C80D9A /* TIMEvaluator.cpp in Sources */,
+				3179B95F2038E75500C80D9A /* TIMEvaluator.hpp in Sources */,
 				3179B9602038E75500C80D9A /* ApproximationSetting.hpp in Sources */,
 				3179B9612038E75500C80D9A /* GenerateGraphLabels.cpp in Sources */,
 				3179B9622038E75500C80D9A /* GenerateGraphLabels.hpp in Sources */,
@@ -453,8 +453,8 @@
 				3179B9322036309D00C80D9A /* json.hpp in Sources */,
 				3179B9332036309D00C80D9A /* DifferenceApproximator.cpp in Sources */,
 				3179B9342036309D00C80D9A /* DifferenceApproximator.hpp in Sources */,
-				3179B9352036309D00C80D9A /* FunctionEvaluators.cpp in Sources */,
-				3179B9362036309D00C80D9A /* FunctionEvaluators.hpp in Sources */,
+				3179B9352036309D00C80D9A /* TIMEvaluator.cpp in Sources */,
+				3179B9362036309D00C80D9A /* TIMEvaluator.hpp in Sources */,
 				3179B9372036309D00C80D9A /* ApproximationSetting.hpp in Sources */,
 				3179B9382036309D00C80D9A /* GenerateGraphLabels.cpp in Sources */,
 				3179B9392036309D00C80D9A /* GenerateGraphLabels.hpp in Sources */,

@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <vector>
 #include <set>
-#include "FunctionEvaluators.hpp"
+#include "TIMEvaluator.hpp"
 #include "Graph.hpp"
 #include <algorithm>
 #include "ApproximationSetting.hpp"
@@ -58,7 +58,7 @@ public:
     void setN(int n);
     vector<int> generatePermutation();
     vector<int> generatePermutation(vector<int> startingElements);
-    set<int> executeGreedyAlgorithm(Graph *graph, ModularApproximation *modularApproximation, int k);
+    set<int> executeGreedyAlgorithm(ApproximationSetting setting, int k);
     set<int> executeGreedyAlgorithmAdjustingPermutation(ApproximationSetting setting, int k);
     set<int> executeAlgorithmApproximatingOneFunction(ApproximationSetting setting, int k);
     set<int> executeAlgorithmApproximatingOneFunctionExtendPermutation(ApproximationSetting setting, int k);

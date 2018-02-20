@@ -220,7 +220,10 @@ int TIMCoverage::getNumberOfRRSetsCovered() {
 //    assert(count==this->numberOfRRSetsCovered);
     return this->numberOfRRSetsCovered;
 }
-    
+
+void TIMCoverage::incrementRRSetsCovered(int number) {
+    this->numberOfRRSetsCovered = this->numberOfRRSetsCovered + number;
+}
 
 
 TIMCoverage::TIMCoverage( const TIMCoverage &obj) {

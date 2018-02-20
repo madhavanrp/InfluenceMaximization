@@ -49,6 +49,7 @@ public:
     
     int countForVertex(int u);
     int numberOfNewRRSetsCoveredByVertex(int vertex);
+    void incrementRRSetsCovered(int number);
     
     vector<int> getRRSetsCoveredByVertex(int vertex);
     

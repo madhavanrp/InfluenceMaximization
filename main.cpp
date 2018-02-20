@@ -53,10 +53,6 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
     DifferenceApproximator differenceApproximator(graph);
     differenceApproximator.setN(graph->getNumberOfVertices());
     set<int> seedSet;
-    vector<int> permutation = differenceApproximator.generatePermutation();
-    ModularApproximation modularApprox(permutation, setting);
-    modularApprox.createTIMEvaluator(graph);
-    modularApprox.findAllApproximations();
     if(setting==setting3) {
         if(!extendPermutation) {
             seedSet = differenceApproximator.executeAlgorithmApproximatingOneFunction(setting, budget);
@@ -65,7 +61,7 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
         }
     } else {
         if(!extendPermutation) {
-            seedSet = differenceApproximator.executeGreedyAlgorithm(graph, &modularApprox, budget);
+            seedSet = differenceApproximator.executeGreedyAlgorithm(setting, budget);
         } else {
             seedSet = differenceApproximator.executeGreedyAlgorithmAdjustingPermutation(setting, budget);
         }

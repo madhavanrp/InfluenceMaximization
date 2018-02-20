@@ -1,13 +1,13 @@
 //
-//  FunctionEvaluators.hpp
+//  TIMEvaluator.hpp
 //  InfluenceMaximization
 //
 //  Created by Madhavan R.P on 10/23/17.
 //  Copyright © 2017 Madhavan R.P. All rights reserved.
 //
 
-#ifndef FunctionEvaluators_hpp
-#define FunctionEvaluators_hpp
+#ifndef TIMEvaluator_hpp
+#define TIMEvaluator_hpp
 
 #include <stdio.h>
 #include <iostream>
@@ -35,13 +35,13 @@ private:
 public:
     TIMEvaluator(Graph *graph, ApproximationSetting approximationSetting);
     ~TIMEvaluator();
-    pair<int, int> findInfluence(set<int> *seedSet);
-    int findInfluenceOnTargets(set<int> *seedSet);
-    int findInfluenceOnNonTargets(set<int> *seedSet);
+    pair<double, double> findInfluence(set<int> *seedSet);
+    double findInfluenceOnTargets(set<int> *seedSet);
+    double findInfluenceOnNonTargets(set<int> *seedSet);
     
-    int findSingleNodeTargetsInfluence(int vertex);
-    int findSingleNodeNonTargetsInfluence(int vertex);
-    int findGenericInfluence(set<int> *seedSet, TIMCoverage *timCoverage, vector<vector<int>> *randomRRSets, double scalingFactor);
+    double findSingleNodeTargetsInfluence(int vertex);
+    double findSingleNodeNonTargetsInfluence(int vertex);
+    double findGenericInfluence(set<int> *seedSet, TIMCoverage *timCoverage, vector<vector<int>> *randomRRSets, double scalingFactor);
     
     void calculateNonTargets();
     void calculateTargets();
