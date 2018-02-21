@@ -23,6 +23,7 @@
 #include "InfluenceMaximization/GenerateGraphLabels.hpp"
 #include "InfluenceMaximization/BaselineGreedy.hpp"
 #include "InfluenceMaximization/BaselineGreedyTIM.hpp"
+#include "InfluenceMaximization/Diffusion.hpp"
 
 #include <iomanip>
 #include <ctime>
@@ -66,11 +67,21 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
             seedSet = differenceApproximator.executeGreedyAlgorithmAdjustingPermutation(setting, budget);
         }
     }
-    pair<int, int> influence = findInfluenceUsingDiffusion(graph, seedSet, NULL);
-    cout <<"\n Results after Diffusion: ";
+    TIMInfluenceCalculator  timInfluenceCalculator(graph, 2);
+    
+    pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
+    cout <<"\n Results: ";
     cout << "\nInfluence Targets: " << influence.first;
     cout << "\nInfluence NT: " << influence.second;
+    IMSeedSet imSeedSet;
+    for(int seed: seedSet) {
+        imSeedSet.addSeed(seed);
+    }
+    imSeedSet.setTargets(influence.first);
+    imSeedSet.setNonTargets(influence.second);
+    IMResults::getInstance().addBestSeedSet(imSeedSet);
     IMResults::getInstance().setApproximationInfluence(influence);
+    IMResults::getInstance().setExpectedTargets(influence);
 
 }
 
@@ -299,6 +310,8 @@ void executeDifferenceAlgorithms(cxxopts::ParseResult result) {
 
     Graph *graph = new Graph;
     graph->readGraph(graphFileName, percentageTargetsFloat);
+    loadResultsFileFrom(result);
+    loadGraphSizeToResults(graph);
 //    Begin f-g
     clock_t differenceStartTime = clock();
     
