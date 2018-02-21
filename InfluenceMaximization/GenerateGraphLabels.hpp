@@ -13,9 +13,14 @@
 #include "Graph.hpp"
 #include <math.h>
 #include <assert.h>
+#include "TIM-Models/TIMCoverage.hpp"
+#include "TIMInfluenceCalculator.hpp"
+#include "Diffusion.hpp"
 
 enum LabelSetting {
-    LabelSetting1
+    LabelSetting1,
+    // Find a seed set using TIM. Set all the nodes influenced by that to be non targets.
+    LabelSettingTIMNonTargets
 };
 
 class GenerateGraphLabels {
@@ -27,6 +32,8 @@ class GenerateGraphLabels {
     vector<bool> labels;
     GenerateGraphLabels(Graph *graph, float percentage, LabelSetting setting);
     void generate();
+    void generateWithSetting1(int numberOfTargets, int numberOfNonTargets);
+    void generateWithTIMNonTargets(int numberOfTargets, int numberOfNonTargets);
     void doDFSWithLabel(int currentNode, int currentDepth, int depthLimit);
 public:
     GenerateGraphLabels(Graph *graph, float percentage);

@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "InfluenceMaximization/GenerateGraphLabels.cpp"
-            timestampString = "540424595.708671"
+            filePath = "InfluenceMaximization/Graph.cpp"
+            timestampString = "540947523.510444"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "GenerateGraphLabels::doDFSWithLabel(int currentNode, int currentDepth, int depthLimit)"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "Graph::readLabels(string fileName)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

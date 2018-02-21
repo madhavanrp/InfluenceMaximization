@@ -489,7 +489,7 @@ void generateGraphLabels(cxxopts::ParseResult result) {
     int percentageTargets = result["percentage"].as<int>();
     float percentageTargetsFloat = (float)percentageTargets/(float)100;
     Graph *graph = new Graph;
-    graph->readGraph(graphFileName, percentageTargetsFloat);
+    graph->readGraph(graphFileName, 1);
     GenerateGraphLabels(graph, percentageTargetsFloat);
 }
 

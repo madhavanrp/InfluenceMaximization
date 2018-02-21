@@ -17,7 +17,7 @@ GenerateGraphLabels::GenerateGraphLabels(Graph *graph, float percentage, LabelSe
 
 GenerateGraphLabels::GenerateGraphLabels(Graph *graph, float percentage) {
     this->graph = graph;
-    this->setting = LabelSetting1;
+    this->setting = LabelSettingTIMNonTargets;
     this->percentage = percentage;
     this->totalNumberOfNonTargets = 0;
     int n = graph->getNumberOfVertices();
@@ -47,10 +47,26 @@ void GenerateGraphLabels::doDFSWithLabel(int currentNode, int currentDepth, int 
 }
 
 void GenerateGraphLabels::generate() {
-    //Assume setting 1
     int n = this->graph->getNumberOfVertices();
     int numberOfTargets = round((float)n * this->percentage);
     int numberOfNonTargets = n - numberOfTargets;
+    switch (this->setting) {
+        case LabelSetting1:
+            generateWithSetting1(numberOfTargets, numberOfNonTargets);
+            break;
+        case LabelSettingTIMNonTargets:
+            generateWithTIMNonTargets(numberOfTargets, numberOfNonTargets);
+            
+        default:
+            generateWithSetting1(numberOfTargets, numberOfNonTargets);
+            break;
+    }
+    this->graph->setLabels(this->labels, this->percentage);
+    this->graph->writeLabels();
+}
+
+void GenerateGraphLabels::generateWithSetting1(int numberOfTargets, int numberOfNonTargets) {
+    int n = graph->getNumberOfVertices();
     vector<vector<int>> adjList = *graph->getGraph();
     cout << "\n Value of n is " << n  << flush;
     cout << "\n Number of non targets aimed is " << numberOfNonTargets;
@@ -68,6 +84,35 @@ void GenerateGraphLabels::generate() {
     cout << "\n Total number of non targets: " << this->totalNumberOfNonTargets;
     cout << "\n Sanity count: " << sanityCount;
     cout << "\n Value of n: " << n;
-    this->graph->setLabels(this->labels, this->percentage);
-    this->graph->writeLabels();
+}
+
+void GenerateGraphLabels::generateWithTIMNonTargets(int numberOfTargets, int numberOfNonTargets) {
+    double epsilon = (double)2;
+    int n = this->graph->getNumberOfVertices();
+    int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
+    //    R = 23648871;
+    Graph *graph = this->graph;
+    graph->generateRandomRRSets(R, true);
+    vector<vector<int>>* rrSets = graph->getRandomRRSets();
+    
+    vector<vector<int>> lookupTable;
+    TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
+    timCoverage->initializeLookupTable(rrSets, n);
+    timCoverage->initializeDataStructures(R, n);
+    set<int> seedSet;
+    double scalingFactor = (double)n/(double)R;
+    double summation = 0;
+    while(timCoverage->getNumberOfRRSetsCovered() * scalingFactor< numberOfNonTargets ) {
+        pair<int, double> nodeWithInfluence = timCoverage->findMaxInfluentialNodeAndUpdateModel(rrSets);
+        seedSet.insert(nodeWithInfluence.first);
+        summation+=nodeWithInfluence.second;
+        double shouldBe = timCoverage->getNumberOfRRSetsCovered() * scalingFactor;
+//        assert(summation==(timCoverage->getNumberOfRRSetsCovered() * scalingFactor));
+    }
+    delete timCoverage;
+    set<int> activatedSet = findActivatedSetAndInfluenceUsingDiffusion(graph, seedSet, NULL).second;
+    for (int activeNode:activatedSet) {
+        this->labels[activeNode] = false;
+        this->totalNumberOfNonTargets++;
+    }
 }
