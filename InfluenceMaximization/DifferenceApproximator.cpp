@@ -14,7 +14,7 @@ ModularApproximation::ModularApproximation(vector<int> permutation, Approximatio
     this->permutation = new vector<int>(permutation);
     this->n = (int)permutation.size();
     this->reverseMap = new vector<int>(this->n);
-    this->approximations = new int[this->n];
+    this->approximations = new double[this->n];
     this->setting = approximationSetting;
     constructReverseMap();
 }
@@ -27,7 +27,7 @@ ModularApproximation::ModularApproximation( const ModularApproximation &obj) {
     this->permutation = new vector<int>(*obj.permutation);
     this->reverseMap = new vector<int>(*obj.reverseMap);
     this->n = obj.n;
-    this->approximations = new int(*obj.approximations);
+    this->approximations = new double(*obj.approximations);
     this->setting = obj.setting;
 }
 
@@ -43,7 +43,7 @@ ModularApproximation& ModularApproximation::operator=( const ModularApproximatio
     this->permutation = new vector<int>(*obj.permutation);
     this->reverseMap = new vector<int>(*obj.reverseMap);
     this->n = obj.n;
-    this->approximations = new int(*obj.approximations);
+    this->approximations = new double(*obj.approximations);
     this->setting = obj.setting;
     return *this;
 }
@@ -66,7 +66,7 @@ TIMEvaluator* ModularApproximation::getTIMEvaluator() {
     return this->timEvaluator;
 }
 
-int* ModularApproximation::getApproximations() {
+double* ModularApproximation::getApproximations() {
     return this->approximations;
 }
 
