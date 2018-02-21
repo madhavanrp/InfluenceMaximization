@@ -59,10 +59,10 @@ public:
     
     void initializeDataStructures(int R, int n) ;
     
-    pair<int, int> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) ;
-    pair<int, int> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets, NodeChecker *nodeChecker);
+    pair<int, double> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) ;
+    pair<int, double> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets, NodeChecker *nodeChecker);
     
-    pair<int, int> findMaxInfluentialNodeWithApproximations(set<int> *seedSet, vector<int> *approximationsScaled);
+    pair<int, double> findMaxInfluentialNodeWithApproximations(set<int> *seedSet, vector<int> *approximationsScaled);
     
     set<pair<int, int>> findTopKNodesWithInfluence(int k, vector<vector<int>> *rrSets);
     

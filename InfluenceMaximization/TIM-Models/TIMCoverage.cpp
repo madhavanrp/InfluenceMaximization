@@ -71,7 +71,7 @@ void TIMCoverage::initializeDataStructures(int R, int n) {
     
 }
 
-pair<int, int> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets, NodeChecker *nodeChecker) {
+pair<int, double> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets, NodeChecker *nodeChecker) {
     priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queue = &this->queue;
     
     vector<int> *coverage = &this->coverage;
@@ -125,11 +125,11 @@ pair<int, int> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<i
     return make_pair(maximumGainNode, scaledInfluence);
 }
 
-pair<int, int> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) {
+pair<int, double> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) {
     return findMaxInfluentialNodeAndUpdateModel(rrSets, NULL);
 }
 
-pair<int, int> TIMCoverage::findMaxInfluentialNodeWithApproximations(set<int> *seedSet, vector<int> *approximationsScaled) {
+pair<int, double> TIMCoverage::findMaxInfluentialNodeWithApproximations(set<int> *seedSet, vector<int> *approximationsScaled) {
     priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queueCopy = new priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>(this->queue);
     int maxValue = -1;
     int maximumGainNode = -1;

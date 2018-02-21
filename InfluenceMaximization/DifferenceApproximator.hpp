@@ -24,7 +24,7 @@ class ModularApproximation {
     vector<int> *permutation;
     vector<int> *reverseMap;
     int n;
-    int *approximations;
+    double *approximations;
     TIMEvaluator *timEvaluator;
     ApproximationSetting setting;
 public:
@@ -35,22 +35,24 @@ public:
     vector<int> getPerumutation();
     vector<int> getReverseMap();
     TIMEvaluator *getTIMEvaluator();
-    int* getApproximations();
+    double* getApproximations();
     
     void createTIMEvaluator(Graph *graph);
     void setApproximationSetting(ApproximationSetting approximationSetting);
     void constructReverseMap();
     void calculateApproximation(int element, set<int> *vertices);
     void findAllApproximations();
-    int evaluateFunction(set<int> elements);
-    int evaluateFunction(int element);
+    double evaluateFunction(set<int> elements);
+    double evaluateFunction(int element);
 };
 
 class DifferenceApproximator {
     vector<int> *permutation;
     int n;
     Graph *graph;
+    double differenceValue;
 public:
+    double getDifferenceValue();
     DifferenceApproximator(Graph *graph);
     ~DifferenceApproximator();
     DifferenceApproximator& operator=( const DifferenceApproximator &obj);
