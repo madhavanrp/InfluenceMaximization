@@ -133,7 +133,11 @@ vector<int> DifferenceApproximator::generatePermutation() {
 }
 
 vector<int> DifferenceApproximator::generatePermutation(vector<int> startingElements) {
-    int totalSize = (int)this->permutation->size();
+    int totalSize = n;
+    
+    if(this->permutation==NULL) {
+        generatePermutation();
+    }
     
     // Shuffle the starting elements and build the new permutation
     random_shuffle(startingElements.begin(), startingElements.end());
@@ -243,7 +247,7 @@ set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunction(Approx
         double nonTargetsEstimateNegated = approximation->evaluateFunction(i);
         // Now scale it back
         TIMEvaluator *timEvaluator = approximation->getTIMEvaluator();
-        double reverseScale = (double)1/timEvaluator->getScalingFactorNonTargets();
+        double reverseScale = (double)1/timEvaluator->getScalingFactorTargets();
         timCoverageTargets->offsetCoverage(i, nonTargetsEstimateNegated * reverseScale);
     }
     seedSet = timCoverageTargets->findTopKNodes(k, approximation->getTIMEvaluator()->getRRSetsTargets());
@@ -274,7 +278,7 @@ set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunctionExtendP
         
         
         TIMEvaluator *timEvaluator = approximation->getTIMEvaluator();
-        double reverseScale = (double)1/timEvaluator->getScalingFactorNonTargets();
+        double reverseScale = (double)1/timEvaluator->getScalingFactorTargets();
         
         vector<int> scaledApproximations;
         for (int j=0; j<this->n; j++) {
