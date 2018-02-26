@@ -225,6 +225,12 @@ void TIMCoverage::incrementRRSetsCovered(int number) {
     this->numberOfRRSetsCovered = this->numberOfRRSetsCovered + number;
 }
 
+vector<bool>* TIMCoverage::getNodeMark() {
+    return &nodeMark;
+}
+vector<bool>* TIMCoverage::getEdgeMark() {
+    return &edgeMark;
+}
 
 TIMCoverage::TIMCoverage( const TIMCoverage &obj) {
     queue = obj.queue;

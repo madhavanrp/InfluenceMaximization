@@ -10,6 +10,8 @@
 #include <assert.h>
 
 TIMEvaluator::TIMEvaluator(Graph *graph, ApproximationSetting approximationSetting) {
+    this->timCoverage = NULL;
+    this->timCoverageNonTargets = NULL;
     this->graph = graph;
     this->setting = approximationSetting;
     calculateNonTargets();
@@ -33,6 +35,7 @@ TIMCoverage* TIMEvaluator::getTIMCoverageNonTargets() {
 vector<vector<int>>* TIMEvaluator::getRRSetsTargets() {
     return &this->rrSetsTargets;
 }
+
 vector<vector<int>>* TIMEvaluator::getRRSetsNonTargets() {
     return &this->rrSetsNonTargets;
 }
@@ -102,6 +105,7 @@ double TIMEvaluator::findGenericInfluence(set<int> *seedSet, TIMCoverage *timCov
     vector<bool> *nodeMark = &timCoverage->nodeMark;
     vector<bool> *edgeMark = &timCoverage->edgeMark;
     for(int vertex: *seedSet) {
+        if(!(*nodeMark)[vertex]) continue;
         (*nodeMark)[vertex] = false;
         //Add the marginal gain
         totalInfluence+= (*coverage)[vertex];

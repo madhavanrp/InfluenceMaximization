@@ -73,6 +73,8 @@ public:
     int findInfluence(set<int> seedSet, double scalingFactor);
     int getNumberOfRRSetsCovered();
     
+    vector<bool> *getNodeMark();
+    vector<bool> *getEdgeMark();
     TIMCoverage( const TIMCoverage &obj);
     ~TIMCoverage();
 };
