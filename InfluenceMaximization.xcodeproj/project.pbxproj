@@ -77,6 +77,7 @@
 		3179B96A2038E7A700C80D9A /* log1.h in Sources */ = {isa = PBXBuildFile; fileRef = 31C4ADA11F787C610077D6BF /* log1.h */; };
 		3179B96B2038E7AF00C80D9A /* IMResults.h in Sources */ = {isa = PBXBuildFile; fileRef = 31279D7A1F6F0CFC00FC4D9B /* IMResults.h */; };
 		3179B96C2038E7AF00C80D9A /* TIMCoverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A120103A04000C70D9 /* TIMCoverage.cpp */; };
+		3179B96E203F85D700C80D9A /* DifferenceTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3179B96D203F85D700C80D9A /* DifferenceTests.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -141,6 +142,7 @@
 		315963571F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMEvaluatorTests.cpp; sourceTree = "<group>"; };
 		315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ApproximationSetting.hpp; sourceTree = "<group>"; };
 		3179B9402038E6F300C80D9A /* InfluenceTests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = InfluenceTests; sourceTree = BUILT_PRODUCTS_DIR; };
+		3179B96D203F85D700C80D9A /* DifferenceTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DifferenceTests.cpp; sourceTree = "<group>"; };
 		31A494991F510CBF00745401 /* IMTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IMTree.cpp; sourceTree = "<group>"; };
 		31A4949A1F510CBF00745401 /* IMTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IMTree.hpp; sourceTree = "<group>"; };
 		31A494A21F55D54700745401 /* catch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				3159634E1F9E8797000EB2F4 /* ApproximationTests.cpp */,
 				315963571F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp */,
 				311FFDFD20041D1500F68590 /* BaselineGreedyTests.cpp */,
+				3179B96D203F85D700C80D9A /* DifferenceTests.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -446,6 +449,7 @@
 				3179B92B2036309D00C80D9A /* IMTree.hpp in Sources */,
 				3179B92C2036309D00C80D9A /* EstimateNonTargets.cpp in Sources */,
 				3179B92D2036309D00C80D9A /* EstimateNonTargets.hpp in Sources */,
+				3179B96E203F85D700C80D9A /* DifferenceTests.cpp in Sources */,
 				3179B92E2036309D00C80D9A /* TIMUtility.hpp in Sources */,
 				3179B92F2036309D00C80D9A /* Phase2.cpp in Sources */,
 				3179B9302036309D00C80D9A /* Phase2.hpp in Sources */,
