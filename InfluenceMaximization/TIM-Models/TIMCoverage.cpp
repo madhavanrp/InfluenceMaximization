@@ -125,6 +125,17 @@ pair<int, double> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vecto
     return make_pair(maximumGainNode, scaledInfluence);
 }
 
+set<int> TIMCoverage::findTopKNodesModular(int k) {
+    int i = 0;
+    set<int> seedSet;
+    while(i<k) {
+        seedSet.insert(this->queue.top().first);
+        this->queue.pop();
+        i++;
+    }
+    return seedSet;
+}
+
 pair<int, double> TIMCoverage::findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) {
     return findMaxInfluentialNodeAndUpdateModel(rrSets, NULL);
 }

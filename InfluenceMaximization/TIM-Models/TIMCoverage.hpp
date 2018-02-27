@@ -67,6 +67,7 @@ public:
     set<pair<int, int>> findTopKNodesWithInfluence(int k, vector<vector<int>> *rrSets);
     
     set<int> findTopKNodes(int k, vector<vector<int>> *rrSets);
+    set<int> findTopKNodesModular(int k);
     
     void addToSeed(int vertex, vector<vector<int>> *rrSets);
 

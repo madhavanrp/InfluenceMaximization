@@ -327,7 +327,7 @@ void executeDifferenceAlgorithms(cxxopts::ParseResult result) {
     IMResults::getInstance().writeToFile(resultFile);
 }
 
-void executeTIMOnLabelledGraph(cxxopts::ParseResult result) {
+void executeTIMOnLabelledGraph(cxxopts::ParseResult result, bool modular) {
     int budget = result["budget"].as<int>();
     string graphFileName = result["graph"].as<std::string>();
     int percentageTargets = result["percentage"].as<int>();
@@ -347,7 +347,12 @@ void executeTIMOnLabelledGraph(cxxopts::ParseResult result) {
     TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
     timCoverage->initializeLookupTable(rrSets, n);
     timCoverage->initializeDataStructures(R, n);
-    set<int> seedSet = timCoverage->findTopKNodes(budget, rrSets);
+    set<int> seedSet;
+    if(!modular) {
+        seedSet = timCoverage->findTopKNodes(budget, rrSets);
+    } else {
+        seedSet = timCoverage->findTopKNodesModular(budget);
+    }
     
     clock_t timEndTime = clock();
     double timTimeTaken = double(timEndTime - timStartTime) / CLOCKS_PER_SEC;
@@ -518,8 +523,10 @@ int main(int argc, char **argv) {
         executeTIMTIM(result);
     } else if(result["algorithm"].count()>0 && algorithm.compare("tim")==0) {
         cout << "\n Executing just TIM";
-        executeTIMOnLabelledGraph(result);
+        executeTIMOnLabelledGraph(result, false);
         
+    } else if(result["algorithm"].count()>0 && algorithm.compare("timmodular")==0 ) {
+        executeTIMOnLabelledGraph(result, true);
     } else if(result["algorithm"].count()>0 && algorithm.compare("baseline")==0 ) {
         executeBaselineGreedy(result);
     } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic2")==0 ) {
