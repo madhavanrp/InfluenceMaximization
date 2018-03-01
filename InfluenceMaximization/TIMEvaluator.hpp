@@ -27,6 +27,8 @@ private:
     vector<double> nonTargets;
     vector<vector<int>> rrSetsTargets;
     vector<vector<int>> rrSetsNonTargets;
+    vector<vector<int>> *reverseMapTargets;
+    vector<vector<int>> *reverseMapNonTargets;
     TIMCoverage *timCoverage;
     TIMCoverage *timCoverageNonTargets;
     int count;

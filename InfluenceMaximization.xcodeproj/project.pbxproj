@@ -42,7 +42,6 @@
 		3179B9472038E75500C80D9A /* catch.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A21F55D54700745401 /* catch.hpp */; };
 		3179B9482038E75500C80D9A /* catchTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A31F55D54700745401 /* catchTest.cpp */; };
 		3179B9492038E75500C80D9A /* TIMCoverageTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D721F63485200FC4D9B /* TIMCoverageTests.cpp */; };
-		3179B94A2038E75500C80D9A /* DiffusionTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D771F6CC18300FC4D9B /* DiffusionTests.cpp */; };
 		3179B94B2038E75500C80D9A /* GraphTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3141B0F51F86BE1500B4F1D2 /* GraphTests.cpp */; };
 		3179B94C2038E75500C80D9A /* ApproximationTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3159634E1F9E8797000EB2F4 /* ApproximationTests.cpp */; };
 		3179B94D2038E75500C80D9A /* TIMEvaluatorTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 315963571F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp */; };
@@ -399,7 +398,6 @@
 				3179B9472038E75500C80D9A /* catch.hpp in Sources */,
 				3179B9482038E75500C80D9A /* catchTest.cpp in Sources */,
 				3179B9492038E75500C80D9A /* TIMCoverageTests.cpp in Sources */,
-				3179B94A2038E75500C80D9A /* DiffusionTests.cpp in Sources */,
 				3179B94B2038E75500C80D9A /* GraphTests.cpp in Sources */,
 				3179B94C2038E75500C80D9A /* ApproximationTests.cpp in Sources */,
 				3179B94D2038E75500C80D9A /* TIMEvaluatorTests.cpp in Sources */,
@@ -624,6 +622,7 @@
 				3179B9452038E6F300C80D9A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		31FC36821F354892005CAFEB /* Build configuration list for PBXProject "InfluenceMaximization" */ = {
 			isa = XCConfigurationList;

@@ -30,4 +30,5 @@ TEST_CASE("Graph is read correctly " , "Graph") {
     randomNumber = graph->generateRandomNumber(randomU, randomV);
     REQUIRE(randomNumber>=0);
     REQUIRE(randomNumber<100);
+    delete graph;
 }

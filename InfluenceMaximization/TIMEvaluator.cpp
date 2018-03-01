@@ -12,6 +12,8 @@
 TIMEvaluator::TIMEvaluator(Graph *graph, ApproximationSetting approximationSetting) {
     this->timCoverage = NULL;
     this->timCoverageNonTargets = NULL;
+    this->reverseMapTargets = NULL;
+    this->reverseMapNonTargets = NULL;
     this->graph = graph;
     this->setting = approximationSetting;
     calculateNonTargets();
@@ -20,6 +22,8 @@ TIMEvaluator::TIMEvaluator(Graph *graph, ApproximationSetting approximationSetti
 }
 
 TIMEvaluator::~TIMEvaluator() {
+    delete this->reverseMapTargets;
+    delete this->reverseMapNonTargets;
     delete this->timCoverage;
     delete this->timCoverageNonTargets;
 }
@@ -61,8 +65,8 @@ void TIMEvaluator::calculateNonTargets() {
     
     int n = this->graph->getNumberOfVertices();
     int R = (int)this->rrSetsNonTargets.size();
-    vector<vector<int>> *lookupTable = new vector<vector<int>>();
-    this->timCoverageNonTargets = new TIMCoverage(lookupTable);
+    this->reverseMapNonTargets = new vector<vector<int>>();
+    this->timCoverageNonTargets = new TIMCoverage(this->reverseMapNonTargets);
     this->timCoverageNonTargets->initializeLookupTable(&this->rrSetsNonTargets, n);
     this->timCoverageNonTargets->initializeDataStructures(R, n);
     
@@ -75,8 +79,8 @@ void TIMEvaluator::calculateTargets() {
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
     graph->generateRandomRRSets(R, true);
     rrSetsTargets = (*graph->getRandomRRSets());
-    vector<vector<int>> *lookupTable = new vector<vector<int>>();
-    this->timCoverage = new TIMCoverage(lookupTable);
+    this->reverseMapTargets = new vector<vector<int>>();
+    this->timCoverage = new TIMCoverage(this->reverseMapTargets);
     this->timCoverage->initializeLookupTable(&rrSetsTargets, n);
     this->timCoverage->initializeDataStructures(R, n);
 }
