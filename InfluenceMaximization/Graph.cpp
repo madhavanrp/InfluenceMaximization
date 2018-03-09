@@ -15,6 +15,10 @@ void Graph::readGraph(string fileName) {
     readGraph(fileName, 0.8);
 }
 
+void Graph::readGraph(string fileName, float percentage) {
+    readGraph(fileName, percentage, LabelSettingUniform);
+}
+
 Graph::Graph() {
     this->standardProbability = false;
 }
@@ -45,11 +49,15 @@ bool Graph:: flipCoinOnEdge(int u, int v) {
     return randomNumber==0;
 }
 
-void Graph::readGraph(string fileName, float percentage) {
+void Graph::readGraph(string fileName, float percentage, LabelSetting labelSetting) {
     this->graphName = fileName;
     this->percentageTargets = percentage;
+    this->labelSetting = labelSetting;
     ifstream myFile("graphs/" + fileName);
     string s;
+    if(!myFile.good()) {
+        throw std::invalid_argument( "Graph file does not exist: " + fileName );
+    }
     if(myFile.is_open()) {
         myFile >> n >> m;
         for(int i =0;i<n;i++) {
@@ -58,7 +66,6 @@ void Graph::readGraph(string fileName, float percentage) {
             inDegree.push_back(0);
         }
         int from, to;
-        float p;
         int maxDegree = 0;
         while (myFile >> from >> to) {
             graph[from].push_back(to);
@@ -78,9 +85,10 @@ void Graph::readGraph(string fileName, float percentage) {
     stream << fixed << setprecision(2) << percentage;
     s = stream.str();
     if(percentage!=1) {
+        string labelFileName = constructLabelFileName(this->graphName, percentage, labelSetting);
         cout << "\n Reading graph: " << fileName;
-        cout << "\n Reading labels file name: " << "graphs/" + fileName + "_" + s + "_labels.txt";
-        readLabels("graphs/" + fileName + "_" + s + "_labels.txt");
+        cout << "\n Reading labels file name: " << labelFileName;
+        readLabels(labelFileName);
     }
     else {
         for (int i=0; i<n; i++) {
@@ -91,10 +99,30 @@ void Graph::readGraph(string fileName, float percentage) {
     }
 }
 
+string Graph::constructLabelFileName(string graphName, float percentageTargets) {
+    return constructLabelFileName(graphName, percentageTargets, LabelSettingUniform);
+}
+
+ string Graph::constructLabelFileName(string graphName, float percentageTargets, LabelSetting labelSetting) {
+    stringstream stream;
+    string folderName = "graphs/";
+    stream << folderName;
+    stream << graphName;
+    stream << fixed << setprecision(2);
+    stream << "_";
+    stream << percentageTargets;
+    stream << "_" << static_cast<int>(labelSetting) << "_labels.txt";
+    return stream.str();
+}
 
 void Graph::readLabels(string fileName) {
     ifstream myFile(fileName);
     bool labelBool;
+    if(!myFile.good()) {
+        throw std::invalid_argument( "Label file does not exist: " + fileName );
+    }
+    string commentLine;
+    getline(myFile, commentLine);
     if(myFile.is_open()) {
         int vertex;
         char label;
@@ -111,18 +139,23 @@ void Graph::readLabels(string fileName) {
     this->numberOfNonTargets = (int)nonTargets.size();
 }
 
-void Graph::writeLabels() {
+void Graph::writeLabels(LabelSetting labelSetting) {
+    writeLabels(labelSetting, "");
+}
+
+void Graph::writeLabels(LabelSetting labelSetting, string comment) {
     string s;
     stringstream stream;
     stream << fixed << setprecision(2) << this->percentageTargets;
     s = stream.str();
-    string labelFileName ="graphs/" + this->graphName + "_" + s + "_labels.txt";
+    string labelFileName = constructLabelFileName(this->graphName, this->percentageTargets, labelSetting);
     
     ofstream myfile;
     string fileName = labelFileName;
     myfile.open (fileName);
     string targetLabel = "A";
     string nonTargetLabel = "B";
+    myfile << "# " << comment << "\n";
     for(int i=0; i<this->n; i++) {
         if(this->labels[i]) {
             myfile << i << " " << targetLabel << "\n";

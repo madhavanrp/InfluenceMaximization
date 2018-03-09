@@ -76,7 +76,6 @@
 		3179B96A2038E7A700C80D9A /* log1.h in Sources */ = {isa = PBXBuildFile; fileRef = 31C4ADA11F787C610077D6BF /* log1.h */; };
 		3179B96B2038E7AF00C80D9A /* IMResults.h in Sources */ = {isa = PBXBuildFile; fileRef = 31279D7A1F6F0CFC00FC4D9B /* IMResults.h */; };
 		3179B96C2038E7AF00C80D9A /* TIMCoverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A120103A04000C70D9 /* TIMCoverage.cpp */; };
-		3179B96E203F85D700C80D9A /* DifferenceTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3179B96D203F85D700C80D9A /* DifferenceTests.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -128,7 +127,6 @@
 		31279D701F63472700FC4D9B /* TIMCoverage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TIMCoverage.hpp; path = "TIM-Models/TIMCoverage.hpp"; sourceTree = "<group>"; };
 		31279D721F63485200FC4D9B /* TIMCoverageTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMCoverageTests.cpp; sourceTree = "<group>"; };
 		31279D751F6CAB3400FC4D9B /* Diffusion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Diffusion.hpp; sourceTree = "<group>"; };
-		31279D771F6CC18300FC4D9B /* DiffusionTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiffusionTests.cpp; sourceTree = "<group>"; };
 		31279D791F6F052C00FC4D9B /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
 		31279D7A1F6F0CFC00FC4D9B /* IMResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IMResults.h; path = IMResults/IMResults.h; sourceTree = "<group>"; };
 		313A589C1F4E072300F86148 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -141,7 +139,7 @@
 		315963571F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMEvaluatorTests.cpp; sourceTree = "<group>"; };
 		315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ApproximationSetting.hpp; sourceTree = "<group>"; };
 		3179B9402038E6F300C80D9A /* InfluenceTests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = InfluenceTests; sourceTree = BUILT_PRODUCTS_DIR; };
-		3179B96D203F85D700C80D9A /* DifferenceTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DifferenceTests.cpp; sourceTree = "<group>"; };
+		3179B9702051F14B00C80D9A /* LabelSetting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LabelSetting.hpp; sourceTree = "<group>"; };
 		31A494991F510CBF00745401 /* IMTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IMTree.cpp; sourceTree = "<group>"; };
 		31A4949A1F510CBF00745401 /* IMTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IMTree.hpp; sourceTree = "<group>"; };
 		31A494A21F55D54700745401 /* catch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
@@ -208,12 +206,10 @@
 				31A494A21F55D54700745401 /* catch.hpp */,
 				31A494A31F55D54700745401 /* catchTest.cpp */,
 				31279D721F63485200FC4D9B /* TIMCoverageTests.cpp */,
-				31279D771F6CC18300FC4D9B /* DiffusionTests.cpp */,
 				3141B0F51F86BE1500B4F1D2 /* GraphTests.cpp */,
 				3159634E1F9E8797000EB2F4 /* ApproximationTests.cpp */,
 				315963571F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp */,
 				311FFDFD20041D1500F68590 /* BaselineGreedyTests.cpp */,
-				3179B96D203F85D700C80D9A /* DifferenceTests.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -271,6 +267,7 @@
 				315963541F9EC153000EB2F4 /* TIMEvaluator.cpp */,
 				315963551F9EC153000EB2F4 /* TIMEvaluator.hpp */,
 				315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */,
+				3179B9702051F14B00C80D9A /* LabelSetting.hpp */,
 				3107F09E1FE4661900EA0135 /* GenerateGraphLabels.cpp */,
 				3107F09F1FE4661900EA0135 /* GenerateGraphLabels.hpp */,
 				310E789C200EB175000C70D9 /* TIMInfluenceCalculator.cpp */,
@@ -447,7 +444,6 @@
 				3179B92B2036309D00C80D9A /* IMTree.hpp in Sources */,
 				3179B92C2036309D00C80D9A /* EstimateNonTargets.cpp in Sources */,
 				3179B92D2036309D00C80D9A /* EstimateNonTargets.hpp in Sources */,
-				3179B96E203F85D700C80D9A /* DifferenceTests.cpp in Sources */,
 				3179B92E2036309D00C80D9A /* TIMUtility.hpp in Sources */,
 				3179B92F2036309D00C80D9A /* Phase2.cpp in Sources */,
 				3179B9302036309D00C80D9A /* Phase2.hpp in Sources */,

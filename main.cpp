@@ -50,6 +50,18 @@ void setupLogger() {
     Output2FILE::Stream() = log_fd;
 }
 
+Graph *createGraphObject(cxxopts::ParseResult result) {
+    string graphFile = result["graph"].as<string>();
+    int percentageTargets = result["percentage"].as<int>();
+    float percentageTargetsFloat = (float)percentageTargets/(float)100;
+    LabelSetting labelSetting = LabelSettingUniform;
+    if(result["labelMethod"].count()>0) {
+        labelSetting = static_cast<LabelSetting>(result["labelMethod"].as<int>());
+    }
+    Graph *graph = new Graph;
+    graph->readGraph(graphFile, percentageTargetsFloat, labelSetting);
+    return graph;
+}
 void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool extendPermutation) {
     DifferenceApproximator differenceApproximator(graph);
     differenceApproximator.setN(graph->getNumberOfVertices());
@@ -112,6 +124,10 @@ void loadResultsFileFrom(cxxopts::ParseResult result) {
         string nonTargetsFileName = result["ntfile"].as<std::string>();
         IMResults::getInstance().setFromFile(true);
         IMResults::getInstance().setNonTargetFileName(nonTargetsFileName);
+    }
+    if(result.count("labelMethod")>0) {
+        LabelSetting setting = static_cast<LabelSetting>(result["labelMethod"].as<int>());
+        IMResults::getInstance().setLabelMethod(setting);
     }
 }
 
@@ -178,8 +194,7 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     IMResults::getInstance().setFromFile(fromFile);
     // insert code here...
     float percentageTargetsFloat = (float)percentageTargets/(float)100;
-    Graph *graph = new Graph;
-    graph->readGraph(graphFileName, percentageTargetsFloat);
+    Graph *graph = createGraphObject(result);
     if(!useIndegree) {
         graph->setPropogationProbability(probability);
     }
@@ -294,7 +309,6 @@ void executeDifferenceAlgorithms(cxxopts::ParseResult result) {
     int budget = result["budget"].as<int>();
     string graphFileName = result["graph"].as<std::string>();
     int percentageTargets = result["percentage"].as<int>();
-    float percentageTargetsFloat = (float)percentageTargets/(float)100;
     ApproximationSetting setting = static_cast<ApproximationSetting>(result["approximation"].as<int>());
     bool extendPermutation = false;
     if(result.count("extend")>0) {
@@ -308,8 +322,7 @@ void executeDifferenceAlgorithms(cxxopts::ParseResult result) {
     cout << "\t Extend: " << extendPermutation;
     cout << flush;
 
-    Graph *graph = new Graph;
-    graph->readGraph(graphFileName, percentageTargetsFloat);
+    Graph *graph = createGraphObject(result);
     loadResultsFileFrom(result);
     loadGraphSizeToResults(graph);
 //    Begin f-g
@@ -325,6 +338,7 @@ void executeDifferenceAlgorithms(cxxopts::ParseResult result) {
     // Setting 1000 as NT threshold. Actually not applicable. TODO: do this better.
     string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting);
     IMResults::getInstance().writeToFile(resultFile);
+    delete graph;
 }
 
 void executeTIMOnLabelledGraph(cxxopts::ParseResult result, bool modular) {
@@ -360,8 +374,7 @@ void executeTIMOnLabelledGraph(cxxopts::ParseResult result, bool modular) {
     delete timCoverage;
     delete unlabelledGraph;
     
-    Graph *labelledGraph = new Graph;
-    labelledGraph->readGraph(graphFileName, percentageTargetsFloat);
+    Graph *labelledGraph = createGraphObject(result);
     loadResultsFileFrom(result);
     
     TIMInfluenceCalculator  timInfluenceCalculator(labelledGraph, 2);
@@ -396,8 +409,7 @@ void executeBaselineGreedy(cxxopts::ParseResult result) {
     
     loadResultsFileFrom(result);
     
-    Graph *graph = new Graph;
-    graph->readGraph(graphFileName, percentageTargetsFloat);
+    Graph *graph = createGraphObject(result);
     if(result.count("p")>0) {
         double probability = result["p"].as<double>();
         graph->setPropogationProbability(probability);
@@ -492,10 +504,31 @@ void executeHeuristic3(cxxopts::ParseResult result) {
 void generateGraphLabels(cxxopts::ParseResult result) {
     string graphFileName = result["graph"].as<std::string>();
     int percentageTargets = result["percentage"].as<int>();
+    LabelSetting labelSetting = LabelSettingUniform;
+    if(result["labelMethod"].count()>0) {
+        labelSetting = static_cast<LabelSetting>(result["labelMethod"].as<int>());
+    }
     float percentageTargetsFloat = (float)percentageTargets/(float)100;
     Graph *graph = new Graph;
     graph->readGraph(graphFileName, 1);
-    GenerateGraphLabels(graph, percentageTargetsFloat);
+    GenerateGraphLabels(graph, percentageTargetsFloat, labelSetting);
+    delete graph;
+}
+
+void createLabelFileIfNotExists(cxxopts::ParseResult result) {
+    string graphName = result["graph"].as<string>();
+    LabelSetting labelMethod = LabelSettingUniform;
+    if(result["labelMethod"].count()>0) {
+        labelMethod = static_cast<LabelSetting>(result["labelMethod"].as<int>());
+    }
+    
+    float percentage = (float)result["percentage"].as<int>()/(float)100;
+    string labelFileName = Graph::constructLabelFileName(graphName, percentage, labelMethod);
+    ifstream labelFile(labelFileName);
+    if (!labelFile.good()) {
+        generateGraphLabels(result);
+    }
+    
 }
 
 int main(int argc, char **argv) {
@@ -514,27 +547,31 @@ int main(int argc, char **argv) {
     ("n,ntfile", "Non Targets File name", cxxopts::value<std::string>())
     ("p,probability", "Propogation probability", cxxopts::value<double>())
     ("approximation", " Approximation Settings", cxxopts::value<int>())
-    ("e,extend", "Extend the permutation");
+    ("e,extend", "Extend the permutation")
+    ("labelMethod", "Labelling Strategy", cxxopts::value<int>());
     auto result = options.parse(argc, argv);
     string algorithm = result["algorithm"].as<string>();
     if(result["algorithm"].count()>0 && algorithm.compare("generate")==0) {
         generateGraphLabels(result);
-    } else if(result["algorithm"].count()>0 && algorithm.compare("timtim")==0) {
-        executeTIMTIM(result);
-    } else if(result["algorithm"].count()>0 && algorithm.compare("tim")==0) {
-        cout << "\n Executing just TIM";
-        executeTIMOnLabelledGraph(result, false);
-        
-    } else if(result["algorithm"].count()>0 && algorithm.compare("timmodular")==0 ) {
-        executeTIMOnLabelledGraph(result, true);
-    } else if(result["algorithm"].count()>0 && algorithm.compare("baseline")==0 ) {
-        executeBaselineGreedy(result);
-    } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic2")==0 ) {
-        executeHeuristic2(result);
-    } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic3")==0 ) {
-        executeHeuristic3(result);
-    }else {
-        executeDifferenceAlgorithms(result);
+    } else{
+        createLabelFileIfNotExists(result);
+        if(result["algorithm"].count()>0 && algorithm.compare("timtim")==0) {
+            executeTIMTIM(result);
+        } else if(result["algorithm"].count()>0 && algorithm.compare("tim")==0) {
+            cout << "\n Executing just TIM";
+            executeTIMOnLabelledGraph(result, false);
+            
+        } else if(result["algorithm"].count()>0 && algorithm.compare("timmodular")==0 ) {
+            executeTIMOnLabelledGraph(result, true);
+        } else if(result["algorithm"].count()>0 && algorithm.compare("baseline")==0 ) {
+            executeBaselineGreedy(result);
+        } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic2")==0 ) {
+            executeHeuristic2(result);
+        } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic3")==0 ) {
+            executeHeuristic3(result);
+        }else {
+            executeDifferenceAlgorithms(result);
+        }
     }
     
     disp_mem_usage("");

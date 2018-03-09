@@ -8,16 +8,9 @@
 
 #include "GenerateGraphLabels.hpp"
 
-GenerateGraphLabels::GenerateGraphLabels(Graph *graph, float percentage, LabelSetting setting) {
+void GenerateGraphLabels::initializeDataAndGenerate(Graph *graph, float percentage, LabelSetting labelSetting) {
     this->graph = graph;
-    this->setting = setting;
-    this->percentage = percentage;
-    generate();
-}
-
-GenerateGraphLabels::GenerateGraphLabels(Graph *graph, float percentage) {
-    this->graph = graph;
-    this->setting = LabelSettingTIMNonTargets;
+    this->setting = labelSetting;
     this->percentage = percentage;
     this->totalNumberOfNonTargets = 0;
     int n = graph->getNumberOfVertices();
@@ -29,6 +22,13 @@ GenerateGraphLabels::GenerateGraphLabels(Graph *graph, float percentage) {
     }
     generate();
 }
+GenerateGraphLabels::GenerateGraphLabels(Graph *graph, float percentage, LabelSetting setting) {
+    initializeDataAndGenerate(graph, percentage, setting);
+}
+
+GenerateGraphLabels::GenerateGraphLabels(Graph *graph, float percentage) {
+    initializeDataAndGenerate(graph, percentage, LabelSettingUniform);
+}
 
 void GenerateGraphLabels::doDFSWithLabel(int currentNode, int currentDepth, int depthLimit) {
     if(currentDepth>depthLimit) return;
@@ -39,7 +39,7 @@ void GenerateGraphLabels::doDFSWithLabel(int currentNode, int currentDepth, int 
     float probability = 0.75f;
     vector<vector<int>> *adjacencyList = this->graph->getGraph();
     for(int neighbour: (*adjacencyList)[currentNode]) {
-        float randomFloat = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/probability));
+        float randomFloat = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX));
         if(randomFloat<=probability && !this->labels[currentNode]) {
             doDFSWithLabel(neighbour, currentDepth+1, depthLimit);
         }
@@ -50,19 +50,36 @@ void GenerateGraphLabels::generate() {
     int n = this->graph->getNumberOfVertices();
     int numberOfTargets = round((float)n * this->percentage);
     int numberOfNonTargets = n - numberOfTargets;
+    string comment;
     switch (this->setting) {
-        case LabelSetting1:
+        case LabelSettingClusters:
+            comment = "Label Setting Clusters with depth level=" + to_string(2);
             generateWithSetting1(numberOfTargets, numberOfNonTargets);
             break;
         case LabelSettingTIMNonTargets:
+            comment = "Find Influence Maximization seed set, do diffusion and label as non targets";
             generateWithTIMNonTargets(numberOfTargets, numberOfNonTargets);
-            
+            break;
+        case LabelSettingUniform:
+            comment = " Each node is target with probability equal to percentage";
+            generateUniformRandom();
+            break;
         default:
-            generateWithSetting1(numberOfTargets, numberOfNonTargets);
+            comment = " Each node is target with probability equal to percentage";
+            generateUniformRandom();
             break;
     }
     this->graph->setLabels(this->labels, this->percentage);
-    this->graph->writeLabels();
+    this->graph->writeLabels(this->setting, comment);
+}
+
+void GenerateGraphLabels::generateUniformRandom() {
+    int n = graph->getNumberOfVertices();
+    for (int i=0; i<n; i++) {
+        float randomFloat = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX));
+        this->labels[i] = (randomFloat<=this->percentage);
+    }
+    
 }
 
 void GenerateGraphLabels::generateWithSetting1(int numberOfTargets, int numberOfNonTargets) {
@@ -101,13 +118,9 @@ void GenerateGraphLabels::generateWithTIMNonTargets(int numberOfTargets, int num
     timCoverage->initializeDataStructures(R, n);
     set<int> seedSet;
     double scalingFactor = (double)n/(double)R;
-    double summation = 0;
     while(timCoverage->getNumberOfRRSetsCovered() * scalingFactor< numberOfNonTargets ) {
         pair<int, double> nodeWithInfluence = timCoverage->findMaxInfluentialNodeAndUpdateModel(rrSets);
         seedSet.insert(nodeWithInfluence.first);
-        summation+=nodeWithInfluence.second;
-        double shouldBe = timCoverage->getNumberOfRRSetsCovered() * scalingFactor;
-//        assert(summation==(timCoverage->getNumberOfRRSetsCovered() * scalingFactor));
     }
     delete timCoverage;
     set<int> activatedSet = findActivatedSetAndInfluenceUsingDiffusion(graph, seedSet, NULL).second;

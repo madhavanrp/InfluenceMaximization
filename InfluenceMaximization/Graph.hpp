@@ -18,7 +18,12 @@
 #include <ctime>
 #include <deque>
 #include <string.h>
+#include <stdexcept>
+#include "LabelSetting.hpp"
+
 using namespace std;
+
+
 
 class Graph {
 private:
@@ -30,6 +35,7 @@ private:
     vector<int> nonTargets;
     int numberOfTargets;
     int numberOfNonTargets;
+    LabelSetting labelSetting;
     
     int n, m;
     vector<vector<int> > graph;
@@ -44,9 +50,15 @@ public:
     vector<int> visitMark;
     void readGraph(string fileName);
     void readGraph(string fileName, float percentage);
+    void readGraph(string fileName, float percentage, LabelSetting labelSetting);
+    
+    //Labels
     void readLabels(string fileName);
-    void writeLabels();
+    void writeLabels(LabelSetting labelSetting);
+    void writeLabels(LabelSetting labelSetting, string comment);
     void setLabels(vector<bool> labels, float percentageTargets);
+    static string constructLabelFileName(string graphName, float percentageTargets);
+    static string constructLabelFileName(string graphName, float percentageTargets, LabelSetting setting);
     
     //Numbers
     int getNumberOfVertices();
