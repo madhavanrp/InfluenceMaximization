@@ -164,6 +164,14 @@ pair<double, double> TIMEvaluator::findInfluence(set<int> *seedSet) {
             nonTargetsInfluenced = findInfluenceOnNonTargets(seedSet);
             break;
         }
+        case setting5: {
+            targetsInfluenced = 0;
+            for (int seed:*seedSet) {
+                nonTargetsInfluenced+= findSingleNodeNonTargetsInfluence(seed);
+            }
+            
+        }
+        break;
     }
     
     return make_pair(targetsInfluenced, nonTargetsInfluenced);
