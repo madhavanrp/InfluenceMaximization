@@ -11,6 +11,8 @@
 
 #include "../IMTree.hpp"
 #include "../ApproximationSetting.hpp"
+#include "../LabelSetting.hpp"
+
 using json = nlohmann::json;
 
 using namespace std;
@@ -150,6 +152,25 @@ public:
     
     void setNumberOfEdges(int m) {
         data["numberOfEdges"] = m;
+    }
+    
+    void setLabelMethod(LabelSetting labelMethod) {
+        string method;
+        switch (labelMethod) {
+            case LabelSettingUniform:
+                method = "uniform";
+                break;
+            case LabelSettingClusters:
+                method = "clusters";
+                break;
+            case LabelSettingTIMNonTargets:
+                method="timNonTargets";
+                break;
+            default:
+                throw std::invalid_argument( "Label Setting is invalid");
+                break;
+        }
+        data["labelMethod" ] = method;
     }
 };
 #endif /* IMResults_h */

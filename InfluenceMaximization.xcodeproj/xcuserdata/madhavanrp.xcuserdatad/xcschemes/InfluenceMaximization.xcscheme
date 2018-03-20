@@ -64,7 +64,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "--algorithm difference --graph ca-GrQc-processed.txt --percentage 75 --budget 20 --approximation 2"
+            argument = "--algorithm generate --graph ca-GrQc-processed.txt --percentage 25 --labelMethod 1"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm difference --graph ca-GrQc-processed.txt --percentage 70 --labelMethod 2 --budget 20 --approximation 0"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
