@@ -227,6 +227,23 @@ set<int> DifferenceApproximator::executeGreedyAlgorithmAdjustingPermutation(Appr
     return seedSet;
 }
 
+// This will treat g as a modular function and approximate f-g_approx
+set<int> DifferenceApproximator::executeAlgorithmModularG(int k) {
+    set<int> seedSet;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> orderedNodes;
+    TIMEvaluator *timEvaluator = new TIMEvaluator(this->graph, setting5);
+    TIMCoverage *timCoverageTargets = timEvaluator->getTIMCoverage();
+    double reverseScale = (double)1/timEvaluator->getScalingFactorTargets();
+    
+    for (int i=0; i<graph->getNumberOfVertices(); i++) {
+        double nonTargetsEstimate = timEvaluator->findSingleNodeNonTargetsInfluence(i);
+        timCoverageTargets->offsetCoverage(i, nonTargetsEstimate * reverseScale * -1);
+    }
+    seedSet = timCoverageTargets->findTopKNodes(k, timEvaluator->getRRSetsTargets());
+    delete timEvaluator;
+    
+    return seedSet;
+}
 
 // Call this function with setting 3. This will approximate only g while optimizing: f - g_aprox
 set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunction(ApproximationSetting setting, int k) {

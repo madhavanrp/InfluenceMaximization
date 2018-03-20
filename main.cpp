@@ -72,6 +72,8 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
         } else {
             seedSet = differenceApproximator.executeAlgorithmApproximatingOneFunctionExtendPermutation(setting, budget);
         }
+    } else if(setting==setting5) {
+        seedSet = differenceApproximator.executeAlgorithmModularG(budget);
     } else {
         if(!extendPermutation) {
             seedSet = differenceApproximator.executeGreedyAlgorithm(setting, budget);

@@ -64,6 +64,8 @@ public:
     set<int> executeGreedyAlgorithmAdjustingPermutation(ApproximationSetting setting, int k);
     set<int> executeAlgorithmApproximatingOneFunction(ApproximationSetting setting, int k);
     set<int> executeAlgorithmApproximatingOneFunctionExtendPermutation(ApproximationSetting setting, int k);
+    
+    set<int> executeAlgorithmModularG(int k);
 };
 
 #endif /* DifferenceApproximator_hpp */
