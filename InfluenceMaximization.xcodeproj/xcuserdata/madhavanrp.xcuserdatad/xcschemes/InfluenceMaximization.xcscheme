@@ -68,11 +68,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--algorithm difference --graph ca-GrQc-processed.txt --percentage 70 --labelMethod 2 --budget 20 --approximation 0"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "--algorithm difference --graph ca-GrQc-processed.txt --percentage 80 --labelMethod 0 --budget 20 --approximation 4"
+            argument = "--algorithm difference --graph ca-GrQc-processed.txt --percentage 70 --labelMethod 0 --budget 20 --approximation 5"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

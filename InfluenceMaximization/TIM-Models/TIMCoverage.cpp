@@ -33,6 +33,10 @@ int TIMCoverage::numberOfNewRRSetsCoveredByVertex(int vertex) {
     return this->coverage[vertex];
 }
 
+double TIMCoverage::marginalGainWithVertex(int vertex, double scalingFactor) {
+    return (this->coverage[vertex] * scalingFactor);
+}
+
 void TIMCoverage::offsetCoverage(int vertex, int offset) {
     this->coverage[vertex] = this->coverage[vertex] + offset;
 }
@@ -48,6 +52,13 @@ void TIMCoverage::initializeLookupTable(vector<vector<int>>* randomRRSets, int n
         for(int vertex: (*randomRRSets)[rrSetID]) {
             incrementCountForVertex(vertex, rrSetID);
         }
+    }
+}
+
+void TIMCoverage::updatePriorityQueueWithCurrentValues() {
+    this->queue = priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>();
+    for (int i=0; i<this->nodeMark.size(); i++) {
+        this->queue.push(make_pair(i, this->coverage[i]));
     }
 }
 
@@ -204,7 +215,7 @@ void TIMCoverage::addToSeed(int vertex, vector<vector<int>> *rrSets) {
     }
 }
 
-int TIMCoverage::findInfluence(set<int> seedSet, double scalingFactor) {
+double TIMCoverage::findInfluence(set<int> seedSet, double scalingFactor) {
     // Should not update anything
     // For each vertex in seed set:
     //  Go to each rr set covered. Mark edgeMark[rrSet Covered] as true
@@ -220,15 +231,11 @@ int TIMCoverage::findInfluence(set<int> seedSet, double scalingFactor) {
             rrSetsCovered++;
         }
     }
-    return round((double)rrSetsCovered * scalingFactor);
+//    return round((double)rrSetsCovered * scalingFactor);
+    return rrSetsCovered * scalingFactor;
 }
 
 int TIMCoverage::getNumberOfRRSetsCovered() {
-//    int count=0;
-//    for(bool edge: edgeMark) {
-//        if(edge) count++;
-//    }
-//    assert(count==this->numberOfRRSetsCovered);
     return this->numberOfRRSetsCovered;
 }
 

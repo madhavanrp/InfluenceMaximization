@@ -49,11 +49,13 @@ public:
     
     int countForVertex(int u);
     int numberOfNewRRSetsCoveredByVertex(int vertex);
+    double marginalGainWithVertex(int vertex, double scalingFactor);
     void incrementRRSetsCovered(int number);
     
     vector<int> getRRSetsCoveredByVertex(int vertex);
     
-    void offsetCoverage(int vertex, int offset) ;
+    void offsetCoverage(int vertex, int offset);
+    void updatePriorityQueueWithCurrentValues();
     
     void initializeLookupTable(vector<vector<int>>* randomRRSets, int n) ;
     
@@ -71,7 +73,7 @@ public:
     
     void addToSeed(int vertex, vector<vector<int>> *rrSets);
 
-    int findInfluence(set<int> seedSet, double scalingFactor);
+    double findInfluence(set<int> seedSet, double scalingFactor);
     int getNumberOfRRSetsCovered();
     
     vector<bool> *getNodeMark();

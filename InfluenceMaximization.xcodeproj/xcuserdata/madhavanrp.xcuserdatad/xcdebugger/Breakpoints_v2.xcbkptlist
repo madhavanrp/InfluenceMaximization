@@ -2,4 +2,70 @@
 <Bucket
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "InfluenceMaximization/DifferenceApproximator.cpp"
+            timestampString = "543365206.094546"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "408"
+            endingLineNumber = "408"
+            landmarkName = "DifferenceApproximator::executeSupSubProcedure(int k)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "InfluenceMaximization/DifferenceApproximator.cpp"
+            timestampString = "543369996.2955281"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "405"
+            endingLineNumber = "405"
+            landmarkName = "DifferenceApproximator::executeSupSubProcedure(int k)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DifferenceApproximator::executeSupSubProcedure(int)"
+                  moduleName = "InfluenceMaximization"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/madhavanrp/XCodeProjects/InfluenceMaximization/InfluenceMaximization/InfluenceMaximization/DifferenceApproximator.cpp"
+                  timestampString = "543369996.507854"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "405"
+                  endingLineNumber = "405"
+                  offsetFromSymbolStart = "2156">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DifferenceApproximator::executeSupSubProcedure(int)"
+                  moduleName = "InfluenceMaximization"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/madhavanrp/XCodeProjects/InfluenceMaximization/InfluenceMaximization/InfluenceMaximization/DifferenceApproximator.cpp"
+                  timestampString = "543369996.5123349"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "405"
+                  endingLineNumber = "405"
+                  offsetFromSymbolStart = "4132">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

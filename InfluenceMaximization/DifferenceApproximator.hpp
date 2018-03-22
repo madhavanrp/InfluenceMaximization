@@ -16,6 +16,7 @@
 #include "Graph.hpp"
 #include <algorithm>
 #include "ApproximationSetting.hpp"
+#include "TIMInfluenceCalculator.hpp"
 
 using namespace std;
 
@@ -44,6 +45,7 @@ public:
     void findAllApproximations();
     double evaluateFunction(set<int> elements);
     double evaluateFunction(int element);
+    
 };
 
 class DifferenceApproximator {
@@ -66,6 +68,9 @@ public:
     set<int> executeAlgorithmApproximatingOneFunctionExtendPermutation(ApproximationSetting setting, int k);
     
     set<int> executeAlgorithmModularG(int k);
+    set<int> executeSupSubProcedure(int k);
+    vector<double> calculateUpperBound(TIMCoverage *timCoverageNonTargets, double scalingFactorNonTargets, set<int> relativeSet);
+    set<int> randGreedyCSO(TIMCoverage *timCoverageDifference, vector<vector<int>> *rrSets);
 };
 
 #endif /* DifferenceApproximator_hpp */
