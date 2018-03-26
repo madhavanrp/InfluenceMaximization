@@ -56,8 +56,12 @@ void TIMCoverage::initializeLookupTable(vector<vector<int>>* randomRRSets, int n
 }
 
 void TIMCoverage::updatePriorityQueueWithCurrentValues() {
-    this->queue = priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>();
-    for (int i=0; i<this->nodeMark.size(); i++) {
+//    this->queue = priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>();
+    while (!this->queue.empty()) {
+        this->queue.pop();
+    }
+    
+    for (int i=0; i<this->coverage.size(); i++) {
         this->queue.push(make_pair(i, this->coverage[i]));
     }
 }
@@ -223,9 +227,8 @@ double TIMCoverage::findInfluence(set<int> seedSet, double scalingFactor) {
     vector<int> edgeMarkTemporary(this->edgeMark.size(), false);
     int rrSetsCovered = 0;
     for(int seed:seedSet) {
-        int numberCovered = this->countForVertex(seed);
-        vector<int> edgeInfluence = (*this->lookupTable)[seed];
-        for (int rrSetID: edgeInfluence) {
+        vector<int> *edgeInfluence = &(*this->lookupTable)[seed];
+        for (int rrSetID: *edgeInfluence) {
             if(edgeMarkTemporary[rrSetID]) continue;
             edgeMarkTemporary[rrSetID] = true;
             rrSetsCovered++;
@@ -233,6 +236,55 @@ double TIMCoverage::findInfluence(set<int> seedSet, double scalingFactor) {
     }
 //    return round((double)rrSetsCovered * scalingFactor);
     return rrSetsCovered * scalingFactor;
+}
+
+vector<double> TIMCoverage::singleNodeMarginalGainWRTSet(vector<int> X, double scalingFactor) {
+    vector<double> marginalGainWRTSet(X.size());
+//    unordered_map<int, int> unmap;
+//    unmap[1] = 2;
+//    for (int i=0; i<X.size(); i++) {
+//        marginalGainWRTSet[i] = rand() % 10;
+//    }
+//    for (int seed:X) {
+//        vector<int> someList = (*this->lookupTable)[seed];
+//    }
+//    return marginalGainWRTSet;
+    
+    vector<bool> edgeMarkTemporary(this->edgeMark.size(), false);
+    unordered_map<int, int> rrSetToVertices;
+    int rrSetsCovered = 0;
+    vector<int> edgeInfluence;
+    for(int seed:X) {
+        assert(seed<this->nodeMark.size()&& seed>=0);
+        edgeInfluence = (*this->lookupTable)[seed];
+        for (int rrSetID: edgeInfluence) {
+            assert(rrSetID>=0 && rrSetID<this->edgeMark.size());
+            if(rrSetToVertices.find(rrSetID)==rrSetToVertices.end()) {
+                rrSetToVertices[rrSetID] = 0;
+            }
+            rrSetToVertices[rrSetID] = rrSetToVertices[rrSetID]+1;
+            if(edgeMarkTemporary[rrSetID]) continue;
+            edgeMarkTemporary[rrSetID] = true;
+            rrSetsCovered++;
+        }
+    }
+    assert(rrSetToVertices.size()==rrSetsCovered);
+    int marginalGain, seed;
+    for (int i=0; i<X.size(); i++) {
+        seed = X[i];
+        assert(seed<this->nodeMark.size() && seed>=0);
+        marginalGain = 0;
+        edgeInfluence = (*this->lookupTable)[seed];
+        for (int rrSetID: edgeInfluence) {
+            assert(rrSetID>=0 && rrSetID<this->edgeMark.size());
+            assert(rrSetToVertices.find(rrSetID)!=rrSetToVertices.end());
+            if(rrSetToVertices[rrSetID] == 1) {
+                marginalGain++;
+            }
+        }
+        marginalGainWRTSet[i] = marginalGain * scalingFactor;
+    }
+    return marginalGainWRTSet;
 }
 
 int TIMCoverage::getNumberOfRRSetsCovered() {
@@ -251,6 +303,7 @@ vector<bool>* TIMCoverage::getEdgeMark() {
 }
 
 TIMCoverage::TIMCoverage( const TIMCoverage &obj) {
+    
     queue = obj.queue;
     lookupTable = obj.lookupTable;
     R = obj.R;
@@ -265,6 +318,27 @@ TIMCoverage::TIMCoverage( const TIMCoverage &obj) {
     for(int x: obj.coverage) {
         coverage.push_back(x);
     }
+}
+
+TIMCoverage& TIMCoverage::operator=( const TIMCoverage &obj) {
+    if (&obj==this) {
+        return *this;
+    }
+    queue = obj.queue;
+    lookupTable = obj.lookupTable;
+    R = obj.R;
+    numberOfRRSetsCovered = obj.numberOfRRSetsCovered;
+    for(bool x: obj.nodeMark) {
+        nodeMark.push_back(x);
+    }
+    
+    for(bool x: obj.edgeMark) {
+        edgeMark.push_back(x);
+    }
+    for(int x: obj.coverage) {
+        coverage.push_back(x);
+    }
+    return *this;
 }
 
 TIMCoverage::~TIMCoverage() {

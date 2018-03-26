@@ -383,62 +383,95 @@ vector<double> DifferenceApproximator::calculateUpperBound(TIMCoverage *timCover
 set<int> DifferenceApproximator::executeSupSubProcedure(int k) {
     set<int> seedSet, previousSeedSet;
     TIMEvaluator *timEvaluator = new TIMEvaluator(this->graph, setting5);
+    double scalingFactorNonTargets = timEvaluator->getScalingFactorNonTargets();
     TIMCoverage *timCoverageDifference = timEvaluator->getTIMCoverage();
+    TIMCoverage *timCoverageNonTargets = timEvaluator->getTIMCoverageNonTargets();
     int n = graph->getNumberOfVertices();
+    vector<double> approximations;
+    for (int v=0; v<n; v++) {
+        approximations.push_back(timEvaluator->findSingleNodeNonTargetsInfluence(v));
+    }
+    int iteration = 0;
+    
     do {
+        vector<int> seedVector;
         previousSeedSet = seedSet;
         
-        //Calulate approximations
-        vector<double> approximations = calculateUpperBound(timCoverageDifference, timEvaluator->getScalingFactorNonTargets(), previousSeedSet);
+        for (int u: previousSeedSet) {
+            seedVector.push_back(u);
+        }
+        vector<double> marginalGains = timCoverageNonTargets->singleNodeMarginalGainWRTSet(seedVector, scalingFactorNonTargets);
+        assert(marginalGains.size()==seedVector.size());
+        
+        //Adjust approximations
+        for (int i=0; i<seedVector.size(); i++) {
+            approximations[seedVector[i]]= approximations[seedVector[i]] + marginalGains[i] - timEvaluator->findSingleNodeNonTargetsInfluence(seedVector[i]);
+        }
+        
         for(int i=0; i<n; i++) {
             timCoverageDifference->offsetCoverage(i, -1 * (1/timEvaluator->getScalingFactorTargets()) * approximations[i]);
         }
+        timCoverageDifference->updatePriorityQueueWithCurrentValues();
         
+        TIMCoverage *coveragePointer = timEvaluator->getTIMCoverage();
+        vector<vector<int>> *rrSetsPointer = timEvaluator->getRRSetsTargets();
+        seedSet = randGreedyCSO(*coveragePointer, rrSetsPointer, k);
         
-        seedSet = randGreedyCSO(timEvaluator->getTIMCoverage(), timEvaluator->getRRSetsTargets());
-        
-        // Set it back
         for(int i=0; i<n; i++) {
-            timCoverageDifference->offsetCoverage(i,(1/timEvaluator->getScalingFactorTargets()) * approximations[i]);
+            timCoverageDifference->offsetCoverage(i, 1 * (1/timEvaluator->getScalingFactorTargets()) * approximations[i]);
         }
+        timCoverageDifference->updatePriorityQueueWithCurrentValues();
         
+        // Adjust approximations back
+        for (int i=0; i<seedVector.size(); i++) {
+            approximations[seedVector[i]]= approximations[seedVector[i]] - marginalGains[i] + timEvaluator->findSingleNodeNonTargetsInfluence(seedVector[i]);
+        }
+        iteration++;
+        if(iteration%300==0) {
+            set<int> s3;
+            set_intersection(previousSeedSet.begin(), previousSeedSet.end(), seedSet.begin(), seedSet.end(), std::inserter(s3,s3.begin()));
+            cout << "\n Completed iteration: " << iteration;
+            cout <<"\n Set intersection size is " << s3.size() << flush;
+        }
+    
     } while(seedSet!=previousSeedSet);
     
     delete timEvaluator;
     return seedSet;
 }
 
-set<int> DifferenceApproximator::randGreedyCSO(TIMCoverage *timCoverageDifference, vector<vector<int>> *rrSets) {
+set<int> DifferenceApproximator::randGreedyCSO(TIMCoverage timCoverageDifference, vector<vector<int>> *rrSets, int budget) {
     set<int> seedSet;
-    int k = 10;
-    int n = graph->getNumberOfVertices();
-    set<int> allVertices;
-    for (int i=0; i<n; i++) {
-        allVertices.insert(i);
-    }
-    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> queue;
-    int currentInfluence;
-    for (int i=0; i<k; i++) {
-        int mg;
-        currentInfluence = timCoverageDifference->findInfluence(seedSet, 1);
-        for (int u:allVertices) {
-            seedSet.insert(u);
-            int newInfluence = timCoverageDifference->findInfluence(seedSet, 1);
-            mg = currentInfluence - newInfluence;
-            seedSet.erase(u);
-            queue.push(make_pair(u, mg));
-            
+    int k = budget;
+    vector<int> *coverage = &timCoverageDifference.coverage;
+    while (seedSet.size()<k) {
+        priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> queue(timCoverageDifference.queue);
+        vector<pair<int, int>> topKPairs;
+        int i=0;
+        while(i<k) {
+            pair<int, int> nodeWithCoverage = make_pair(-1, -1);
+            bool nodeFound = false;
+            while (!queue.empty() && !nodeFound) {
+                nodeWithCoverage = queue.top();
+                queue.pop();
+                if(nodeWithCoverage.second>(*coverage)[nodeWithCoverage.first]) {
+                    queue.push(make_pair(nodeWithCoverage.first, (*coverage)[nodeWithCoverage.first]));
+                    continue;
+                }
+                if(seedSet.find(nodeWithCoverage.first)==seedSet.end()) nodeFound = true;
+            }
+            if(!nodeFound) {
+                break;
+            }
+            topKPairs.push_back(nodeWithCoverage);
+            i++;
         }
-        vector<int> topK;
-        for (int j=0; j<k; j++) {
-            topK.push_back( queue.top().first);
-            queue.pop();
-        }
+        assert(topKPairs.size()==k);
         int randomUIndex = rand() % k;
-        int randomU = topK[randomUIndex];
-//        timCoverageDifference->addToSeed(randomU, NULL);
+        int randomU = topKPairs[randomUIndex].first;
         seedSet.insert(randomU);
-        allVertices.erase(randomU);
+        timCoverageDifference.addToSeed(randomU, rrSets);
+        
     }
     
     return seedSet;

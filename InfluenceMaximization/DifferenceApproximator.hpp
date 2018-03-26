@@ -9,7 +9,7 @@
 #ifndef DifferenceApproximator_hpp
 #define DifferenceApproximator_hpp
 
-#include <stdio.h>
+#include <iostream>
 #include <vector>
 #include <set>
 #include "TIMEvaluator.hpp"
@@ -70,7 +70,7 @@ public:
     set<int> executeAlgorithmModularG(int k);
     set<int> executeSupSubProcedure(int k);
     vector<double> calculateUpperBound(TIMCoverage *timCoverageNonTargets, double scalingFactorNonTargets, set<int> relativeSet);
-    set<int> randGreedyCSO(TIMCoverage *timCoverageDifference, vector<vector<int>> *rrSets);
+    set<int> randGreedyCSO(TIMCoverage timCoverageDifference, vector<vector<int>> *rrSets, int budget);
 };
 
 #endif /* DifferenceApproximator_hpp */

@@ -62,6 +62,9 @@ Graph *createGraphObject(cxxopts::ParseResult result) {
     graph->readGraph(graphFile, percentageTargetsFloat, labelSetting);
     return graph;
 }
+void testFunction(TIMCoverage t) {
+    cout << "\n test function called";
+}
 void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool extendPermutation) {
     DifferenceApproximator differenceApproximator(graph);
     differenceApproximator.setN(graph->getNumberOfVertices());
@@ -76,6 +79,7 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
         seedSet = differenceApproximator.executeAlgorithmModularG(budget);
     } else if(setting==setting6) {
         seedSet = differenceApproximator.executeSupSubProcedure(budget);
+        
     } else {
         if(!extendPermutation) {
             seedSet = differenceApproximator.executeGreedyAlgorithm(setting, budget);

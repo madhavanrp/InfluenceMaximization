@@ -86,7 +86,7 @@ void TIMEvaluator::calculateTargets() {
 }
 
 double TIMEvaluator::findInfluenceOnTargets(set<int> *seedSet) {
-    //Don't create copy for now. TODO: Complete this correctly
+    //Don't create copy for now. TODO: Complete this without updating model
     TIMCoverage *timCoverage = this->timCoverage;
     double scalingFactor = getScalingFactorTargets();
     double scaledInfluence = findGenericInfluence(seedSet, timCoverage, &this->rrSetsTargets, scalingFactor);

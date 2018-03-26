@@ -10,12 +10,14 @@
 #ifndef TIMCoverage_c
 #define TIMCoverage_c
 
-#include <stdio.h>
-#include <algorithm>
+#include <iostream>
 #include <assert.h>
 #include <queue>
 #include <set>
 #include <math.h>
+#include <unordered_map>
+#include <unordered_set>
+
 using namespace std;
 
 struct QueueComparator {
@@ -74,11 +76,13 @@ public:
     void addToSeed(int vertex, vector<vector<int>> *rrSets);
 
     double findInfluence(set<int> seedSet, double scalingFactor);
+    vector<double> singleNodeMarginalGainWRTSet(vector<int> X, double scalingFactor);
     int getNumberOfRRSetsCovered();
     
     vector<bool> *getNodeMark();
     vector<bool> *getEdgeMark();
     TIMCoverage( const TIMCoverage &obj);
+    TIMCoverage& operator=( const TIMCoverage &obj);
     ~TIMCoverage();
 };
 
