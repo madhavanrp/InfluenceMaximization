@@ -11,6 +11,7 @@
 #define TIMCoverage_c
 
 #include <iostream>
+#include <algorithm>
 #include <assert.h>
 #include <queue>
 #include <set>

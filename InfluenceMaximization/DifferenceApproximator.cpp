@@ -393,6 +393,7 @@ set<int> DifferenceApproximator::executeSupSubProcedure(int k) {
     }
     int iteration = 0;
     
+    bool converge = false;
     do {
         vector<int> seedVector;
         previousSeedSet = seedSet;
@@ -427,14 +428,20 @@ set<int> DifferenceApproximator::executeSupSubProcedure(int k) {
             approximations[seedVector[i]]= approximations[seedVector[i]] - marginalGains[i] + timEvaluator->findSingleNodeNonTargetsInfluence(seedVector[i]);
         }
         iteration++;
+        
+        
+        set<int> s3;
+        set_intersection(previousSeedSet.begin(), previousSeedSet.end(), seedSet.begin(), seedSet.end(), std::inserter(s3,s3.begin()));
+        converge = (s3.size()>= (0.7 * k));
         if(iteration%300==0) {
-            set<int> s3;
-            set_intersection(previousSeedSet.begin(), previousSeedSet.end(), seedSet.begin(), seedSet.end(), std::inserter(s3,s3.begin()));
             cout << "\n Completed iteration: " << iteration;
             cout <<"\n Set intersection size is " << s3.size() << flush;
         }
-    
-    } while(seedSet!=previousSeedSet);
+        if(iteration>5000) {
+            converge = true;
+            seedSet.clear();
+        }
+    } while(!converge);
     
     delete timEvaluator;
     return seedSet;

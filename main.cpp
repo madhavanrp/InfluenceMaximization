@@ -62,10 +62,9 @@ Graph *createGraphObject(cxxopts::ParseResult result) {
     graph->readGraph(graphFile, percentageTargetsFloat, labelSetting);
     return graph;
 }
-void testFunction(TIMCoverage t) {
-    cout << "\n test function called";
-}
+
 void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool extendPermutation) {
+    clock_t differenceStartTime = clock();
     DifferenceApproximator differenceApproximator(graph);
     differenceApproximator.setN(graph->getNumberOfVertices());
     set<int> seedSet;
@@ -88,6 +87,10 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
         }
     }
     TIMInfluenceCalculator  timInfluenceCalculator(graph, 2);
+
+    
+    clock_t differenceEndTime = clock();
+    double differenceTimeTaken = double(differenceEndTime - differenceStartTime) / CLOCKS_PER_SEC;
     
     pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
     cout <<"\n Results: ";
@@ -100,6 +103,7 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
     imSeedSet.setTargets(influence.first);
     imSeedSet.setNonTargets(influence.second);
     IMResults::getInstance().addBestSeedSet(imSeedSet);
+    IMResults::getInstance().setTotalTimeTaken(differenceTimeTaken);
     IMResults::getInstance().setApproximationInfluence(influence);
     IMResults::getInstance().setExpectedTargets(influence);
 
@@ -334,13 +338,7 @@ void executeDifferenceAlgorithms(cxxopts::ParseResult result) {
     loadResultsFileFrom(result);
     loadGraphSizeToResults(graph);
 //    Begin f-g
-    clock_t differenceStartTime = clock();
-    
-
     testApprox(graph, budget, setting, extendPermutation);
-    clock_t differenceEndTime = clock();
-    double differenceTimeTaken = double(differenceEndTime - differenceStartTime) / CLOCKS_PER_SEC;
-    IMResults::getInstance().setApproximationTime(differenceTimeTaken);
     IMResults::getInstance().setApproximationSetting(setting);
     IMResults::getInstance().setExtendingPermutation(extendPermutation);
     // Setting 1000 as NT threshold. Actually not applicable. TODO: do this better.
