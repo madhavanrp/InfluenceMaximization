@@ -24,7 +24,10 @@ enum ApproximationSetting {
     setting4,
     // returns -g(i)
     setting5,
-    setting6
+    // Sup Sub procedure
+    setting6,
+    // No approximation
+    setting7
 };
 
 #endif /* ApproximationSetting_h */

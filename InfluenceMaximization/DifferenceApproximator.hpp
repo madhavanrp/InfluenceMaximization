@@ -17,6 +17,7 @@
 #include <algorithm>
 #include "ApproximationSetting.hpp"
 #include "TIMInfluenceCalculator.hpp"
+#include "log.h"
 
 using namespace std;
 
@@ -66,6 +67,7 @@ public:
     set<int> executeGreedyAlgorithmAdjustingPermutation(ApproximationSetting setting, int k);
     set<int> executeAlgorithmApproximatingOneFunction(ApproximationSetting setting, int k);
     set<int> executeAlgorithmApproximatingOneFunctionExtendPermutation(ApproximationSetting setting, int k);
+    set<int> executeGreedyAlgorithmOnDS(int budget);
     
     set<int> executeAlgorithmModularG(int k);
     set<int> executeSupSubProcedure(int k);

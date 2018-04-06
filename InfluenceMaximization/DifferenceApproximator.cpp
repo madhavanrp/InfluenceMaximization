@@ -380,6 +380,53 @@ vector<double> DifferenceApproximator::calculateUpperBound(TIMCoverage *timCover
     return approximations;
 }
 
+set<int> DifferenceApproximator::executeGreedyAlgorithmOnDS(int budget) {
+    set<int> seedSet;
+    TIMEvaluator *timEvaluator = new TIMEvaluator(this->graph, setting5);
+    double scalingFactorTargets = timEvaluator->getScalingFactorTargets();
+    double scalingFactorNonTargets = timEvaluator->getScalingFactorNonTargets();
+    TIMCoverage *timCoverageTargets = timEvaluator->getTIMCoverage();
+    TIMCoverage *timCoverageNonTargets = timEvaluator->getTIMCoverageNonTargets();
+    int n = graph->getNumberOfVertices();
+    
+    double maximumDifference = -1;
+    
+    int maxNode=-1;
+    for (int i=0; i<budget; i++) {
+        maximumDifference = -1;
+        maxNode = -1;
+//        if(i==0) {
+//            int mNode = timCoverageTargets->queue.top().first;
+//            cout << "\n f value = " << timCoverageTargets->marginalGainWithVertex(mNode, scalingFactorTargets);
+//            cout << "\n g value = " << timCoverageNonTargets->marginalGainWithVertex(mNode, scalingFactorNonTargets);
+//            cout << "\n Node = " << mNode;
+//            cout << "\n new RR sets covered = " << timCoverageTargets->numberOfNewRRSetsCoveredByVertex(mNode);
+//            cout << "\n As calculated = " << timCoverageTargets->numberOfNewRRSetsCoveredByVertex(mNode) * scalingFactorTargets;
+//            cout << flush;
+//            assert(timCoverageTargets->numberOfNewRRSetsCoveredByVertex(mNode) * scalingFactorTargets== timCoverageTargets->marginalGainWithVertex(mNode, scalingFactorTargets));
+//        }
+        for (int u=0; u<n; u++) {
+            double mgTarget = timCoverageTargets->marginalGainWithVertex(u, scalingFactorTargets);
+            double mgNonTarget = timCoverageNonTargets->marginalGainWithVertex(u, scalingFactorNonTargets);
+            if((mgTarget - mgNonTarget) > maximumDifference) {
+                if (seedSet.find(u)==seedSet.end()) {
+                    maximumDifference = mgTarget - mgNonTarget;
+                    maxNode = u;
+                }
+            }
+        }
+        if(maxNode==-1) break;
+        seedSet.insert(maxNode);
+        FILE_LOG(logDEBUG) << "\n Adding node with max difference value: " << maximumDifference;
+        FILE_LOG(logDEBUG) << "\t Node is " << maxNode <<flush;
+        timCoverageTargets->addToSeed(maxNode, timEvaluator->getRRSetsTargets());
+        timCoverageNonTargets->addToSeed(maxNode, timEvaluator->getRRSetsNonTargets());
+    }
+    delete timEvaluator;
+    return seedSet;
+
+}
+
 set<int> DifferenceApproximator::executeSupSubProcedure(int k) {
     set<int> seedSet, previousSeedSet;
     TIMEvaluator *timEvaluator = new TIMEvaluator(this->graph, setting5);
