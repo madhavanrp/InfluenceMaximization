@@ -81,6 +81,7 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
         
     } else if (setting==setting7) {
         seedSet = differenceApproximator.executeGreedyAlgorithmOnDS(budget);
+        IMResults::getInstance().addGreedySolutions(differenceApproximator.getGreedySolutions());
     } else {
         if(!extendPermutation) {
             seedSet = differenceApproximator.executeGreedyAlgorithm(setting, budget);

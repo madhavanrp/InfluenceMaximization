@@ -392,6 +392,7 @@ set<int> DifferenceApproximator::executeGreedyAlgorithmOnDS(int budget) {
     double maximumDifference = -1;
     
     int maxNode=-1;
+    double objectiveFunctionValue = 0;
     for (int i=0; i<budget; i++) {
         maximumDifference = -1;
         maxNode = -1;
@@ -421,6 +422,8 @@ set<int> DifferenceApproximator::executeGreedyAlgorithmOnDS(int budget) {
         FILE_LOG(logDEBUG) << "\t Node is " << maxNode <<flush;
         timCoverageTargets->addToSeed(maxNode, timEvaluator->getRRSetsTargets());
         timCoverageNonTargets->addToSeed(maxNode, timEvaluator->getRRSetsNonTargets());
+        objectiveFunctionValue+=maximumDifference;
+        greedySolutions.push_back(objectiveFunctionValue);
     }
     delete timEvaluator;
     return seedSet;
@@ -529,4 +532,8 @@ set<int> DifferenceApproximator::randGreedyCSO(TIMCoverage timCoverageDifference
     }
     
     return seedSet;
+}
+
+vector<double> DifferenceApproximator::getGreedySolutions() {
+    return this->greedySolutions;
 }

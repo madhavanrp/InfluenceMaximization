@@ -54,6 +54,7 @@ class DifferenceApproximator {
     int n;
     Graph *graph;
     double differenceValue;
+    vector<double> greedySolutions;
 public:
     double getDifferenceValue();
     DifferenceApproximator(Graph *graph);
@@ -61,6 +62,7 @@ public:
     DifferenceApproximator& operator=( const DifferenceApproximator &obj);
     DifferenceApproximator( const DifferenceApproximator &obj);
     void setN(int n);
+    vector<double> getGreedySolutions();
     vector<int> generatePermutation();
     vector<int> generatePermutation(vector<int> startingElements);
     set<int> executeGreedyAlgorithm(ApproximationSetting setting, int k);
