@@ -28,6 +28,13 @@ struct QueueComparator {
     }
 };
 
+struct ReverseQueueComparator {
+    bool operator()(pair<int, int> a, pair<int, int> b)
+    {
+        return a.second > b.second;
+    }
+};
+
 class NodeChecker {
 public:
     virtual bool isNodeValid(int nodeID)=0;
@@ -35,6 +42,7 @@ public:
 
 class TIMCoverage {
     int numberOfRRSetsCovered;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, ReverseQueueComparator> reverseQueue;
 public:
     vector<bool> nodeMark;
     vector<bool> edgeMark;
@@ -66,10 +74,12 @@ public:
     
     pair<int, double> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) ;
     pair<int, double> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets, NodeChecker *nodeChecker);
+    set<int> findMinInfluentialNodes(vector<vector<int>> *rrSets);
     
     pair<int, double> findMaxInfluentialNodeWithApproximations(set<int> *seedSet, vector<int> *approximationsScaled);
     
     set<pair<int, int>> findTopKNodesWithInfluence(int k, vector<vector<int>> *rrSets);
+    void constructReverseQueue();
     
     set<int> findTopKNodes(int k, vector<vector<int>> *rrSets);
     set<int> findTopKNodesModular(int k);

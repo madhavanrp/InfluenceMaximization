@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3114572620AB7CE800A8DD46 /* HeuristicsExecuter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3114572420AB7CE800A8DD46 /* HeuristicsExecuter.cpp */; };
+		3114572720AB7CE800A8DD46 /* HeuristicsExecuter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3114572420AB7CE800A8DD46 /* HeuristicsExecuter.cpp */; };
 		3179B91C2036308000C80D9A /* cxxopts.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31D8716A1FD1EF5B00F51E73 /* cxxopts.hpp */; };
 		3179B91D2036308000C80D9A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A51F55D88B00745401 /* main.cpp */; };
 		3179B91E2036309D00C80D9A /* BaselineGreedy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */; };
@@ -119,6 +121,8 @@
 		310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaselineGreedyTIM.cpp; sourceTree = "<group>"; };
 		310E78A4201BCE71000C70D9 /* BaselineGreedyTIM.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BaselineGreedyTIM.hpp; sourceTree = "<group>"; };
 		311423111F6F4AA7001BA3FA /* memoryusage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memoryusage.h; sourceTree = "<group>"; };
+		3114572420AB7CE800A8DD46 /* HeuristicsExecuter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HeuristicsExecuter.cpp; sourceTree = "<group>"; };
+		3114572520AB7CE800A8DD46 /* HeuristicsExecuter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HeuristicsExecuter.hpp; sourceTree = "<group>"; };
 		311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaselineGreedy.cpp; sourceTree = "<group>"; };
 		311FFDFB20041C5900F68590 /* BaselineGreedy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BaselineGreedy.hpp; sourceTree = "<group>"; };
 		311FFDFD20041D1500F68590 /* BaselineGreedyTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaselineGreedyTests.cpp; sourceTree = "<group>"; };
@@ -272,6 +276,8 @@
 				3107F09F1FE4661900EA0135 /* GenerateGraphLabels.hpp */,
 				310E789C200EB175000C70D9 /* TIMInfluenceCalculator.cpp */,
 				310E789D200EB175000C70D9 /* TIMInfluenceCalculator.hpp */,
+				3114572420AB7CE800A8DD46 /* HeuristicsExecuter.cpp */,
+				3114572520AB7CE800A8DD46 /* HeuristicsExecuter.hpp */,
 			);
 			path = InfluenceMaximization;
 			sourceTree = "<group>";
@@ -385,6 +391,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3179B96B2038E7AF00C80D9A /* IMResults.h in Sources */,
+				3114572720AB7CE800A8DD46 /* HeuristicsExecuter.cpp in Sources */,
 				3179B96C2038E7AF00C80D9A /* TIMCoverage.cpp in Sources */,
 				3179B9652038E7A700C80D9A /* BaselineGreedy.cpp in Sources */,
 				3179B9662038E7A700C80D9A /* BaselineGreedy.hpp in Sources */,
@@ -436,6 +443,7 @@
 				3179B9232036309D00C80D9A /* log1.h in Sources */,
 				3179B9242036309D00C80D9A /* IMResults.h in Sources */,
 				3179B9252036309D00C80D9A /* TIMCoverage.cpp in Sources */,
+				3114572620AB7CE800A8DD46 /* HeuristicsExecuter.cpp in Sources */,
 				3179B9262036309D00C80D9A /* TIMCoverage.hpp in Sources */,
 				3179B9272036309D00C80D9A /* Graph.cpp in Sources */,
 				3179B9282036309D00C80D9A /* memoryusage.h in Sources */,

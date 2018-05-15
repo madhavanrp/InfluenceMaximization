@@ -69,6 +69,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--algorithm difference --graph ca-GrQc-processed.txt --percentage 80 --labelMethod 0 --budget 20 --approximation 6"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm heuristic3 --graph graph_ic.inf --threshold 10 --budget 20 --percentage 80"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

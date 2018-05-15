@@ -24,6 +24,7 @@
 #include "InfluenceMaximization/BaselineGreedy.hpp"
 #include "InfluenceMaximization/BaselineGreedyTIM.hpp"
 #include "InfluenceMaximization/Diffusion.hpp"
+#include "InfluenceMaximization/HeuristicsExecuter.hpp"
 
 #include <iomanip>
 #include <ctime>
@@ -507,7 +508,42 @@ void executeHeuristic2(cxxopts::ParseResult result) {
 }
 
 void executeHeuristic3(cxxopts::ParseResult result) {
-    cout << "\n Executing Heuristic 2" << flush;
+    cout << "\n Executing Heuristic 3" << flush;
+    int budget = result["budget"].as<int>();
+    string graphFileName = result["graph"].as<std::string>();
+    int percentageTargets = result["percentage"].as<int>();
+    int nonTargetThreshold = result["threshold"].as<int>();
+    loadResultsFileFrom(result);
+    
+    Graph *graph = createGraphObject(result);
+    if(result.count("p")>0) {
+        double probability = result["p"].as<double>();
+        graph->setPropogationProbability(probability);
+    }
+    loadGraphSizeToResults(graph);
+    
+    HeuristicsExecuter h;
+    set<int> seedSet = h.executeNonTargetMinimizer(graph, budget, nonTargetThreshold);
+    TIMInfluenceCalculator timInfluenceCalculator(graph, 2);
+    pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
+    int targetsActivated = influence.first;
+    int nonTargetsActivated = influence.second;
+    
+    cout << "\n Targets activated = " << targetsActivated;
+    cout << "\n Non targets activated = " << nonTargetsActivated;
+    IMSeedSet imSeedSet;
+    for(int s: seedSet) {
+        imSeedSet.addSeed(s);
+    }
+    imSeedSet.setTargets(influence.first);
+    imSeedSet.setNonTargets(influence.second);
+    
+    IMResults::getInstance().setExpectedTargets(influence);
+    IMResults::getInstance().addBestSeedSet(imSeedSet);
+    
+    string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting1);
+    IMResults::getInstance().writeToFile(resultFile);
+    delete graph;
 }
 
 void generateGraphLabels(cxxopts::ParseResult result) {

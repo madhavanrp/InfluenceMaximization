@@ -66,6 +66,57 @@ void TIMCoverage::updatePriorityQueueWithCurrentValues() {
     }
 }
 
+void TIMCoverage::constructReverseQueue() {
+    while(!this->reverseQueue.empty()) {
+        this->reverseQueue.pop();
+    }
+    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queueCopy = new priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>(this->queue);
+    while (!queueCopy->empty()) {
+        this->reverseQueue.push(queueCopy->top());
+        queueCopy->pop();
+    }
+    delete queueCopy;
+}
+
+set<int> TIMCoverage::findMinInfluentialNodes(vector<vector<int>> *rrSets) {
+    priority_queue<pair<int, int>, vector<pair<int, int>>, ReverseQueueComparator> *queue = new priority_queue<pair<int, int>, vector<pair<int, int>>, ReverseQueueComparator>(this->reverseQueue);
+    vector<int> *coverage = &this->coverage;
+    vector<bool> *nodeMark = &this->nodeMark;
+    int minimumGainNode = -1;
+    int influence = 0;
+    set<int> minNodes;
+    int previousInfluence = -1;
+    while(!queue->empty()) {
+        pair<int,int> element = queue->top();
+        if(element.second > (*coverage)[element.first]) {
+            queue->pop();
+            element.second = (*coverage)[element.first];
+            queue->push(element);
+            continue;
+        }
+        
+        queue->pop();
+        if(!(*nodeMark)[element.first]) {
+            continue;
+        }
+        
+        minimumGainNode = element.first;
+        influence = (*coverage)[element.first];
+        
+        if (previousInfluence==-1) {
+            previousInfluence = influence;
+        }
+        if (previousInfluence!=influence) {
+            break;
+        }
+        minNodes.insert(minimumGainNode);
+        
+        previousInfluence = influence;
+    }
+    delete queue;
+    return minNodes;
+}
+
 void TIMCoverage::initializeDataStructures(int R, int n) {
     int numberCovered;
     for (int i = 0; i < n; i++) {
