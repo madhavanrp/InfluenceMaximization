@@ -18,6 +18,7 @@ class HeuristicsExecuter {
     
 public:
     set<int> executeNonTargetMinimizer(Graph *graph, int budget, int nontargetThreshold);
+    set<int> maximizeOnlyOverTargets(Graph *graph, int budget, int nontargetThreshold);
 };
 
 #endif /* HeuristicsExecuter_hpp */

@@ -44,3 +44,12 @@ set<int> HeuristicsExecuter::executeNonTargetMinimizer(Graph *graph, int budget,
     }
     return seedSet;
 }
+
+set<int> HeuristicsExecuter::maximizeOnlyOverTargets(Graph *graph, int budget, int nontargetThreshold) {
+    TIMInfluenceCalculator timInfluenceCalculator(graph, 2);
+    
+    set<int> seedSet;
+    shared_ptr<TIMCoverage> timCoverageTargets = timInfluenceCalculator.getTimCoverageTargets();
+    return timCoverageTargets->findTopKNodes(budget, timInfluenceCalculator.getRRsetsTargets());
+    
+}

@@ -507,8 +507,8 @@ void executeHeuristic2(cxxopts::ParseResult result) {
     cout << "\n Non Targets: " << influence.second;
 }
 
-void executeHeuristic3(cxxopts::ParseResult result) {
-    cout << "\n Executing Heuristic 3" << flush;
+void executeHeuristic(cxxopts::ParseResult result) {
+    cout << "\n Executing Heuristic: " << result["algorithm"].as<std::string>() << flush;
     int budget = result["budget"].as<int>();
     string graphFileName = result["graph"].as<std::string>();
     int percentageTargets = result["percentage"].as<int>();
@@ -523,7 +523,13 @@ void executeHeuristic3(cxxopts::ParseResult result) {
     loadGraphSizeToResults(graph);
     
     HeuristicsExecuter h;
-    set<int> seedSet = h.executeNonTargetMinimizer(graph, budget, nonTargetThreshold);
+    string algorithm = result["algorithm"].as<std::string>();
+    set<int> seedSet;
+    if(algorithm.compare("heuristic3")==0) {
+        seedSet = h.executeNonTargetMinimizer(graph, budget, nonTargetThreshold);
+    } else {
+        seedSet = h.maximizeOnlyOverTargets(graph, budget, nonTargetThreshold);
+    }
     TIMInfluenceCalculator timInfluenceCalculator(graph, 2);
     pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
     int targetsActivated = influence.first;
@@ -613,8 +619,10 @@ int main(int argc, char **argv) {
         } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic2")==0 ) {
             executeHeuristic2(result);
         } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic3")==0 ) {
-            executeHeuristic3(result);
-        }else {
+            executeHeuristic(result);
+        } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic4")==0 ) {
+            executeHeuristic(result);
+        } else {
             executeDifferenceAlgorithms(result);
         }
     }
