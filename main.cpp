@@ -25,6 +25,7 @@
 #include "InfluenceMaximization/BaselineGreedyTIM.hpp"
 #include "InfluenceMaximization/Diffusion.hpp"
 #include "InfluenceMaximization/HeuristicsExecuter.hpp"
+#include "InfluenceMaximization/DPAlgorithm/HeirarchicalDecomposition.hpp"
 
 #include <iomanip>
 #include <ctime>
@@ -582,6 +583,46 @@ void createLabelFileIfNotExists(cxxopts::ParseResult result) {
     
 }
 
+void executeDPAlgorithm(cxxopts::ParseResult result) {
+    int budget = result["budget"].as<int>();
+    string graphFileName = result["graph"].as<std::string>();
+    int percentageTargets = result["percentage"].as<int>();
+    string decompositionFile = result["decompositionFile"].as<std::string>();
+    loadResultsFileFrom(result);
+    
+    Graph *graph = createGraphObject(result);
+    if(result.count("p")>0) {
+        double probability = result["p"].as<double>();
+        graph->setPropogationProbability(probability);
+    }
+    loadGraphSizeToResults(graph);
+    
+    HeirarchicalDecomposition hDecomp(graph, decompositionFile, budget);
+    set<int> seedSet = hDecomp.maximizeUsingDP();
+    
+    
+    TIMInfluenceCalculator timInfluenceCalculator(graph, 2);
+    pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
+    int targetsActivated = influence.first;
+    int nonTargetsActivated = influence.second;
+    
+    cout << "\n Targets activated = " << targetsActivated;
+    cout << "\n Non targets activated = " << nonTargetsActivated;
+    IMSeedSet imSeedSet;
+    for(int s: seedSet) {
+        imSeedSet.addSeed(s);
+    }
+    imSeedSet.setTargets(influence.first);
+    imSeedSet.setNonTargets(influence.second);
+    
+    IMResults::getInstance().setExpectedTargets(influence);
+    IMResults::getInstance().addBestSeedSet(imSeedSet);
+    
+    string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting1);
+    IMResults::getInstance().writeToFile(resultFile);
+    delete graph;
+}
+
 int main(int argc, char **argv) {
     cout << "Starting program\n";
     srand(time(0));
@@ -599,7 +640,9 @@ int main(int argc, char **argv) {
     ("p,probability", "Propogation probability", cxxopts::value<double>())
     ("approximation", " Approximation Settings", cxxopts::value<int>())
     ("e,extend", "Extend the permutation")
-    ("labelMethod", "Labelling Strategy", cxxopts::value<int>());
+    ("labelMethod", "Labelling Strategy", cxxopts::value<int>())
+    ("decompositionFile", "Decomposition File", cxxopts::value<string>());
+    
     auto result = options.parse(argc, argv);
     string algorithm = result["algorithm"].as<string>();
     if(result["algorithm"].count()>0 && algorithm.compare("generate")==0) {
@@ -622,6 +665,8 @@ int main(int argc, char **argv) {
             executeHeuristic(result);
         } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic4")==0 ) {
             executeHeuristic(result);
+        } else if(result["algorithm"].count()>0 && algorithm.compare("dp")==0) {
+            executeDPAlgorithm(result);
         } else {
             executeDifferenceAlgorithms(result);
         }

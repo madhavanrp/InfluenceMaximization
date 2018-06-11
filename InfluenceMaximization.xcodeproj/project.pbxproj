@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3114572620AB7CE800A8DD46 /* HeuristicsExecuter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3114572420AB7CE800A8DD46 /* HeuristicsExecuter.cpp */; };
 		3114572720AB7CE800A8DD46 /* HeuristicsExecuter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3114572420AB7CE800A8DD46 /* HeuristicsExecuter.cpp */; };
+		3138F06C20CEEA73003E77C2 /* HeirarchicalDecomposition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3138F06A20CEEA73003E77C2 /* HeirarchicalDecomposition.cpp */; };
 		3179B91C2036308000C80D9A /* cxxopts.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31D8716A1FD1EF5B00F51E73 /* cxxopts.hpp */; };
 		3179B91D2036308000C80D9A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A51F55D88B00745401 /* main.cpp */; };
 		3179B91E2036309D00C80D9A /* BaselineGreedy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */; };
@@ -133,6 +134,8 @@
 		31279D751F6CAB3400FC4D9B /* Diffusion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Diffusion.hpp; sourceTree = "<group>"; };
 		31279D791F6F052C00FC4D9B /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
 		31279D7A1F6F0CFC00FC4D9B /* IMResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IMResults.h; path = IMResults/IMResults.h; sourceTree = "<group>"; };
+		3138F06A20CEEA73003E77C2 /* HeirarchicalDecomposition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HeirarchicalDecomposition.cpp; sourceTree = "<group>"; };
+		3138F06B20CEEA73003E77C2 /* HeirarchicalDecomposition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HeirarchicalDecomposition.hpp; sourceTree = "<group>"; };
 		313A589C1F4E072300F86148 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		3141B0F51F86BE1500B4F1D2 /* GraphTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphTests.cpp; sourceTree = "<group>"; };
 		3159634B1F9E756C000EB2F4 /* DifferenceApproximator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DifferenceApproximator.cpp; sourceTree = "<group>"; };
@@ -204,6 +207,15 @@
 			name = "TIM-Models";
 			sourceTree = "<group>";
 		};
+		3138F06920CEEA73003E77C2 /* DPAlgorithm */ = {
+			isa = PBXGroup;
+			children = (
+				3138F06A20CEEA73003E77C2 /* HeirarchicalDecomposition.cpp */,
+				3138F06B20CEEA73003E77C2 /* HeirarchicalDecomposition.hpp */,
+			);
+			path = DPAlgorithm;
+			sourceTree = "<group>";
+		};
 		31A494A11F55D54700745401 /* tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -246,6 +258,7 @@
 		31FC36891F354892005CAFEB /* InfluenceMaximization */ = {
 			isa = PBXGroup;
 			children = (
+				3138F06920CEEA73003E77C2 /* DPAlgorithm */,
 				311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */,
 				311FFDFB20041C5900F68590 /* BaselineGreedy.hpp */,
 				310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */,
@@ -445,6 +458,7 @@
 				3179B9252036309D00C80D9A /* TIMCoverage.cpp in Sources */,
 				3114572620AB7CE800A8DD46 /* HeuristicsExecuter.cpp in Sources */,
 				3179B9262036309D00C80D9A /* TIMCoverage.hpp in Sources */,
+				3138F06C20CEEA73003E77C2 /* HeirarchicalDecomposition.cpp in Sources */,
 				3179B9272036309D00C80D9A /* Graph.cpp in Sources */,
 				3179B9282036309D00C80D9A /* memoryusage.h in Sources */,
 				3179B9292036309D00C80D9A /* Graph.hpp in Sources */,

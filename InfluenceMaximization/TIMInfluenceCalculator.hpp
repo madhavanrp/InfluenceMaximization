@@ -49,6 +49,9 @@ public:
     pair<int, int> findInfluence(set<int> seedSet);
     pair<int, int> findInfluence(set<int> seedSet, set<int> *alreadyActivated);
     
+    //Find Influence without updating model
+    pair<double, double> findInfluenceWithoutUpdatingModel(set<int> seedSet);
+    
     // Coverage Getters
     shared_ptr<TIMCoverage> getTimCoverageTargets();
     shared_ptr<TIMCoverage> getTimCoverageNonTargets();

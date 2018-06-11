@@ -72,7 +72,11 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--algorithm heuristic4 --graph graph_ic.inf --threshold 10 --budget 20 --percentage 80"
+            argument = "--algorithm timtim --graph graph_ic.inf --threshold 102 --budget 20 --percentage 80"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm dp --graph ca-GrQc-processed.txt --budget 4 --percentage 80 --decompositionFile samplefile"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
