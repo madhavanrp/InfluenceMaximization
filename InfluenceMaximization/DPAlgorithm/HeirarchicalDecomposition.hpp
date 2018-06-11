@@ -10,12 +10,13 @@
 #define HeirarchicalDecomposition_hpp
 
 #include <stdio.h>
-#include "Graph.hpp"
+#include "../Graph.hpp"
 #include <string.h>
 #include <assert.h>
 #include <math.h>
 #include <unordered_set>
 #include <memory>
+#include <limits.h>
 #include "../TIMInfluenceCalculator.hpp"
 
 class HeirarchicalDecomposition {
