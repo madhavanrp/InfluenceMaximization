@@ -9,14 +9,14 @@
 #include "HeirarchicalDecomposition.hpp"
 
 vector<int> HeirarchicalDecomposition::readVertexBuckets(string decompositionFile) {
-//    decompositionFile = "/Users/madhavanrp/Downloads/metis_binaries/output_graph_ic.inf.part.15229";
-//    decompositionFile = "/Users/madhavanrp/Downloads/metis_binaries/output_ca-GrQc-processed.txt.part.5241";
-//    decompositionFile = "smallGraph-decom.txt";
     ifstream myFile(decompositionFile);
     if(!myFile.good()) {
         throw std::invalid_argument( "Decomposition file does not exist: " + decompositionFile );
     }
     vector<int> vertexBuckets;
+    set<int> allBuckets;
+    vector<bool> bucketOccupied;
+    
     int bucket;
     if(myFile.is_open()) {
         while (myFile >> bucket) {
@@ -24,7 +24,32 @@ vector<int> HeirarchicalDecomposition::readVertexBuckets(string decompositionFil
         }
         myFile.close();
     }
-    return vertexBuckets;
+    
+    int n = (int)vertexBuckets.size();
+    
+    for (int i=0; i<n; i++) {
+        allBuckets.insert(i);
+        bucketOccupied.push_back(false);
+    }
+    
+    for (int b:vertexBuckets) {
+        allBuckets.erase(b);
+    }
+    set<int> availableBuckets = allBuckets;
+    
+    vector<int> assignedBuckets(n);
+    for (int i=0; i<n; i++) {
+        int b = vertexBuckets[i];
+        if(!bucketOccupied[b]) {
+            bucketOccupied[b] = true;
+            assignedBuckets[i] = b;
+        } else {
+            b = *availableBuckets.begin();
+            availableBuckets.erase(b);
+            assignedBuckets[i] = b;
+        }
+    }
+    return assignedBuckets;
 }
 
 vector<int> HeirarchicalDecomposition::getRandomBuckets(int n) {
@@ -38,9 +63,9 @@ vector<int> HeirarchicalDecomposition::getRandomBuckets(int n) {
 
 HeirarchicalDecomposition::HeirarchicalDecomposition(Graph *graph, string decompositionFile, int k) {
     
-//    vector<int> vertexBuckets = readVertexBuckets(decompositionFile);
+    vector<int> vertexBuckets = readVertexBuckets(decompositionFile);
     int n = graph->getNumberOfVertices();
-    vector<int> vertexBuckets = getRandomBuckets(n);
+//    vector<int> vertexBuckets = getRandomBuckets(n);
     assert(n==vertexBuckets.size());
     this->timInfluenceCalculator.reset(new TIMInfluenceCalculator(graph, 2));
     this->leaves = vector<int>(n);
