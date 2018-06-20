@@ -246,6 +246,59 @@ set<int> TIMCoverage::findTopKNodes(int k, vector<vector<int>> *rrSets) {
     return topKNodes;
 }
 
+pair<set<int>,int> TIMCoverage::findTopKNodesFromCandidatesWithoutUpdate(int k, vector<vector<int>> *rrSets, set<int> candidateNodes) {
+    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queue = new priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>(this->queue);
+    
+    vector<int> *coverage = new vector<int>(this->coverage);
+    vector<bool> *nodeMark = new vector<bool>(this->nodeMark);
+    vector<bool> *edgeMark = new vector<bool>(this->edgeMark);
+    int maximumGainNode = -1;
+    set<int> topKNodes;
+    int rrSetsCovered = 0;
+    while(!queue->empty() && topKNodes.size()<=k) {
+        pair<int,int> element = queue->top();
+        if(element.second > (*coverage)[element.first]) {
+            queue->pop();
+            element.second = (*coverage)[element.first];
+            queue->push(element);
+            continue;
+        }
+        
+        queue->pop();
+        if (candidateNodes.find(element.first)==candidateNodes.end()) {
+            continue;
+        }
+        if(!(*nodeMark)[element.first]) {
+            continue;
+        }
+        topKNodes.insert(element.first);
+        
+        int numberCovered = this->countForVertex(element.first);
+        vector<int> edgeInfluence = (*this->lookupTable)[element.first];
+        
+        for (int i = 0; i < numberCovered; i++) {
+            if ((*edgeMark)[edgeInfluence[i]]) continue;
+            
+            vector<int> nList = (*rrSets)[edgeInfluence[i]];
+            for (int l :
+                 nList) {
+                if ((*nodeMark)[l]) {
+                    (*coverage)[l]--;
+                }
+            }
+            (*edgeMark)[edgeInfluence[i]] = true;
+            rrSetsCovered++;
+        }
+    }
+    
+    
+    delete coverage;
+    delete nodeMark;
+    delete edgeMark;
+    delete queue;
+    return make_pair(topKNodes, rrSetsCovered);
+}
+
 void TIMCoverage::addToSeed(int vertex, vector<vector<int>> *rrSets) {
     
     vector<int> *coverage = &this->coverage;

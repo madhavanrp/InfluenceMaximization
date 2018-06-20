@@ -76,8 +76,16 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--algorithm dp --graph ca-GrQc-processed.txt --budget 4 --percentage 80 --decompositionFile samplefile"
+            argument = "--algorithm dp --graph ca-GrQc-processed.txt --budget 4 --percentage 100 --decompositionFile output_ca-GrQc-processed.txt.part.5241"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm dpdm --graph graph_ic.inf --budget 4 --percentage 100 --decompositionFile output_graph_ic.inf.part.15229 --nBuckets 4"
             isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm tim --graph ca-GrQc-processed.txt --budget 4 --percentage 100"
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>

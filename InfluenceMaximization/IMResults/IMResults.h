@@ -185,5 +185,9 @@ public:
         }
         data["labelMethod" ] = method;
     }
+    
+    void setnBuckets(int nBuckets) {
+        data["nBuckets"] = nBuckets;
+    }
 };
 #endif /* IMResults_h */

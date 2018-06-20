@@ -24,6 +24,7 @@ class HeirarchicalDecomposition {
     
     // Number of nodes in tree. Each node has a list of seed sets. 
     vector<vector<unordered_set<int>>> seeds;
+    vector<vector<int>> bucketWithSeeds;
     vector<int> leaves;
     int height;
     int k;
@@ -38,7 +39,12 @@ public:
     HeirarchicalDecomposition(Graph *graph, string decompositionFile, int k);
 //    HeirarchicalDecomposition(Graph *graph, vector<int> leafOrdering);
     set<int> maximizeUsingDP();
+    
+    set<int> divideAndMaximize(int nBuckets);
     int findIndexOfMaximizingSeed(int vertexL, int vertexR, int k);
+    
+    set<int> findBestSeedFromCandidates(int k, vector<int> candidateNodes);
+    set<int> findBestSeedFromTree(int currentNodeIndex, int currentHeight);
 };
 
 #endif /* HeirarchicalDecomposition_hpp */

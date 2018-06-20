@@ -169,3 +169,79 @@ set<int> HeirarchicalDecomposition::maximizeUsingDP() {
     seedSet.insert(seeds[0][k].begin(), seeds[0][k].end());
     return seedSet;
 }
+
+set<int> HeirarchicalDecomposition::divideAndMaximize(int nBuckets) {
+//    int nTree = (int)this->bucketWithSeeds.size();
+//    int height = log2(nTree+1) - 1;
+    int height = ceil(log(nBuckets)/log(2));
+    this->height = height;
+    int nLeaves = pow(2, height);
+    int nodesPerLeaf = ceil((double)this->leaves.size()/(double)nLeaves);
+    for (int i=0; i<nLeaves; i++) {
+        this->bucketWithSeeds.push_back(vector<int>());
+    }
+    int b = 0;
+    for (int i=0; i<this->leaves.size(); i++) {
+        this->bucketWithSeeds[b].push_back(this->leaves[i]);
+        if(this->bucketWithSeeds[b].size()==nodesPerLeaf) b++;
+    }
+    set<int> bestSeed = findBestSeedFromTree(0, 0);
+    for (bool edge:*this->timInfluenceCalculator.get()->getTimCoverageTargets()->getEdgeMark()) {
+        assert(!edge);
+    }
+    for (bool n:*this->timInfluenceCalculator.get()->getTimCoverageTargets()->getNodeMark()) {
+        assert(n);
+    }
+    return bestSeed;
+}
+
+set<int> HeirarchicalDecomposition::findBestSeedFromCandidates(int k, vector<int> candidateNodes) {
+    TIMCoverage *coverageTargets = this->timInfluenceCalculator.get()->getTimCoverageTargets().get();
+    set<int> candidates;
+    for (int v:candidateNodes) {
+        candidates.insert(v);
+    }
+    return coverageTargets->findTopKNodesFromCandidatesWithoutUpdate(k, this->timInfluenceCalculator.get()->getRRsetsTargets(), candidates).first;
+//    return coverageTargets->findTopKNodes(k, this->timInfluenceCalculator.get()->getRRsetsTargets());
+}
+
+set<int> HeirarchicalDecomposition::findBestSeedFromTree(int currentNodeIndex, int currentHeight) {
+    int lIndex = 2 *currentNodeIndex + 1;
+//    cout << "\n Processing node " << currentNodeIndex +1;
+//    cout << "\n At Height " << currentHeight << flush;
+    if(currentHeight==this->height) {
+        int nNodesAtLevel = pow(2, height);
+        int seedIndex = currentNodeIndex % nNodesAtLevel;
+        assert(seedIndex<this->bucketWithSeeds.size());
+        return findBestSeedFromCandidates(this->k, this->bucketWithSeeds[seedIndex]);
+    } else {
+        int rIndex = lIndex + 1;
+        set<int> leftSeed = findBestSeedFromTree(lIndex, currentHeight+1);
+        set<int> rightSeed = findBestSeedFromTree(rIndex, currentHeight+1);
+        vector<int> leftSeedVector(leftSeed.begin(), leftSeed.end());
+        vector<int> rightSeedVector(rightSeed.begin(), rightSeed.end());
+        int k = (int)leftSeed.size();
+        assert(rightSeed.size()==k);
+        set<int> bestSeed;
+        int bestInfluence = -1;
+        set<int> currentSeed;
+        for (int i=0; i<k; i++) {
+            
+            for (int j=0; j<i; j++) {
+                currentSeed.insert(leftSeedVector[j]);
+            }
+            for (int j=i; j<k; j++) {
+                currentSeed.insert(rightSeedVector[j]);
+            }
+            int influence = this->timInfluenceCalculator.get()->findInfluenceWithoutUpdatingModel(currentSeed).first;
+            if(influence>bestInfluence) {
+                bestInfluence = influence;
+                bestSeed = set<int>(currentSeed.begin(), currentSeed.end());
+                assert(bestSeed.size()==k);
+            }
+            currentSeed.clear();
+        }
+
+        return bestSeed;
+    }
+}

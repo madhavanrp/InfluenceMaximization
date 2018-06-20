@@ -597,8 +597,16 @@ void executeDPAlgorithm(cxxopts::ParseResult result) {
     }
     loadGraphSizeToResults(graph);
     
+    set<int> seedSet;
+    
     HeirarchicalDecomposition hDecomp(graph, decompositionFile, budget);
-    set<int> seedSet = hDecomp.maximizeUsingDP();
+    if (result["algorithm"].as<std::string>().compare("dp")==0) {
+        seedSet = hDecomp.maximizeUsingDP();
+    } else {
+        int nBuckets = result["nBuckets"].as<int>();
+        seedSet = hDecomp.divideAndMaximize(nBuckets);
+        IMResults::getInstance().setnBuckets(nBuckets);
+    }
     
     
     TIMInfluenceCalculator timInfluenceCalculator(graph, 2);
@@ -641,7 +649,8 @@ int main(int argc, char **argv) {
     ("approximation", " Approximation Settings", cxxopts::value<int>())
     ("e,extend", "Extend the permutation")
     ("labelMethod", "Labelling Strategy", cxxopts::value<int>())
-    ("decompositionFile", "Decomposition File", cxxopts::value<string>());
+    ("decompositionFile", "Decomposition File", cxxopts::value<string>())
+    ("nBuckets", "Number of Buckets", cxxopts::value<int>());
     
     auto result = options.parse(argc, argv);
     string algorithm = result["algorithm"].as<string>();
@@ -666,6 +675,8 @@ int main(int argc, char **argv) {
         } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic4")==0 ) {
             executeHeuristic(result);
         } else if(result["algorithm"].count()>0 && algorithm.compare("dp")==0) {
+            executeDPAlgorithm(result);
+        } else if(result["algorithm"].count()>0 && algorithm.compare("dpdm")==0) {
             executeDPAlgorithm(result);
         } else {
             executeDifferenceAlgorithms(result);
