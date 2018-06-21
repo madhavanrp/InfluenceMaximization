@@ -16,9 +16,9 @@ void GenerateGraphLabels::initializeDataAndGenerate(Graph *graph, float percenta
     int n = graph->getNumberOfVertices();
     this->numberOfTargetsToLabel = round((float)n * percentage);
     this->numberOfNonTargetsToLabel = n - this->numberOfTargetsToLabel;
-    this->labels = vector<bool>(n);
+    this->labels = vector<NodeLabel>(n);
     for (int i=0; i<n; i++) {
-        this->labels[i] = true;
+        this->labels[i] = NodeLabelTarget;
     }
     generate();
 }
@@ -32,15 +32,15 @@ GenerateGraphLabels::GenerateGraphLabels(Graph *graph, float percentage) {
 
 void GenerateGraphLabels::doDFSWithLabel(int currentNode, int currentDepth, int depthLimit) {
     if(currentDepth>depthLimit) return;
-    if(!this->labels[currentNode]) return;
+    if(this->labels[currentNode]==NodeLabelNonTarget) return;
     if(this->totalNumberOfNonTargets>=this->numberOfNonTargetsToLabel) return;
-    this->labels[currentNode] = false;
+    this->labels[currentNode] = NodeLabelNonTarget;
     this->totalNumberOfNonTargets++;
     float probability = 0.75f;
     vector<vector<int>> *adjacencyList = this->graph->getGraph();
     for(int neighbour: (*adjacencyList)[currentNode]) {
         float randomFloat = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX));
-        if(randomFloat<=probability && !this->labels[currentNode]) {
+        if(randomFloat<=probability && (this->labels[currentNode]==NodeLabelNonTarget)) {
             doDFSWithLabel(neighbour, currentDepth+1, depthLimit);
         }
     }
@@ -77,7 +77,11 @@ void GenerateGraphLabels::generateUniformRandom() {
     int n = graph->getNumberOfVertices();
     for (int i=0; i<n; i++) {
         float randomFloat = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX));
-        this->labels[i] = (randomFloat<=this->percentage);
+        if (randomFloat<=this->percentage) {
+            this->labels[i] = NodeLabelTarget;
+        } else {
+            this->labels[i] = NodeLabelNonTarget;
+        }
     }
     
 }
@@ -91,12 +95,12 @@ void GenerateGraphLabels::generateWithSetting1(int numberOfTargets, int numberOf
     int level = 2;
     while(this->totalNumberOfNonTargets< this->numberOfNonTargetsToLabel) {
         int randomVertex = rand() % n;
-        if(!this->labels[randomVertex]) continue;
+        if(this->labels[randomVertex]==NodeLabelNonTarget) continue;
         doDFSWithLabel(randomVertex, 0, level);
     }
     int sanityCount = 0;
-    for(bool aBool: this->labels) {
-        if(!aBool) sanityCount++;
+    for(NodeLabel l: this->labels) {
+        if(l==NodeLabelNonTarget) sanityCount++;
     }
     cout << "\n Total number of non targets: " << this->totalNumberOfNonTargets;
     cout << "\n Sanity count: " << sanityCount;
@@ -125,7 +129,7 @@ void GenerateGraphLabels::generateWithTIMNonTargets(int numberOfTargets, int num
     delete timCoverage;
     set<int> activatedSet = findActivatedSetAndInfluenceUsingDiffusion(graph, seedSet, NULL).second;
     for (int activeNode:activatedSet) {
-        this->labels[activeNode] = false;
+        this->labels[activeNode] = NodeLabelNonTarget;
         this->totalNumberOfNonTargets++;
     }
 }

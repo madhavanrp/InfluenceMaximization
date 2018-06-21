@@ -60,7 +60,7 @@ void TIMInfluenceCalculator::generateRandomRRSetsTargets(int R) {
     int randomVertex;
     for(int i=0;i<R;i++) {
         randomVertex = rand() % n;
-        while(!graph->labels[randomVertex]) {
+        while(!graph->isTarget(randomVertex)) {
             randomVertex = rand() % n;
         }
         generateRandomRRSet(randomVertex, i, &rrSetsTargets, &targetCounts);
@@ -73,7 +73,7 @@ void TIMInfluenceCalculator::generateRandomRRSetsNonTargets(int R) {
     if(graph->getNumberOfNonTargets()>0) {
         for(int i=0;i<R;i++) {
             randomVertex = (*nonTargets)[rand() % graph->getNumberOfNonTargets()];
-            assert(!graph->labels[randomVertex]);
+            assert(!graph->isTarget(randomVertex));
             generateRandomRRSet(randomVertex, i, &rrSetsNonTargets, &nonTargetCounts);
         }
     }

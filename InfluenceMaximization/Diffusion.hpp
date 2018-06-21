@@ -108,7 +108,7 @@ inline pair<int, int> findInfluenceUsingDiffusion(Graph *graph, set<int> seedSet
     int targetsActivated = 0;
     int nonTargetsActivated = 0;
     for(int activeNode:activatedSet) {
-        if(graph->labels[activeNode]) targetsActivated++;
+        if(graph->isTarget(activeNode)) targetsActivated++;
         else nonTargetsActivated++;
     }
     return make_pair(targetsActivated, nonTargetsActivated);
@@ -125,7 +125,7 @@ inline pair<pair<int, int>, set<int>> findActivatedSetAndInfluenceUsingDiffusion
     int targetsActivated = 0;
     int nonTargetsActivated = 0;
     for(int activeNode:activatedSet) {
-        if(graph->labels[activeNode]) targetsActivated++;
+        if(graph->isTarget(activeNode)) targetsActivated++;
         else nonTargetsActivated++;
         activated.insert(activeNode);
     }
