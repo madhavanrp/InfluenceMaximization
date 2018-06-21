@@ -23,7 +23,10 @@
 
 using namespace std;
 
-
+enum NodeLabel {
+    NodeLabelTarget,
+    NodeLabelNonTarget
+};
 
 class Graph {
 private:
@@ -40,10 +43,12 @@ private:
     int n, m;
     vector<vector<int> > graph;
     vector<vector<int> > graphTranspose;
+    
+    vector<NodeLabel> labels;
 public:
     Graph();
     vector<vector<int>> rrSets;
-    vector<bool> labels;
+    
     deque<int> q;
     vector<int> inDegree;
     vector<bool> visited;
@@ -53,10 +58,12 @@ public:
     void readGraph(string fileName, float percentage, LabelSetting labelSetting);
     
     //Labels
+    bool isTarget(int v);
+    bool isNonTarget(int v);
     void readLabels(string fileName);
     void writeLabels(LabelSetting labelSetting);
     void writeLabels(LabelSetting labelSetting, string comment);
-    void setLabels(vector<bool> labels, float percentageTargets);
+    void setLabels(vector<NodeLabel> labels, float percentageTargets);
     static string constructLabelFileName(string graphName, float percentageTargets);
     static string constructLabelFileName(string graphName, float percentageTargets, LabelSetting setting);
     
@@ -77,7 +84,6 @@ public:
     void clearRandomRRSets();
     vector<vector<int>>* getRandomRRSets();
     
-    vector<int> oldRRSetGeneration(int randomVertex, int rrSetID);
     void assertTransposeIsCorrect();
     
     //Functions for propogation probability

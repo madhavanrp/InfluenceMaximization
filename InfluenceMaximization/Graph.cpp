@@ -80,7 +80,7 @@ void Graph::readGraph(string fileName, float percentage, LabelSetting labelSetti
     
     graphTranspose = constructTranspose(graph);
     visitMark = vector<int>(n);
-    labels = vector<bool>(n);
+    labels = vector<NodeLabel>(n);
     stringstream stream;
     stream << fixed << setprecision(2) << percentage;
     s = stream.str();
@@ -92,7 +92,7 @@ void Graph::readGraph(string fileName, float percentage, LabelSetting labelSetti
     }
     else {
         for (int i=0; i<n; i++) {
-            labels[i] = true;
+            labels[i] = NodeLabelTarget;
         }
         this->numberOfNonTargets = 0;
         this->numberOfTargets = n;
@@ -128,7 +128,7 @@ void Graph::readLabels(string fileName) {
         char label;
         while (myFile >> vertex >> label) {
             labelBool = (tolower(label)=='a');
-            labels[vertex] = labelBool;
+            labels[vertex] = labelBool?NodeLabelTarget:NodeLabelNonTarget;
             if(!labelBool) {
                 nonTargets.push_back(vertex);
             }
@@ -157,7 +157,7 @@ void Graph::writeLabels(LabelSetting labelSetting, string comment) {
     string nonTargetLabel = "B";
     myfile << "# " << comment << "\n";
     for(int i=0; i<this->n; i++) {
-        if(this->labels[i]) {
+        if(this->labels[i]==NodeLabelTarget) {
             myfile << i << " " << targetLabel << "\n";
         } else {
             myfile << i << " " << nonTargetLabel << "\n";
@@ -167,7 +167,15 @@ void Graph::writeLabels(LabelSetting labelSetting, string comment) {
     myfile.close();
 }
 
-void Graph::setLabels(vector<bool> labels, float percentageTargets) {
+bool Graph::isTarget(int v) {
+    return this->labels[v]==NodeLabelTarget;
+}
+
+bool Graph::isNonTarget(int v) {
+    return this->labels[v]==NodeLabelNonTarget;
+}
+
+void Graph::setLabels(vector<NodeLabel> labels, float percentageTargets) {
     this->labels = labels;
     this->percentageTargets = percentageTargets;
 }
@@ -202,7 +210,7 @@ void Graph::generateRandomRRSets(int R, bool label) {
     for(int i=0;i<R;i++) {
         int randomVertex;
         randomVertex = rand() % n;
-        while(!labels[randomVertex]) {
+        while(this->labels[randomVertex]==NodeLabelNonTarget) {
             randomVertex = rand() % n;
         }
         generateRandomRRSet(randomVertex, i);
@@ -277,7 +285,7 @@ void Graph::generateRandomRRSetsWithoutVisitingNonTargets(int R) {
     for(int i=0;i<R;i++) {
         int randomVertex;
         randomVertex = rand() % n;
-        while(!labels[randomVertex]) {
+        while(labels[randomVertex]==NodeLabelNonTarget) {
             randomVertex = rand() % n;
         }
         generateRandomRRSetWithoutVisitingNonTargets(randomVertex, i);
@@ -304,7 +312,7 @@ vector<int> Graph::generateRandomRRSetWithoutVisitingNonTargets(int randomVertex
         q.pop_front();
         for(int j=0; j<(int)graphTranspose[expand].size(); j++){
             int v=graphTranspose[expand][j];
-            if(!labels[v]) continue;
+            if(labels[v]==NodeLabelNonTarget) continue;
             if(!this->flipCoinOnEdge(v, expand))
                 continue;
             if(visited[v])
@@ -323,7 +331,7 @@ vector<int> Graph::generateRandomRRSetWithoutVisitingNonTargets(int randomVertex
         
     }
     for(int v: rrSets[rrSetID]) {
-        assert(labels[v]);
+        assert(labels[v]==NodeLabelTarget);
     }
     return rrSets[rrSetID];
     
@@ -374,50 +382,4 @@ void Graph::assertTransposeIsCorrect() {
     assert(edgeCount==reverseEdgeCount);
     assert(edgeCount==m);
     
-}
-
-
-vector<int> Graph::oldRRSetGeneration(int randomVertex, int rrSetID) {
-    //Most of this code is used from the source code of TIM - Influence Maximization: Near-Optimal Time Complexity Meets Practical Efficiency by Tang et al.
-    // Source code - https://sourceforge.net/projects/timplus/
-    // License GNU GENERAL PUBLIC LICENSE Version 3
-
-    int n_visit_edge=0;
-    int uStart = randomVertex;
-    int hyperiiid = rrSetID;
-    
-    int n_visit_mark=0;
-    q.clear();
-    q.push_back(uStart);
-    rrSets[hyperiiid].push_back(uStart);
-    visitMark[n_visit_mark++]=uStart;
-    visited[uStart]=true;
-    while(!q.empty()) {
-        int expand=q.front();
-        q.pop_front();
-        int i=expand;
-        for(int j=0; j<(int)graphTranspose[i].size(); j++){
-            int v=graphTranspose[i][j];
-            n_visit_edge++;
-            int randDouble = rand() % (int)(inDegree[i]);
-            //     continue;
-            if(randDouble!=0)
-                continue;
-            if(visited[v])
-                continue;
-            if(!visited[v])
-            {
-                assert(n_visit_mark<n);
-                visitMark[n_visit_mark++]=v;
-                visited[v]=true;
-            }
-            q.push_back(v);
-            assert((int)rrSets.size() > hyperiiid);
-            rrSets[hyperiiid].push_back(v);
-        }
-        
-    }
-    for(int i=0; i<n_visit_mark; i++)
-        visited[visitMark[i]]=false;
-    return rrSets[hyperiiid];
 }

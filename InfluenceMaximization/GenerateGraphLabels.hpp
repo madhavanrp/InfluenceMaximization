@@ -24,7 +24,7 @@ private:
     float percentage;
     int numberOfTargetsToLabel, numberOfNonTargetsToLabel;
     int totalNumberOfNonTargets;
-    vector<bool> labels;
+    vector<NodeLabel> labels;
     void initializeDataAndGenerate(Graph *graph, float percentage, LabelSetting labelSetting);
     void generate();
     void generateWithSetting1(int numberOfTargets, int numberOfNonTargets);
