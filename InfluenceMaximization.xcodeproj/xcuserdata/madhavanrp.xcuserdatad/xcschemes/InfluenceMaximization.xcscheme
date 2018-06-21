@@ -68,15 +68,32 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--algorithm difference --graph ca-GrQc-processed.txt --percentage 70 --labelMethod 2 --budget 20 --approximation 0"
+            argument = "--algorithm difference --graph ca-GrQc-processed.txt --percentage 80 --labelMethod 0 --budget 20 --approximation 6"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--algorithm difference --graph ca-GrQc-processed.txt --percentage 80 --labelMethod 0 --budget 20 --approximation 4"
+            argument = "--algorithm timtim --graph graph_ic.inf --threshold 102 --budget 20 --percentage 80"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm dp --graph ca-GrQc-processed.txt --budget 4 --percentage 100 --decompositionFile output_ca-GrQc-processed.txt.part.5241"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm dpdm --graph graph_ic.inf --budget 4 --percentage 100 --decompositionFile output_graph_ic.inf.part.15229 --nBuckets 4"
             isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm tim --graph ca-GrQc-processed.txt --budget 4 --percentage 100"
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
+         <AdditionalOption
+            key = "NSZombieEnabled"
+            value = "YES"
+            isEnabled = "YES">
+         </AdditionalOption>
       </AdditionalOptions>
       <LocationScenarioReference
          identifier = "com.apple.dt.IDEFoundation.CurrentLocationScenarioIdentifier"

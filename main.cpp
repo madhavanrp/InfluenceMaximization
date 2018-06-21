@@ -24,6 +24,8 @@
 #include "InfluenceMaximization/BaselineGreedy.hpp"
 #include "InfluenceMaximization/BaselineGreedyTIM.hpp"
 #include "InfluenceMaximization/Diffusion.hpp"
+#include "InfluenceMaximization/HeuristicsExecuter.hpp"
+#include "InfluenceMaximization/DPAlgorithm/HeirarchicalDecomposition.hpp"
 
 #include <iomanip>
 #include <ctime>
@@ -62,7 +64,9 @@ Graph *createGraphObject(cxxopts::ParseResult result) {
     graph->readGraph(graphFile, percentageTargetsFloat, labelSetting);
     return graph;
 }
+
 void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool extendPermutation) {
+    clock_t differenceStartTime = clock();
     DifferenceApproximator differenceApproximator(graph);
     differenceApproximator.setN(graph->getNumberOfVertices());
     set<int> seedSet;
@@ -74,6 +78,12 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
         }
     } else if(setting==setting5) {
         seedSet = differenceApproximator.executeAlgorithmModularG(budget);
+    } else if(setting==setting6) {
+        seedSet = differenceApproximator.executeSupSubProcedure(budget);
+        
+    } else if (setting==setting7) {
+        seedSet = differenceApproximator.executeGreedyAlgorithmOnDS(budget);
+        IMResults::getInstance().addGreedySolutions(differenceApproximator.getGreedySolutions());
     } else {
         if(!extendPermutation) {
             seedSet = differenceApproximator.executeGreedyAlgorithm(setting, budget);
@@ -82,6 +92,10 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
         }
     }
     TIMInfluenceCalculator  timInfluenceCalculator(graph, 2);
+
+    
+    clock_t differenceEndTime = clock();
+    double differenceTimeTaken = double(differenceEndTime - differenceStartTime) / CLOCKS_PER_SEC;
     
     pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
     cout <<"\n Results: ";
@@ -94,6 +108,7 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
     imSeedSet.setTargets(influence.first);
     imSeedSet.setNonTargets(influence.second);
     IMResults::getInstance().addBestSeedSet(imSeedSet);
+    IMResults::getInstance().setTotalTimeTaken(differenceTimeTaken);
     IMResults::getInstance().setApproximationInfluence(influence);
     IMResults::getInstance().setExpectedTargets(influence);
 
@@ -328,13 +343,7 @@ void executeDifferenceAlgorithms(cxxopts::ParseResult result) {
     loadResultsFileFrom(result);
     loadGraphSizeToResults(graph);
 //    Begin f-g
-    clock_t differenceStartTime = clock();
-    
-
     testApprox(graph, budget, setting, extendPermutation);
-    clock_t differenceEndTime = clock();
-    double differenceTimeTaken = double(differenceEndTime - differenceStartTime) / CLOCKS_PER_SEC;
-    IMResults::getInstance().setApproximationTime(differenceTimeTaken);
     IMResults::getInstance().setApproximationSetting(setting);
     IMResults::getInstance().setExtendingPermutation(extendPermutation);
     // Setting 1000 as NT threshold. Actually not applicable. TODO: do this better.
@@ -499,8 +508,49 @@ void executeHeuristic2(cxxopts::ParseResult result) {
     cout << "\n Non Targets: " << influence.second;
 }
 
-void executeHeuristic3(cxxopts::ParseResult result) {
-    cout << "\n Executing Heuristic 2" << flush;
+void executeHeuristic(cxxopts::ParseResult result) {
+    cout << "\n Executing Heuristic: " << result["algorithm"].as<std::string>() << flush;
+    int budget = result["budget"].as<int>();
+    string graphFileName = result["graph"].as<std::string>();
+    int percentageTargets = result["percentage"].as<int>();
+    int nonTargetThreshold = result["threshold"].as<int>();
+    loadResultsFileFrom(result);
+    
+    Graph *graph = createGraphObject(result);
+    if(result.count("p")>0) {
+        double probability = result["p"].as<double>();
+        graph->setPropogationProbability(probability);
+    }
+    loadGraphSizeToResults(graph);
+    
+    HeuristicsExecuter h;
+    string algorithm = result["algorithm"].as<std::string>();
+    set<int> seedSet;
+    if(algorithm.compare("heuristic3")==0) {
+        seedSet = h.executeNonTargetMinimizer(graph, budget, nonTargetThreshold);
+    } else {
+        seedSet = h.maximizeOnlyOverTargets(graph, budget, nonTargetThreshold);
+    }
+    TIMInfluenceCalculator timInfluenceCalculator(graph, 2);
+    pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
+    int targetsActivated = influence.first;
+    int nonTargetsActivated = influence.second;
+    
+    cout << "\n Targets activated = " << targetsActivated;
+    cout << "\n Non targets activated = " << nonTargetsActivated;
+    IMSeedSet imSeedSet;
+    for(int s: seedSet) {
+        imSeedSet.addSeed(s);
+    }
+    imSeedSet.setTargets(influence.first);
+    imSeedSet.setNonTargets(influence.second);
+    
+    IMResults::getInstance().setExpectedTargets(influence);
+    IMResults::getInstance().addBestSeedSet(imSeedSet);
+    
+    string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting1);
+    IMResults::getInstance().writeToFile(resultFile);
+    delete graph;
 }
 
 void generateGraphLabels(cxxopts::ParseResult result) {
@@ -533,6 +583,54 @@ void createLabelFileIfNotExists(cxxopts::ParseResult result) {
     
 }
 
+void executeDPAlgorithm(cxxopts::ParseResult result) {
+    int budget = result["budget"].as<int>();
+    string graphFileName = result["graph"].as<std::string>();
+    int percentageTargets = result["percentage"].as<int>();
+    string decompositionFile = result["decompositionFile"].as<std::string>();
+    loadResultsFileFrom(result);
+    
+    Graph *graph = createGraphObject(result);
+    if(result.count("p")>0) {
+        double probability = result["p"].as<double>();
+        graph->setPropogationProbability(probability);
+    }
+    loadGraphSizeToResults(graph);
+    
+    set<int> seedSet;
+    
+    HeirarchicalDecomposition hDecomp(graph, decompositionFile, budget);
+    if (result["algorithm"].as<std::string>().compare("dp")==0) {
+        seedSet = hDecomp.maximizeUsingDP();
+    } else {
+        int nBuckets = result["nBuckets"].as<int>();
+        seedSet = hDecomp.divideAndMaximize(nBuckets);
+        IMResults::getInstance().setnBuckets(nBuckets);
+    }
+    
+    
+    TIMInfluenceCalculator timInfluenceCalculator(graph, 2);
+    pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
+    int targetsActivated = influence.first;
+    int nonTargetsActivated = influence.second;
+    
+    cout << "\n Targets activated = " << targetsActivated;
+    cout << "\n Non targets activated = " << nonTargetsActivated;
+    IMSeedSet imSeedSet;
+    for(int s: seedSet) {
+        imSeedSet.addSeed(s);
+    }
+    imSeedSet.setTargets(influence.first);
+    imSeedSet.setNonTargets(influence.second);
+    
+    IMResults::getInstance().setExpectedTargets(influence);
+    IMResults::getInstance().addBestSeedSet(imSeedSet);
+    
+    string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting1);
+    IMResults::getInstance().writeToFile(resultFile);
+    delete graph;
+}
+
 int main(int argc, char **argv) {
     cout << "Starting program\n";
     srand(time(0));
@@ -550,7 +648,10 @@ int main(int argc, char **argv) {
     ("p,probability", "Propogation probability", cxxopts::value<double>())
     ("approximation", " Approximation Settings", cxxopts::value<int>())
     ("e,extend", "Extend the permutation")
-    ("labelMethod", "Labelling Strategy", cxxopts::value<int>());
+    ("labelMethod", "Labelling Strategy", cxxopts::value<int>())
+    ("decompositionFile", "Decomposition File", cxxopts::value<string>())
+    ("nBuckets", "Number of Buckets", cxxopts::value<int>());
+    
     auto result = options.parse(argc, argv);
     string algorithm = result["algorithm"].as<string>();
     if(result["algorithm"].count()>0 && algorithm.compare("generate")==0) {
@@ -570,8 +671,14 @@ int main(int argc, char **argv) {
         } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic2")==0 ) {
             executeHeuristic2(result);
         } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic3")==0 ) {
-            executeHeuristic3(result);
-        }else {
+            executeHeuristic(result);
+        } else if(result["algorithm"].count()>0 && algorithm.compare("heuristic4")==0 ) {
+            executeHeuristic(result);
+        } else if(result["algorithm"].count()>0 && algorithm.compare("dp")==0) {
+            executeDPAlgorithm(result);
+        } else if(result["algorithm"].count()>0 && algorithm.compare("dpdm")==0) {
+            executeDPAlgorithm(result);
+        } else {
             executeDifferenceAlgorithms(result);
         }
     }

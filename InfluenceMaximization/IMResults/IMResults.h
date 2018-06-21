@@ -46,6 +46,19 @@ public:
         o << std::setw(4) << data << std::endl;
     }
     
+    void addGreedySolutions(vector<double> greedySolutions) {
+        data["greedySolutions"] = greedySolutions;
+        bool monotone = true;
+        double previous = INT_MIN;
+        for (double solution: greedySolutions) {
+            if (solution<previous) {
+                monotone = false;
+            }
+            previous = solution;
+        }
+        data["monotone"] = monotone;
+    }
+    
     void addSeedSets(vector<IMSeedSet> allSeedSets) {
         
         vector<json> all;
@@ -171,6 +184,10 @@ public:
                 break;
         }
         data["labelMethod" ] = method;
+    }
+    
+    void setnBuckets(int nBuckets) {
+        data["nBuckets"] = nBuckets;
     }
 };
 #endif /* IMResults_h */

@@ -87,11 +87,22 @@ void ModularApproximation::calculateApproximation(int element, set<int> *vertice
     this->approximations[element] = f-g;
 }
 
+
+
 void ModularApproximation::findAllApproximations() {
+    
+//    if(this->setting==setting6) {
+//        this->timEvaluator->findInfluence(&relativeSet)
+//    }
     set<int> *vertices = new set<int>();
+    
     for (int i=0; i<this->n; i++) {
         int vertex = (*this->permutation)[i];
-        calculateApproximation(vertex, vertices);
+        if(this->setting==setting6) {
+            // Do setting 6 special
+        } else {
+            calculateApproximation(vertex, vertices);
+        }
         vertices->insert(vertex);
         assert(vertices->size()==i+1);
     }
@@ -335,4 +346,194 @@ DifferenceApproximator::DifferenceApproximator( const DifferenceApproximator &ob
     if(obj.permutation!=NULL) {
         this->permutation = new vector<int>(*obj.permutation);
     }
+}
+
+vector<double> DifferenceApproximator::calculateUpperBound(TIMCoverage *timCoverageNonTargets, double scalingFactorNonTargets, set<int> relativeSet) {
+    
+    double gOfX = timCoverageNonTargets->findInfluence(relativeSet, scalingFactorNonTargets);
+    
+    set<int> XCopy = relativeSet;
+    double marginalGainSummations = 0;
+    for (int v:relativeSet) {
+        XCopy.erase(v);
+        double gain = gOfX - timCoverageNonTargets->findInfluence(XCopy, scalingFactorNonTargets);
+        XCopy.insert(v);
+        marginalGainSummations+=gain;
+        
+    }
+    set<int> seedSet;
+    vector<double> approximations = vector<double>(this->n);
+    for (int i=0; i<this->n; i++) {
+        if(relativeSet.find(i)==relativeSet.end()) {
+            seedSet.insert(i);
+            double gOfI = timCoverageNonTargets->findInfluence(seedSet, scalingFactorNonTargets);
+            approximations[i] = gOfX - marginalGainSummations + gOfI;
+            seedSet.erase(i);
+        } else {
+            XCopy.erase(i);
+            double gain = gOfX - timCoverageNonTargets->findInfluence(XCopy, scalingFactorNonTargets);
+            XCopy.insert(i);
+            approximations[i] = gOfX - marginalGainSummations + gain;
+        }
+        
+    }
+    return approximations;
+}
+
+set<int> DifferenceApproximator::executeGreedyAlgorithmOnDS(int budget) {
+    set<int> seedSet;
+    TIMEvaluator *timEvaluator = new TIMEvaluator(this->graph, setting5);
+    double scalingFactorTargets = timEvaluator->getScalingFactorTargets();
+    double scalingFactorNonTargets = timEvaluator->getScalingFactorNonTargets();
+    TIMCoverage *timCoverageTargets = timEvaluator->getTIMCoverage();
+    TIMCoverage *timCoverageNonTargets = timEvaluator->getTIMCoverageNonTargets();
+    int n = graph->getNumberOfVertices();
+    
+    double maximumDifference = -1;
+    
+    int maxNode=-1;
+    double objectiveFunctionValue = 0;
+    for (int i=0; i<budget; i++) {
+        maximumDifference = -1;
+        maxNode = -1;
+//        if(i==0) {
+//            int mNode = timCoverageTargets->queue.top().first;
+//            cout << "\n f value = " << timCoverageTargets->marginalGainWithVertex(mNode, scalingFactorTargets);
+//            cout << "\n g value = " << timCoverageNonTargets->marginalGainWithVertex(mNode, scalingFactorNonTargets);
+//            cout << "\n Node = " << mNode;
+//            cout << "\n new RR sets covered = " << timCoverageTargets->numberOfNewRRSetsCoveredByVertex(mNode);
+//            cout << "\n As calculated = " << timCoverageTargets->numberOfNewRRSetsCoveredByVertex(mNode) * scalingFactorTargets;
+//            cout << flush;
+//            assert(timCoverageTargets->numberOfNewRRSetsCoveredByVertex(mNode) * scalingFactorTargets== timCoverageTargets->marginalGainWithVertex(mNode, scalingFactorTargets));
+//        }
+        for (int u=0; u<n; u++) {
+            double mgTarget = timCoverageTargets->marginalGainWithVertex(u, scalingFactorTargets);
+            double mgNonTarget = timCoverageNonTargets->marginalGainWithVertex(u, scalingFactorNonTargets);
+            if((mgTarget - mgNonTarget) > maximumDifference) {
+                if (seedSet.find(u)==seedSet.end()) {
+                    maximumDifference = mgTarget - mgNonTarget;
+                    maxNode = u;
+                }
+            }
+        }
+        if(maxNode==-1) break;
+        seedSet.insert(maxNode);
+        FILE_LOG(logDEBUG) << "\n Adding node with max difference value: " << maximumDifference;
+        FILE_LOG(logDEBUG) << "\t Node is " << maxNode <<flush;
+        timCoverageTargets->addToSeed(maxNode, timEvaluator->getRRSetsTargets());
+        timCoverageNonTargets->addToSeed(maxNode, timEvaluator->getRRSetsNonTargets());
+        objectiveFunctionValue+=maximumDifference;
+        greedySolutions.push_back(objectiveFunctionValue);
+    }
+    delete timEvaluator;
+    return seedSet;
+
+}
+
+set<int> DifferenceApproximator::executeSupSubProcedure(int k) {
+    set<int> seedSet, previousSeedSet;
+    TIMEvaluator *timEvaluator = new TIMEvaluator(this->graph, setting5);
+    double scalingFactorNonTargets = timEvaluator->getScalingFactorNonTargets();
+    TIMCoverage *timCoverageDifference = timEvaluator->getTIMCoverage();
+    TIMCoverage *timCoverageNonTargets = timEvaluator->getTIMCoverageNonTargets();
+    int n = graph->getNumberOfVertices();
+    vector<double> approximations;
+    for (int v=0; v<n; v++) {
+        approximations.push_back(timEvaluator->findSingleNodeNonTargetsInfluence(v));
+    }
+    int iteration = 0;
+    
+    bool converge = false;
+    do {
+        vector<int> seedVector;
+        previousSeedSet = seedSet;
+        
+        for (int u: previousSeedSet) {
+            seedVector.push_back(u);
+        }
+        vector<double> marginalGains = timCoverageNonTargets->singleNodeMarginalGainWRTSet(seedVector, scalingFactorNonTargets);
+        assert(marginalGains.size()==seedVector.size());
+        
+        //Adjust approximations
+        for (int i=0; i<seedVector.size(); i++) {
+            approximations[seedVector[i]]= approximations[seedVector[i]] + marginalGains[i] - timEvaluator->findSingleNodeNonTargetsInfluence(seedVector[i]);
+        }
+        
+        for(int i=0; i<n; i++) {
+            timCoverageDifference->offsetCoverage(i, -1 * (1/timEvaluator->getScalingFactorTargets()) * approximations[i]);
+        }
+        timCoverageDifference->updatePriorityQueueWithCurrentValues();
+        
+        TIMCoverage *coveragePointer = timEvaluator->getTIMCoverage();
+        vector<vector<int>> *rrSetsPointer = timEvaluator->getRRSetsTargets();
+        seedSet = randGreedyCSO(*coveragePointer, rrSetsPointer, k);
+        
+        for(int i=0; i<n; i++) {
+            timCoverageDifference->offsetCoverage(i, 1 * (1/timEvaluator->getScalingFactorTargets()) * approximations[i]);
+        }
+        timCoverageDifference->updatePriorityQueueWithCurrentValues();
+        
+        // Adjust approximations back
+        for (int i=0; i<seedVector.size(); i++) {
+            approximations[seedVector[i]]= approximations[seedVector[i]] - marginalGains[i] + timEvaluator->findSingleNodeNonTargetsInfluence(seedVector[i]);
+        }
+        iteration++;
+        
+        
+        set<int> s3;
+        set_intersection(previousSeedSet.begin(), previousSeedSet.end(), seedSet.begin(), seedSet.end(), std::inserter(s3,s3.begin()));
+        converge = (s3.size()>= (0.7 * k));
+        if(iteration%300==0) {
+            cout << "\n Completed iteration: " << iteration;
+            cout <<"\n Set intersection size is " << s3.size() << flush;
+        }
+        if(iteration>5000) {
+            converge = true;
+            seedSet.clear();
+        }
+    } while(!converge);
+    
+    delete timEvaluator;
+    return seedSet;
+}
+
+set<int> DifferenceApproximator::randGreedyCSO(TIMCoverage timCoverageDifference, vector<vector<int>> *rrSets, int budget) {
+    set<int> seedSet;
+    int k = budget;
+    vector<int> *coverage = &timCoverageDifference.coverage;
+    while (seedSet.size()<k) {
+        priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> queue(timCoverageDifference.queue);
+        vector<pair<int, int>> topKPairs;
+        int i=0;
+        while(i<k) {
+            pair<int, int> nodeWithCoverage = make_pair(-1, -1);
+            bool nodeFound = false;
+            while (!queue.empty() && !nodeFound) {
+                nodeWithCoverage = queue.top();
+                queue.pop();
+                if(nodeWithCoverage.second>(*coverage)[nodeWithCoverage.first]) {
+                    queue.push(make_pair(nodeWithCoverage.first, (*coverage)[nodeWithCoverage.first]));
+                    continue;
+                }
+                if(seedSet.find(nodeWithCoverage.first)==seedSet.end()) nodeFound = true;
+            }
+            if(!nodeFound) {
+                break;
+            }
+            topKPairs.push_back(nodeWithCoverage);
+            i++;
+        }
+        assert(topKPairs.size()==k);
+        int randomUIndex = rand() % k;
+        int randomU = topKPairs[randomUIndex].first;
+        seedSet.insert(randomU);
+        timCoverageDifference.addToSeed(randomU, rrSets);
+        
+    }
+    
+    return seedSet;
+}
+
+vector<double> DifferenceApproximator::getGreedySolutions() {
+    return this->greedySolutions;
 }

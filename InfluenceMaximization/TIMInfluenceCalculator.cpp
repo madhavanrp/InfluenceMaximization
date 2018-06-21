@@ -149,6 +149,14 @@ pair<int, int> TIMInfluenceCalculator::findInfluence(set<int> seedSet, set<int> 
     return make_pair(targetsInfluenced, nonTargetsInfluenced);
 }
 
+pair<double, double> TIMInfluenceCalculator::findInfluenceWithoutUpdatingModel(set<int> seedSet) {
+    
+    double targets = this->timCoverageTargets->findInfluence(seedSet, getScalingFactorTargets());
+    double nonTargets = this->timCoverageNonTargets->findInfluence(seedSet, getScalingFactorNonTargets());
+    return make_pair(targets, nonTargets);
+
+}
+
 shared_ptr<TIMCoverage> TIMInfluenceCalculator::getTimCoverageTargets() {
     return this->timCoverageTargets;
 }

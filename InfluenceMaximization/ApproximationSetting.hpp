@@ -23,7 +23,11 @@ enum ApproximationSetting {
     // returns f(i) - g(i) = f(i) - g(i|1..i-1)
     setting4,
     // returns -g(i)
-    setting5
+    setting5,
+    // Sup Sub procedure
+    setting6,
+    // No approximation
+    setting7
 };
 
 #endif /* ApproximationSetting_h */
