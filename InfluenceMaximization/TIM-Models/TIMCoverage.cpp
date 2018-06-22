@@ -246,14 +246,14 @@ set<int> TIMCoverage::findTopKNodes(int k, vector<vector<int>> *rrSets) {
     return topKNodes;
 }
 
-pair<set<int>,int> TIMCoverage::findTopKNodesFromCandidatesWithoutUpdate(int k, vector<vector<int>> *rrSets, set<int> candidateNodes) {
+pair<vector<int>,int> TIMCoverage::findTopKNodesFromCandidatesWithoutUpdate(int k, vector<vector<int>> *rrSets, set<int> candidateNodes) {
     priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> *queue = new priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>(this->queue);
     
     vector<int> *coverage = new vector<int>(this->coverage);
     vector<bool> *nodeMark = new vector<bool>(this->nodeMark);
     vector<bool> *edgeMark = new vector<bool>(this->edgeMark);
     int maximumGainNode = -1;
-    set<int> topKNodes;
+    vector<int> topKNodes;
     int rrSetsCovered = 0;
     while(!queue->empty() && topKNodes.size()<=k) {
         pair<int,int> element = queue->top();
@@ -271,7 +271,7 @@ pair<set<int>,int> TIMCoverage::findTopKNodesFromCandidatesWithoutUpdate(int k, 
         if(!(*nodeMark)[element.first]) {
             continue;
         }
-        topKNodes.insert(element.first);
+        topKNodes.push_back(element.first);
         
         int numberCovered = this->countForVertex(element.first);
         vector<int> edgeInfluence = (*this->lookupTable)[element.first];

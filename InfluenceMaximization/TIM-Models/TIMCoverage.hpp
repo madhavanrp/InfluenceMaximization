@@ -79,7 +79,7 @@ public:
     pair<int, double> findMaxInfluentialNodeWithApproximations(set<int> *seedSet, vector<int> *approximationsScaled);
     
     set<pair<int, int>> findTopKNodesWithInfluence(int k, vector<vector<int>> *rrSets);
-    pair<set<int>,int> findTopKNodesFromCandidatesWithoutUpdate(int k, vector<vector<int>> *rrSets, set<int> candidateNodes);
+    pair<vector<int>,int> findTopKNodesFromCandidatesWithoutUpdate(int k, vector<vector<int>> *rrSets, set<int> candidateNodes);
     void constructReverseQueue();
     
     set<int> findTopKNodes(int k, vector<vector<int>> *rrSets);

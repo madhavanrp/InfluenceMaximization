@@ -596,6 +596,7 @@ void executeDPAlgorithm(cxxopts::ParseResult result) {
         graph->setPropogationProbability(probability);
     }
     loadGraphSizeToResults(graph);
+    clock_t startTime = clock();
     
     set<int> seedSet;
     
@@ -608,6 +609,8 @@ void executeDPAlgorithm(cxxopts::ParseResult result) {
         IMResults::getInstance().setnBuckets(nBuckets);
     }
     
+    clock_t endTime = clock();
+    double totalTimeTaken = double(endTime - startTime) / CLOCKS_PER_SEC;
     
     TIMInfluenceCalculator timInfluenceCalculator(graph, 2);
     pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
@@ -625,6 +628,7 @@ void executeDPAlgorithm(cxxopts::ParseResult result) {
     
     IMResults::getInstance().setExpectedTargets(influence);
     IMResults::getInstance().addBestSeedSet(imSeedSet);
+    IMResults::getInstance().setTotalTimeTaken(totalTimeTaken);
     
     string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting1);
     IMResults::getInstance().writeToFile(resultFile);

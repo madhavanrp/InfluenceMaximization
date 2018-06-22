@@ -43,8 +43,8 @@ public:
     set<int> divideAndMaximize(int nBuckets);
     int findIndexOfMaximizingSeed(int vertexL, int vertexR, int k);
     
-    set<int> findBestSeedFromCandidates(int k, vector<int> candidateNodes);
-    set<int> findBestSeedFromTree(int currentNodeIndex, int currentHeight);
+    vector<int> findBestSeedFromCandidates(int k, vector<int> candidateNodes);
+    vector<int> findBestSeedFromTree(int currentNodeIndex, int currentHeight);
 };
 
 #endif /* HeirarchicalDecomposition_hpp */
