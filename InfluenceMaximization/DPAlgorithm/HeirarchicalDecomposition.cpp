@@ -14,8 +14,6 @@ vector<int> HeirarchicalDecomposition::readVertexBuckets(string decompositionFil
         throw std::invalid_argument( "Decomposition file does not exist: " + decompositionFile );
     }
     vector<int> vertexBuckets;
-    set<int> allBuckets;
-    vector<bool> bucketOccupied;
     
     int bucket;
     if(myFile.is_open()) {
@@ -24,7 +22,12 @@ vector<int> HeirarchicalDecomposition::readVertexBuckets(string decompositionFil
         }
         myFile.close();
     }
-    
+    return vertexBuckets;
+}
+
+vector<int> HeirarchicalDecomposition::assignOneVertexPerBucket(vector<int> vertexBuckets) {
+    set<int> allBuckets;
+    vector<bool> bucketOccupied;
     int n = (int)vertexBuckets.size();
     
     for (int i=0; i<n; i++) {
@@ -62,12 +65,17 @@ vector<int> HeirarchicalDecomposition::getRandomBuckets(int n) {
 }
 
 HeirarchicalDecomposition::HeirarchicalDecomposition(Graph *graph, string decompositionFile, int k) {
-    
-    vector<int> vertexBuckets = readVertexBuckets(decompositionFile);
-    int n = graph->getNumberOfVertices();
-//    vector<int> vertexBuckets = getRandomBuckets(n);
-    assert(n==vertexBuckets.size());
+    this->partitionFile = decompositionFile;
+    this->graph = graph;
     this->timInfluenceCalculator.reset(new TIMInfluenceCalculator(graph, 2));
+    this->k = k;
+}
+
+void HeirarchicalDecomposition::initializeDataStructuresForDPIM() {
+    vector<int> vertexBuckets = readVertexBuckets(this->partitionFile);
+    vertexBuckets = assignOneVertexPerBucket(vertexBuckets);
+    int n = this->graph->getNumberOfVertices();
+    assert(n==vertexBuckets.size());
     this->leaves = vector<int>(n);
     for (int v=0; v<vertexBuckets.size(); v++) {
         int bucket = vertexBuckets[v];
@@ -81,7 +89,6 @@ HeirarchicalDecomposition::HeirarchicalDecomposition(Graph *graph, string decomp
         numberOfNodes+=pow(2, h);
     }
     binaryTree = vector<int>(numberOfNodes);
-    this->k = k;
     
     seeds = vector<vector<unordered_set<int>>>(numberOfNodes);
     
@@ -91,7 +98,21 @@ HeirarchicalDecomposition::HeirarchicalDecomposition(Graph *graph, string decomp
     cout << "\n Value of n is " << n;
     cout << "\n Value of height is  " << height;
     cout << "\n Number of nodes in tree is " << numberOfNodes;
-    
+}
+
+void HeirarchicalDecomposition::initializeDataStructuresForDPDM() {
+    vector<int> vertexBuckets = readVertexBuckets(this->partitionFile);
+    int height = this->height;
+    int nLeaves = pow(2, height);
+    int nodesPerLeaf = ceil((double)this->leaves.size()/(double)nLeaves);
+    for (int i=0; i<nLeaves; i++) {
+        this->bucketWithSeeds.push_back(vector<int>());
+    }
+    int bucket;
+    for (int i=0; i<vertexBuckets.size(); i++) {
+        bucket = vertexBuckets[i];
+        this->bucketWithSeeds[bucket].push_back(i);
+    }
 }
 
 int HeirarchicalDecomposition::findIndexOfMaximizingSeed(int vertexL, int vertexR, int k) {
@@ -123,6 +144,7 @@ int HeirarchicalDecomposition::findIndexOfMaximizingSeed(int vertexL, int vertex
 }
 
 set<int> HeirarchicalDecomposition::maximizeUsingDP() {
+    this->initializeDataStructuresForDPIM();
     int height = this->height;
     int v, indexOfNode;
     indexOfNode = pow(2, height) - 1;
@@ -171,20 +193,12 @@ set<int> HeirarchicalDecomposition::maximizeUsingDP() {
 }
 
 set<int> HeirarchicalDecomposition::divideAndMaximize(int nBuckets) {
-//    int nTree = (int)this->bucketWithSeeds.size();
-//    int height = log2(nTree+1) - 1;
     int height = ceil(log(nBuckets)/log(2));
     this->height = height;
-    int nLeaves = pow(2, height);
-    int nodesPerLeaf = ceil((double)this->leaves.size()/(double)nLeaves);
-    for (int i=0; i<nLeaves; i++) {
-        this->bucketWithSeeds.push_back(vector<int>());
-    }
-    int b = 0;
-    for (int i=0; i<this->leaves.size(); i++) {
-        this->bucketWithSeeds[b].push_back(this->leaves[i]);
-        if(this->bucketWithSeeds[b].size()==nodesPerLeaf) b++;
-    }
+    this->initializeDataStructuresForDPDM();
+//    int nTree = (int)this->bucketWithSeeds.size();
+//    int height = log2(nTree+1) - 1;
+    
     vector<int> bestSeed = findBestSeedFromTree(0, 0);
     for (bool edge:*this->timInfluenceCalculator.get()->getTimCoverageTargets()->getEdgeMark()) {
         assert(!edge);

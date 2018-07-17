@@ -25,15 +25,20 @@ class HeirarchicalDecomposition {
     // Number of nodes in tree. Each node has a list of seed sets. 
     vector<vector<unordered_set<int>>> seeds;
     vector<vector<int>> bucketWithSeeds;
+    Graph *graph;
     vector<int> leaves;
     int height;
     int k;
+    string partitionFile;
     
     // Find Influence
     shared_ptr<TIMInfluenceCalculator> timInfluenceCalculator;
+    void initializeDataStructuresForDPIM();
+    void initializeDataStructuresForDPDM();
 protected:
     vector<int> readVertexBuckets(string decompositionFile);
     vector<int> getRandomBuckets(int n);
+    vector<int> assignOneVertexPerBucket(vector<int> buckets);
     
 public:
     HeirarchicalDecomposition(Graph *graph, string decompositionFile, int k);
