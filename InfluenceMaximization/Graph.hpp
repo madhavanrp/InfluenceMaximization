@@ -19,6 +19,7 @@
 #include <deque>
 #include <string.h>
 #include <stdexcept>
+#include <unordered_map>
 #include "LabelSetting.hpp"
 
 using namespace std;
@@ -43,6 +44,8 @@ private:
     int n, m;
     vector<vector<int> > graph;
     vector<vector<int> > graphTranspose;
+    unordered_map<string, int> edgeProbabilities;
+    bool edgeProbabilitiesAssigned;
     
     vector<NodeLabel> labels;
 public:

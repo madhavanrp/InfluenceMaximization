@@ -38,6 +38,9 @@ int Graph:: generateRandomNumber(int u, int v) {
     if(this->standardProbability) {
         randomNumberLimit = this->propogationProbabilityNumber;
     }
+    else if(this->edgeProbabilitiesAssigned) {
+        randomNumberLimit = this->edgeProbabilities[to_string(u) + "#" + to_string(v)];
+    }
     else {
         randomNumberLimit = inDegree[v];
     }
@@ -59,15 +62,35 @@ void Graph::readGraph(string fileName, float percentage, LabelSetting labelSetti
         throw std::invalid_argument( "Graph file does not exist: " + fileName );
     }
     if(myFile.is_open()) {
+        int beginningPosition = myFile.tellg();
         myFile >> n >> m;
+        
+        int from, to;
+        double edgeProbability;
+        bool probabilityAssigned = false;
+        int maxDegree = 0;
+        string line;
+        myFile.seekg(beginningPosition);
+        getline(myFile, line);
+        int firstEdgePosition = (int)myFile.tellg();
+        getline(myFile, line);
+        istringstream iss(line);
+        
+        iss >> from >> to;
+        probabilityAssigned = (iss >> edgeProbability)? true:false;
+        this->edgeProbabilitiesAssigned = probabilityAssigned?true:false;
+        
         for(int i =0;i<n;i++) {
             graph.push_back(vector<int>());
             visited.push_back(false);
             inDegree.push_back(0);
         }
-        int from, to;
-        int maxDegree = 0;
+        myFile.seekg(firstEdgePosition);
         while (myFile >> from >> to) {
+            if (probabilityAssigned) {
+                myFile >> edgeProbability;
+                edgeProbabilities[to_string(from) + "#" + to_string(to)] = (double)1/edgeProbability;
+            }
             graph[from].push_back(to);
             inDegree[to] = inDegree[to]+1;
             if(inDegree[to] > maxDegree) {
