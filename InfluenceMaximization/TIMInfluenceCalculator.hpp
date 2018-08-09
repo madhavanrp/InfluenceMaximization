@@ -19,9 +19,10 @@
 class TIMInfluenceCalculator {
     Graph *graph;
     double epsilon;
-    void constructCalculator(Graph *graph, double epsilon);
+    void constructCalculator(Graph *graph, double epsilon, string model);
     vector<vector<int>> rrSetsNonTargets;
     vector<vector<int>> rrSetsTargets;
+    string model;
     
     shared_ptr<TIMCoverage> timCoverageTargets, timCoverageNonTargets;
     shared_ptr<vector<vector<int>>> lookupTableTargets, lookupTableNonTargets;
@@ -39,6 +40,7 @@ class TIMInfluenceCalculator {
 public:
     TIMInfluenceCalculator(Graph *graph);
     TIMInfluenceCalculator(Graph *graph, double epsilon);
+    TIMInfluenceCalculator(Graph *graph, double epsilon, string model);
     
     //Generation of Random RR Sets
     void generateRandomRRSet(int randomVertex, int rrSetID, vector<vector<int>> *rrSets, vector<int> *counts);

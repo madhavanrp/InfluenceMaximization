@@ -186,6 +186,10 @@ public:
         data["labelMethod" ] = method;
     }
     
+    void setDiffusionModel(string model) {
+        data["diffusionModel"] = model;
+    }
+    
     void setnBuckets(int nBuckets) {
         data["nBuckets"] = nBuckets;
     }

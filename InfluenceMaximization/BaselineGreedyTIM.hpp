@@ -22,12 +22,15 @@ class BaselineGreedyTIM: public virtual NodeChecker {
     int budget;
     int threshold;
     int rrSetsNonTargetsThreshold;
+    string model;
     vector<vector<int>> *rrSetTargets;
     vector<vector<int>> *rrSetNonTargets;
     shared_ptr<TIMCoverage> timCoverageTargets;
     shared_ptr<TIMCoverage> timCoverageNonTargets;
     
 public:
+    BaselineGreedyTIM(string model);
+    BaselineGreedyTIM();
     vector<int> getOrderedSeed();
     set<int> findSeedSet(Graph *graph, int budget, int nonTargetThreshold);
     virtual bool isNodeValid(int nodeID);

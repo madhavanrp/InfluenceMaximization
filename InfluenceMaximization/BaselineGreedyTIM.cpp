@@ -8,8 +8,16 @@
 
 #include "BaselineGreedyTIM.hpp"
 
+BaselineGreedyTIM::BaselineGreedyTIM(string model) {
+    this->model = model;
+}
+
+BaselineGreedyTIM::BaselineGreedyTIM() {
+    this->model = "IC";
+}
+
 set<int> BaselineGreedyTIM::findSeedSet(Graph *graph, int budget, int nonTargetThreshold) {
-    TIMInfluenceCalculator timInfluenceCalculator(graph, 2);
+    TIMInfluenceCalculator timInfluenceCalculator(graph, 2, this->model);
     double scalingFactorNonTargets = timInfluenceCalculator.getScalingFactorNonTargets();
     if(scalingFactorNonTargets==0) {
         this->rrSetsNonTargetsThreshold = INT_MAX;
