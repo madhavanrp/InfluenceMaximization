@@ -34,6 +34,7 @@ private:
     float propogationProbability;
     int propogationProbabilityNumber;
     bool standardProbability;
+    string diffusionModel;
     string graphName;
     float percentageTargets;
     vector<int> nonTargets;
@@ -94,6 +95,8 @@ public:
     bool flipCoinOnEdge(int u, int v);
     int generateRandomNumber(int u, int v);
     int getPropogationProbabilityNumber();
+    double getWeightForLTModel(int u, int v);
+    void setDiffusionModel(string model);
     
     
     // For heuristics

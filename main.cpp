@@ -146,6 +146,12 @@ void loadResultsFileFrom(cxxopts::ParseResult result) {
         LabelSetting setting = static_cast<LabelSetting>(result["labelMethod"].as<int>());
         IMResults::getInstance().setLabelMethod(setting);
     }
+    
+    if (result.count("model")>0) {
+        IMResults::getInstance().setDiffusionModel(result["model"].as<std::string>());
+    } else {
+        IMResults::getInstance().setDiffusionModel("IC");
+    }
 }
 
 void loadGraphSizeToResults(Graph *graph) {
@@ -168,6 +174,7 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     nonTargetThreshold = result["threshold"].as<int>();
     graphFileName = result["graph"].as<std::string>();
     percentageTargets = result["percentage"].as<int>();
+    string model = "IC";
     loadResultsFileFrom(result);
     
     if(result.count("method")>0) {
@@ -180,6 +187,9 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     if(result.count("ntfile")>0) {
         nonTargetsFileName = result["ntfile"].as<std::string>();
         fromFile = true;
+    }
+    if (result.count("model")>0) {
+        model = result["model"].as<std::string>();
     }
     
     // Log information
@@ -212,6 +222,7 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     // insert code here...
     float percentageTargetsFloat = (float)percentageTargets/(float)100;
     Graph *graph = createGraphObject(result);
+    graph->setDiffusionModel(model);
     if(!useIndegree) {
         graph->setPropogationProbability(probability);
     }
@@ -224,6 +235,7 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     EstimateNonTargets *estimateNonTargets = NULL;
     if(!fromFile) {
         estimateNonTargets = new EstimateNonTargets(graph);
+        estimateNonTargets->setDiffusionModel(model);
         if(method==1) {
             nodeCounts = estimateNonTargets->getNonTargetsUsingTIM();
         } else {
@@ -295,7 +307,7 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     IMSeedSet bestSeedSet = phase2->getTree()->getBestSeedSet(budget);
     delete phase2;
     graph->clearRandomRRSets();
-    TIMInfluenceCalculator  *timInfluenceCalculator = new TIMInfluenceCalculator(graph, 2);
+    TIMInfluenceCalculator  *timInfluenceCalculator = new TIMInfluenceCalculator(graph, 2, model);
     pair<int, int> influenceOfBestSeedSet = timInfluenceCalculator->findInfluence(bestSeedSet.getSeedSet());
     int targetsActivated = influenceOfBestSeedSet.first;
     int nonTargetsActivated = influenceOfBestSeedSet.second;
@@ -417,6 +429,10 @@ void executeBaselineGreedy(cxxopts::ParseResult result) {
     int percentageTargets = result["percentage"].as<int>();
     float percentageTargetsFloat = (float)percentageTargets/(float)100;
     int nonTargetThreshold = result["threshold"].as<int>();
+    string model = "IC";
+    if (result.count("model")>0) {
+        model = result["model"].as<string>();
+    }
     
     loadResultsFileFrom(result);
     
@@ -428,13 +444,13 @@ void executeBaselineGreedy(cxxopts::ParseResult result) {
     loadGraphSizeToResults(graph);
     
     clock_t baselineStartTime = clock();
-    BaselineGreedyTIM baselineGreedyTIM;
+    BaselineGreedyTIM baselineGreedyTIM(model);
     set<int> seedSet = baselineGreedyTIM.findSeedSet(graph, budget, nonTargetThreshold);
     clock_t baselineEndTime = clock();
     double baselineTimeTaken = double(baselineEndTime - baselineStartTime) / CLOCKS_PER_SEC;
     
     
-    TIMInfluenceCalculator  timInfluenceCalculator(graph, 2);
+    TIMInfluenceCalculator  timInfluenceCalculator(graph, 2, model);
     pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
     cout <<"\n Results after Diffusion: ";
     cout << "\nInfluence Targets: " << influence.first;
@@ -442,24 +458,33 @@ void executeBaselineGreedy(cxxopts::ParseResult result) {
     FILE_LOG(logDEBUG) << "\n Time Taken: " << baselineTimeTaken;
     vector<int> orderedSeed = baselineGreedyTIM.getOrderedSeed();
     set<int> greedySeedSet;
-    vector<IMSeedSet> allSeedSets;
-    for (int i=(int)(orderedSeed.size()-1); i<orderedSeed.size(); i++) {
-        greedySeedSet.insert(orderedSeed[i]);
-        TIMInfluenceCalculator  timInfluenceCalculatorGreedy(graph, 2);
-        pair<int, int> seedSetInfluence = timInfluenceCalculatorGreedy.findInfluence(greedySeedSet);
-        IMSeedSet imSeedSet;
-        vector<int> seedVector(orderedSeed.begin(), orderedSeed.begin() + i + 1);
-        // Reverse this before adding so the last seed is first
-        reverse(seedVector.begin(), seedVector.end());
-        for (int s: seedVector) {
-            imSeedSet.addSeed(s);
-        }
-        imSeedSet.setTargets(seedSetInfluence.first);
-        imSeedSet.setNonTargets(seedSetInfluence.second);
-        allSeedSets.push_back(imSeedSet);
+//    vector<IMSeedSet> allSeedSets;
+//    for (int i=0; i<orderedSeed.size(); i++) {
+//        greedySeedSet.insert(orderedSeed[i]);
+//        TIMInfluenceCalculator  timInfluenceCalculatorGreedy(graph, 2, model);
+//        pair<int, int> seedSetInfluence = timInfluenceCalculatorGreedy.findInfluence(greedySeedSet);
+//        IMSeedSet imSeedSet;
+//        vector<int> seedVector(orderedSeed.begin(), orderedSeed.begin() + i + 1);
+//        // Reverse this before adding so the last seed is first
+//        reverse(seedVector.begin(), seedVector.end());
+//        for (int s: seedVector) {
+//            imSeedSet.addSeed(s);
+//        }
+//        imSeedSet.setTargets(seedSetInfluence.first);
+//        imSeedSet.setNonTargets(seedSetInfluence.second);
+//        allSeedSets.push_back(imSeedSet);
+//    }
+    IMSeedSet imSeedSet;
+    reverse(orderedSeed.begin(), orderedSeed.end());
+    for (int s: orderedSeed) {
+        imSeedSet.addSeed(s);
     }
-    IMResults::getInstance().addSeedSets(allSeedSets);
-    IMResults::getInstance().addBestSeedSet(allSeedSets[0]);
+    imSeedSet.setTargets(influence.first);
+    imSeedSet.setNonTargets(influence.second);
+    
+//    IMResults::getInstance().addSeedSets(allSeedSets);
+//    IMResults::getInstance().addBestSeedSet(allSeedSets[allSeedSets.size()-1]);
+    IMResults::getInstance().addBestSeedSet(imSeedSet);
     
     IMResults::getInstance().setTotalTimeTaken(baselineTimeTaken);
     string resultFile = constructResultFileName(graphFileName, budget, nonTargetThreshold, percentageTargets, setting1);
@@ -654,7 +679,8 @@ int main(int argc, char **argv) {
     ("e,extend", "Extend the permutation")
     ("labelMethod", "Labelling Strategy", cxxopts::value<int>())
     ("decompositionFile", "Decomposition File", cxxopts::value<string>())
-    ("nBuckets", "Number of Buckets", cxxopts::value<int>());
+    ("nBuckets", "Number of Buckets", cxxopts::value<int>())
+    ("model", "Cascade Model", cxxopts::value<string>());
     
     auto result = options.parse(argc, argv);
     string algorithm = result["algorithm"].as<string>();

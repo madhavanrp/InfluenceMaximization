@@ -16,11 +16,17 @@ EstimateNonTargets::EstimateNonTargets(Graph *graph) {
         this->visited.push_back(false);
     }
     n = graph->getNumberOfVertices();
+    this->model = "IC";
 }
 
 EstimateNonTargets::EstimateNonTargets() {
     
 }
+
+void EstimateNonTargets::setDiffusionModel(string model) {
+    this->model = model;
+}
+
 vector<vector<int>>* EstimateNonTargets::getRandomRRSets() {
     return &this->rrSets;
 }
@@ -104,21 +110,49 @@ vector<int> EstimateNonTargets::generateRandomRRSet(int randomVertex, int rrSetI
     nodeCounts[randomVertex]++;
     vector<vector<int>> *graphTranspose = graph->getGraphTranspose();
     while(!q.empty()) {
-        int u=q.front();
-        q.pop_front();
-        for(int j=0; j<(int)(*graphTranspose)[u].size(); j++){
-            int v = (*graphTranspose)[u][j];
-            if(!graph->flipCoinOnEdge(v, u))
-                continue;
-            if(visited[v])
-                continue;
-            
-            visitMark[nVisitMark++]=v;
-            visited[v]=true;
-            nodeCounts[v]++;
-            q.push_back(v);
-            rrSets[rrSetID].push_back(v);
+        if (this->model.compare("IC")==0) {
+            int u=q.front();
+            q.pop_front();
+            for(int j=0; j<(int)(*graphTranspose)[u].size(); j++){
+                int v = (*graphTranspose)[u][j];
+                if(!graph->flipCoinOnEdge(v, u))
+                    continue;
+                if(visited[v])
+                    continue;
+                
+                visitMark[nVisitMark++]=v;
+                visited[v]=true;
+                nodeCounts[v]++;
+                q.push_back(v);
+                rrSets[rrSetID].push_back(v);
+            }
         }
+        else {
+            // LT Model
+            int u=q.front();
+            q.pop_front();
+            
+            if((*graphTranspose)[u].size()==0)
+                continue;
+            double randomDouble = (double)rand() / (double)RAND_MAX;
+            for(int i=0; i<(int)(*graphTranspose)[u].size(); i++){
+                int v = (*graphTranspose)[u][i];
+                randomDouble = randomDouble - graph->getWeightForLTModel(v, u);
+                if(randomDouble>0)
+                    continue;
+                
+                if(visited[v])
+                    break;
+                visitMark[nVisitMark++]=v;
+                visited[v]=true;
+                nodeCounts[v]++;
+                q.push_back(v);
+                rrSets[rrSetID].push_back(v);
+                break;
+            }
+        }
+        
+        
     }
     for(int i=0;i<nVisitMark;i++) {
         visited[visitMark[i]] = false;
