@@ -13,11 +13,11 @@
 TEST_CASE("Graph is read correctly " , "Graph") {
     Graph *graph = new Graph;
     graph->readGraph("ca-GrQc-processed.txt");
-    int n = graph->n;
+    int n = graph->getNumberOfVertices();
     
     int randomV = rand() % n;
     int inDegree = graph->inDegree[randomV];
-    int randomU = graph->graphTranspose[randomV][rand() % graph->graphTranspose[randomV].size()];
+    int randomU = (*graph->getGraphTranspose())[randomV][rand() % (*graph->getGraphTranspose())[randomV].size()];
     int randomNumber = graph->generateRandomNumber(randomU, randomV);
     REQUIRE(randomNumber>=0);
     REQUIRE(randomNumber<inDegree);
@@ -30,4 +30,5 @@ TEST_CASE("Graph is read correctly " , "Graph") {
     randomNumber = graph->generateRandomNumber(randomU, randomV);
     REQUIRE(randomNumber>=0);
     REQUIRE(randomNumber<100);
+    delete graph;
 }

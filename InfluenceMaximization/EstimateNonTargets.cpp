@@ -16,11 +16,17 @@ EstimateNonTargets::EstimateNonTargets(Graph *graph) {
         this->visited.push_back(false);
     }
     n = graph->getNumberOfVertices();
+    this->model = "IC";
 }
 
 EstimateNonTargets::EstimateNonTargets() {
     
 }
+
+void EstimateNonTargets::setDiffusionModel(string model) {
+    this->model = model;
+}
+
 vector<vector<int>>* EstimateNonTargets::getRandomRRSets() {
     return &this->rrSets;
 }
@@ -64,7 +70,7 @@ vector<vector<int>>* EstimateNonTargets::generateRandomRRSets(int R, bool label)
         vector<int> *nonTargets = graph->getNonTargets();
         for(int i=0;i<R;i++) {
             randomVertex = (*nonTargets)[rand() % graph->getNumberOfNonTargets()];
-            assert(!graph->labels[randomVertex]);
+            assert(graph->isNonTarget(randomVertex));
             generateRandomRRSet(randomVertex, i);
         }
     }
@@ -76,7 +82,7 @@ vector<vector<int>>* EstimateNonTargets::generateRandomRRSets(int R, bool label)
        nodeCounts[i] = (double)nodeCounts[i] * (double)graph->getNumberOfNonTargets()/(double)R;
         
         if(nodeCounts[i]==0) {
-            assert(graph->labels[i]);
+            assert(graph->isTarget(i));
         }
         if(nodeCounts[i] > maxInfluence) {
             maxNode = i;
@@ -102,22 +108,51 @@ vector<int> EstimateNonTargets::generateRandomRRSet(int randomVertex, int rrSetI
     visitMark[nVisitMark++] = randomVertex;
     visited[randomVertex] = true;
     nodeCounts[randomVertex]++;
+    vector<vector<int>> *graphTranspose = graph->getGraphTranspose();
     while(!q.empty()) {
-        int u=q.front();
-        q.pop_front();
-        for(int j=0; j<(int)graph->graphTranspose[u].size(); j++){
-            int v = graph->graphTranspose[u][j];
-            if(!graph->flipCoinOnEdge(v, u))
-                continue;
-            if(visited[v])
-                continue;
-            
-            visitMark[nVisitMark++]=v;
-            visited[v]=true;
-            nodeCounts[v]++;
-            q.push_back(v);
-            rrSets[rrSetID].push_back(v);
+        if (this->model.compare("IC")==0) {
+            int u=q.front();
+            q.pop_front();
+            for(int j=0; j<(int)(*graphTranspose)[u].size(); j++){
+                int v = (*graphTranspose)[u][j];
+                if(!graph->flipCoinOnEdge(v, u))
+                    continue;
+                if(visited[v])
+                    continue;
+                
+                visitMark[nVisitMark++]=v;
+                visited[v]=true;
+                nodeCounts[v]++;
+                q.push_back(v);
+                rrSets[rrSetID].push_back(v);
+            }
         }
+        else {
+            // LT Model
+            int u=q.front();
+            q.pop_front();
+            
+            if((*graphTranspose)[u].size()==0)
+                continue;
+            double randomDouble = (double)rand() / (double)RAND_MAX;
+            for(int i=0; i<(int)(*graphTranspose)[u].size(); i++){
+                int v = (*graphTranspose)[u][i];
+                randomDouble = randomDouble - graph->getWeightForLTModel(v, u);
+                if(randomDouble>0)
+                    continue;
+                
+                if(visited[v])
+                    break;
+                visitMark[nVisitMark++]=v;
+                visited[v]=true;
+                nodeCounts[v]++;
+                q.push_back(v);
+                rrSets[rrSetID].push_back(v);
+                break;
+            }
+        }
+        
+        
     }
     for(int i=0;i<nVisitMark;i++) {
         visited[visitMark[i]] = false;

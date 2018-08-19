@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>InfluenceTests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>jsonexperimenter.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -18,6 +23,11 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>310E6A121FDE0FAB00D72424</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3179B93F2038E6F300C80D9A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

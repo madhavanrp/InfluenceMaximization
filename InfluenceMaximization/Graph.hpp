@@ -18,34 +18,58 @@
 #include <ctime>
 #include <deque>
 #include <string.h>
+#include <stdexcept>
+#include <unordered_map>
+#include "LabelSetting.hpp"
+
 using namespace std;
+
+enum NodeLabel {
+    NodeLabelTarget,
+    NodeLabelNonTarget
+};
 
 class Graph {
 private:
     float propogationProbability;
     int propogationProbabilityNumber;
     bool standardProbability;
+    string diffusionModel;
     string graphName;
     float percentageTargets;
     vector<int> nonTargets;
     int numberOfTargets;
     int numberOfNonTargets;
-public:
-    Graph();
+    LabelSetting labelSetting;
+    
     int n, m;
     vector<vector<int> > graph;
     vector<vector<int> > graphTranspose;
+    unordered_map<string, int> edgeProbabilities;
+    bool edgeProbabilitiesAssigned;
+    
+    vector<NodeLabel> labels;
+public:
+    Graph();
     vector<vector<int>> rrSets;
-    vector<bool> labels;
+    
     deque<int> q;
     vector<int> inDegree;
     vector<bool> visited;
     vector<int> visitMark;
     void readGraph(string fileName);
     void readGraph(string fileName, float percentage);
+    void readGraph(string fileName, float percentage, LabelSetting labelSetting);
+    
+    //Labels
+    bool isTarget(int v);
+    bool isNonTarget(int v);
     void readLabels(string fileName);
-    void writeLabels();
-    void setLabels(vector<bool> labels, float percentageTargets);
+    void writeLabels(LabelSetting labelSetting);
+    void writeLabels(LabelSetting labelSetting, string comment);
+    void setLabels(vector<NodeLabel> labels, float percentageTargets);
+    static string constructLabelFileName(string graphName, float percentageTargets);
+    static string constructLabelFileName(string graphName, float percentageTargets, LabelSetting setting);
     
     //Numbers
     int getNumberOfVertices();
@@ -55,6 +79,8 @@ public:
     
     //Data Structure
     vector<int> *getNonTargets();
+    vector<vector<int>> *getGraph();
+    vector<vector<int>> *getGraphTranspose();
     
     vector<vector<int> > constructTranspose(vector<vector<int> > aGraph);
     void generateRandomRRSets(int R, bool label);
@@ -62,7 +88,6 @@ public:
     void clearRandomRRSets();
     vector<vector<int>>* getRandomRRSets();
     
-    vector<int> oldRRSetGeneration(int randomVertex, int rrSetID);
     void assertTransposeIsCorrect();
     
     //Functions for propogation probability
@@ -70,6 +95,8 @@ public:
     bool flipCoinOnEdge(int u, int v);
     int generateRandomNumber(int u, int v);
     int getPropogationProbabilityNumber();
+    double getWeightForLTModel(int u, int v);
+    void setDiffusionModel(string model);
     
     
     // For heuristics

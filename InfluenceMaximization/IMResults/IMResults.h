@@ -11,6 +11,8 @@
 
 #include "../IMTree.hpp"
 #include "../ApproximationSetting.hpp"
+#include "../LabelSetting.hpp"
+
 using json = nlohmann::json;
 
 using namespace std;
@@ -42,6 +44,19 @@ public:
     void writeToFile(string filePath) {
         std::ofstream o(filePath);
         o << std::setw(4) << data << std::endl;
+    }
+    
+    void addGreedySolutions(vector<double> greedySolutions) {
+        data["greedySolutions"] = greedySolutions;
+        bool monotone = true;
+        double previous = INT_MIN;
+        for (double solution: greedySolutions) {
+            if (solution<previous) {
+                monotone = false;
+            }
+            previous = solution;
+        }
+        data["monotone"] = monotone;
     }
     
     void addSeedSets(vector<IMSeedSet> allSeedSets) {
@@ -150,6 +165,33 @@ public:
     
     void setNumberOfEdges(int m) {
         data["numberOfEdges"] = m;
+    }
+    
+    void setLabelMethod(LabelSetting labelMethod) {
+        string method;
+        switch (labelMethod) {
+            case LabelSettingUniform:
+                method = "uniform";
+                break;
+            case LabelSettingClusters:
+                method = "clusters";
+                break;
+            case LabelSettingTIMNonTargets:
+                method="timNonTargets";
+                break;
+            default:
+                throw std::invalid_argument( "Label Setting is invalid");
+                break;
+        }
+        data["labelMethod" ] = method;
+    }
+    
+    void setDiffusionModel(string model) {
+        data["diffusionModel"] = model;
+    }
+    
+    void setnBuckets(int nBuckets) {
+        data["nBuckets"] = nBuckets;
     }
 };
 #endif /* IMResults_h */

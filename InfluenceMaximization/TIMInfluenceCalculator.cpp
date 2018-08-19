@@ -10,16 +10,21 @@
 
 TIMInfluenceCalculator::TIMInfluenceCalculator(Graph *graph) {
     //Default Epsilon
-    constructCalculator(graph, 2);
+    constructCalculator(graph, 2, "IC");
 }
 
 TIMInfluenceCalculator::TIMInfluenceCalculator(Graph *graph, double epsilon) {
-    constructCalculator(graph, epsilon);
+    constructCalculator(graph, epsilon, "IC");
 }
 
-void TIMInfluenceCalculator::constructCalculator(Graph *graph, double epsilon) {
+TIMInfluenceCalculator::TIMInfluenceCalculator(Graph *graph, double epsilon, string model) {
+    constructCalculator(graph, epsilon, model);
+}
+
+void TIMInfluenceCalculator::constructCalculator(Graph *graph, double epsilon, string model) {
     this->graph = graph;
     this->epsilon = epsilon;
+    this->model = model;
     int n = graph->getNumberOfVertices();
     
     //Initialize RR Set related data structures
@@ -58,13 +63,21 @@ void TIMInfluenceCalculator::constructCalculator(Graph *graph, double epsilon) {
 void TIMInfluenceCalculator::generateRandomRRSetsTargets(int R) {
     int n = this->graph->getNumberOfVertices();
     int randomVertex;
+    if (this->model.compare("LT")==0) {
+        cout << "\n Begin generation of LT model RR Sets";
+        cout << "\n Value of R is " << R;
+    }
+    int totalSize = 0;
     for(int i=0;i<R;i++) {
         randomVertex = rand() % n;
-        while(!graph->labels[randomVertex]) {
+        while(!graph->isTarget(randomVertex)) {
             randomVertex = rand() % n;
         }
         generateRandomRRSet(randomVertex, i, &rrSetsTargets, &targetCounts);
+        totalSize += (int)rrSetsTargets[i].size();
     }
+    cout << "\n Total Number of elements in RR Sets: " << totalSize;
+    cout << "\n Average size of an RR Set is " << (double)totalSize/(double)R;
 }
 
 void TIMInfluenceCalculator::generateRandomRRSetsNonTargets(int R) {
@@ -73,42 +86,84 @@ void TIMInfluenceCalculator::generateRandomRRSetsNonTargets(int R) {
     if(graph->getNumberOfNonTargets()>0) {
         for(int i=0;i<R;i++) {
             randomVertex = (*nonTargets)[rand() % graph->getNumberOfNonTargets()];
-            assert(!graph->labels[randomVertex]);
+            assert(!graph->isTarget(randomVertex));
             generateRandomRRSet(randomVertex, i, &rrSetsNonTargets, &nonTargetCounts);
         }
     }
 }
 
 void TIMInfluenceCalculator::generateRandomRRSet(int randomVertex, int rrSetID, vector<vector<int>> *rrSets, vector<int> *counts) {
-    q.clear();
-    
-    (*rrSets)[rrSetID].push_back(randomVertex);
-    q.push_back(randomVertex);
-    int nVisitMark = 0;
-    visitMark[nVisitMark++] = randomVertex;
-    visited[randomVertex] = true;
-    (*counts)[randomVertex]++;
-    while(!q.empty()) {
-        int u=q.front();
-        q.pop_front();
-        for(int j=0; j<(int)graph->graphTranspose[u].size(); j++){
-            int v = graph->graphTranspose[u][j];
-            if(!graph->flipCoinOnEdge(v, u))
-                continue;
-            if(visited[v])
-                continue;
+    if (this->model.compare("IC")==0) {
+        q.clear();
+        
+        (*rrSets)[rrSetID].push_back(randomVertex);
+        q.push_back(randomVertex);
+        int nVisitMark = 0;
+        visitMark[nVisitMark++] = randomVertex;
+        visited[randomVertex] = true;
+        (*counts)[randomVertex]++;
+        vector<vector<int>> *graphTranspose = graph->getGraphTranspose();
+        while(!q.empty()) {
+            int u=q.front();
+            q.pop_front();
+            for(int j=0; j<(int)(*graphTranspose)[u].size(); j++){
+                int v = (*graphTranspose)[u][j];
+                if(!graph->flipCoinOnEdge(v, u))
+                    continue;
+                if(visited[v])
+                    continue;
+                
+                visitMark[nVisitMark++]=v;
+                visited[v]=true;
+                (*counts)[v]++;
+                q.push_back(v);
+                (*rrSets)[rrSetID].push_back(v);
+            }
+        }
+        for(int i=0;i<nVisitMark;i++) {
+            visited[visitMark[i]] = false;
+        }
+
+    }
+    else {
+        q.clear();
+        
+        (*rrSets)[rrSetID].push_back(randomVertex);
+        q.push_back(randomVertex);
+        int nVisitMark = 0;
+        visitMark[nVisitMark++] = randomVertex;
+        visited[randomVertex] = true;
+        (*counts)[randomVertex]++;
+        vector<vector<int>> *graphTranspose = graph->getGraphTranspose();
+        while (!q.empty()) {
+            int u=q.front();
+            q.pop_front();
             
-            visitMark[nVisitMark++]=v;
-            visited[v]=true;
-            (*counts)[v]++;
-            q.push_back(v);
-            (*rrSets)[rrSetID].push_back(v);
+            if((*graphTranspose)[u].size()==0)
+                continue;
+            double randomDouble = (double)rand() / (double)RAND_MAX;
+            for(int i=0; i<(int)(*graphTranspose)[u].size(); i++){
+                int v = (*graphTranspose)[u][i];
+                randomDouble = randomDouble - graph->getWeightForLTModel(v, u);
+                if(randomDouble>0)
+                    continue;
+                
+                if(visited[v])
+                    break;
+                visitMark[nVisitMark++]=v;
+                visited[v]=true;
+                q.push_back(v);
+                
+                (*rrSets)[rrSetID].push_back(v);
+                break;
+            }
+
+        }
+        for(int i=0;i<nVisitMark;i++) {
+            visited[visitMark[i]] = false;
         }
     }
-    for(int i=0;i<nVisitMark;i++) {
-        visited[visitMark[i]] = false;
-    }
-    
+
 }
 
 double TIMInfluenceCalculator::getScalingFactorTargets() {
@@ -146,6 +201,14 @@ pair<int, int> TIMInfluenceCalculator::findInfluence(set<int> seedSet, set<int> 
     int nonTargetsInfluenced = round((double) count * getScalingFactorNonTargets());
 //    int nonTargetsInfluenced = this->timCoverageNonTargets->findInfluence(seedSet, getScalingFactorNonTargets());
     return make_pair(targetsInfluenced, nonTargetsInfluenced);
+}
+
+pair<double, double> TIMInfluenceCalculator::findInfluenceWithoutUpdatingModel(set<int> seedSet) {
+    
+    double targets = this->timCoverageTargets->findInfluence(seedSet, getScalingFactorTargets());
+    double nonTargets = this->timCoverageNonTargets->findInfluence(seedSet, getScalingFactorNonTargets());
+    return make_pair(targets, nonTargets);
+
 }
 
 shared_ptr<TIMCoverage> TIMInfluenceCalculator::getTimCoverageTargets() {

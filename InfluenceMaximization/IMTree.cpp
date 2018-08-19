@@ -25,7 +25,7 @@ vector<struct node*> IMTree::getTree() {
 
 struct node* IMTree::addChild(struct node* parent, int childNode, double targets, double nonTargets) {
     struct node *child = new struct node();
-    struct node* newChild = makeNode(parent, child, childNode, targets, nonTargets);
+    struct node *newChild = makeNode(parent, child, childNode, targets, nonTargets);
     parent->children.push_back(newChild);
     tree.push_back(newChild);
     return newChild;
@@ -237,7 +237,3 @@ IMSeedSet IMTree::getBestSeedSet(int depth) {
     return maxSeedSet;
 }
 
-IMTree::IMTree( const IMTree &obj) {
-    tree = obj.tree;
-    root = obj.root;
-}

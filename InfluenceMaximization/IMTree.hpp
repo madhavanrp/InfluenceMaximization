@@ -86,7 +86,6 @@ private:
     void recursivelyDeleteLeaves(struct node* leaf);
 public:
     IMTree(void);
-    IMTree( const IMTree &obj);
     ~IMTree();
     vector<struct node*> getLeafNodes(int depth);
     vector<struct node*> findSeedSetInPath(struct node *aNode);

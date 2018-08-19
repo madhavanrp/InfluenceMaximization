@@ -10,10 +10,11 @@
 
 
 ModularApproximation::ModularApproximation(vector<int> permutation, ApproximationSetting approximationSetting) {
+    this->timEvaluator = NULL;
     this->permutation = new vector<int>(permutation);
     this->n = (int)permutation.size();
     this->reverseMap = new vector<int>(this->n);
-    this->approximations = new int[this->n];
+    this->approximations = new double[this->n];
     this->setting = approximationSetting;
     constructReverseMap();
 }
@@ -22,14 +23,36 @@ void ModularApproximation::createTIMEvaluator(Graph *graph) {
     this->timEvaluator = new TIMEvaluator(graph, this->setting);
 }
 
+ModularApproximation::ModularApproximation( const ModularApproximation &obj) {
+    this->permutation = new vector<int>(*obj.permutation);
+    this->reverseMap = new vector<int>(*obj.reverseMap);
+    this->n = obj.n;
+    this->approximations = new double(*obj.approximations);
+    this->setting = obj.setting;
+}
+
+ModularApproximation& ModularApproximation::operator=( const ModularApproximation &obj) {
+    if(this==&obj) {
+        return *this;
+    }
+    delete this->permutation;
+    delete this->reverseMap;
+    delete[] this->approximations;
+    delete this->timEvaluator;
+    
+    this->permutation = new vector<int>(*obj.permutation);
+    this->reverseMap = new vector<int>(*obj.reverseMap);
+    this->n = obj.n;
+    this->approximations = new double(*obj.approximations);
+    this->setting = obj.setting;
+    return *this;
+}
 
 ModularApproximation::~ModularApproximation() {
     delete this->permutation;
     delete this->reverseMap;
-    delete this->approximations;
-    if(this->timEvaluator!=NULL) {
-        delete this->timEvaluator;
-    }
+    delete[] this->approximations;
+    delete this->timEvaluator;
 }
 
 vector<int> ModularApproximation::getPerumutation() {
@@ -43,7 +66,7 @@ TIMEvaluator* ModularApproximation::getTIMEvaluator() {
     return this->timEvaluator;
 }
 
-int* ModularApproximation::getApproximations() {
+double* ModularApproximation::getApproximations() {
     return this->approximations;
 }
 
@@ -58,37 +81,53 @@ void ModularApproximation::constructReverseMap() {
 void ModularApproximation::calculateApproximation(int element, set<int> *vertices) {
     set<int> seed;
     seed.insert(element);
-    pair<int, int> totalInfluence = this->timEvaluator->findInfluence(&seed);
-    int f = totalInfluence.first;
-    int g = totalInfluence.second;
+    pair<double, double> totalInfluence = this->timEvaluator->findInfluence(&seed);
+    double f = totalInfluence.first;
+    double g = totalInfluence.second;
     this->approximations[element] = f-g;
 }
 
+
+
 void ModularApproximation::findAllApproximations() {
+    
+//    if(this->setting==setting6) {
+//        this->timEvaluator->findInfluence(&relativeSet)
+//    }
     set<int> *vertices = new set<int>();
+    
     for (int i=0; i<this->n; i++) {
         int vertex = (*this->permutation)[i];
-        calculateApproximation(vertex, vertices);
+        if(this->setting==setting6) {
+            // Do setting 6 special
+        } else {
+            calculateApproximation(vertex, vertices);
+        }
         vertices->insert(vertex);
         assert(vertices->size()==i+1);
     }
     delete vertices;
 }
 
-int ModularApproximation::evaluateFunction(set<int> elements) {
-    int valueCalculated = 0;
+double ModularApproximation::evaluateFunction(set<int> elements) {
+    double valueCalculated = 0;
     for(int element: elements) {
         valueCalculated+=evaluateFunction(element);
     }
     return valueCalculated;
 }
-int ModularApproximation::evaluateFunction(int element) {
+
+double ModularApproximation::evaluateFunction(int element) {
     return this->approximations[element];
 }
 
 DifferenceApproximator::DifferenceApproximator(Graph *graph) {
     this->graph = graph;
     this->permutation = NULL;
+}
+
+double DifferenceApproximator::getDifferenceValue() {
+    return differenceValue;
 }
 
 void DifferenceApproximator::setN(int n) {
@@ -105,7 +144,11 @@ vector<int> DifferenceApproximator::generatePermutation() {
 }
 
 vector<int> DifferenceApproximator::generatePermutation(vector<int> startingElements) {
-    int totalSize = (int)this->permutation->size();
+    int totalSize = n;
+    
+    if(this->permutation==NULL) {
+        generatePermutation();
+    }
     
     // Shuffle the starting elements and build the new permutation
     random_shuffle(startingElements.begin(), startingElements.end());
@@ -132,55 +175,86 @@ vector<int> DifferenceApproximator::generatePermutation(vector<int> startingElem
     return *this->permutation;
 }
 
-set<int> DifferenceApproximator::executeGreedyAlgorithm(Graph *graph, ModularApproximation *modularApproximation, int k) {
+set<int> DifferenceApproximator::executeGreedyAlgorithm(ApproximationSetting setting, int k) {
     
-    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> orderedNodes;
-    for(int i=0; i<graph->n; i++) {
-        int evaluation = modularApproximation->evaluateFunction(i);
+    vector<int> permutation = generatePermutation();
+    ModularApproximation modularApproximation(permutation, setting);
+    modularApproximation.createTIMEvaluator(this->graph);
+    modularApproximation.findAllApproximations();
+    
+    priority_queue<pair<int, double>, vector<pair<int, double>>, QueueComparator> orderedNodes;
+    for(int i=0; i<graph->getNumberOfVertices(); i++) {
+        double evaluation = modularApproximation.evaluateFunction(i);
         orderedNodes.push(make_pair(i, evaluation));
     }
     set<int> seedSet;
+    double differenceValue = 0;
     for (int i =0; i<k; i++) {
         seedSet.insert(orderedNodes.top().first);
+        differenceValue+=orderedNodes.top().second;
         orderedNodes.pop();
     }
+    this->differenceValue = differenceValue;
     return seedSet;
     
 }
 
 set<int> DifferenceApproximator::executeGreedyAlgorithmAdjustingPermutation(ApproximationSetting setting, int k) {
     set<int> seedSet;
-    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> orderedNodes;
+    priority_queue<pair<int, double>, vector<pair<int, double>>, QueueComparator> *orderedNodes;
     vector<int> permutation = generatePermutation();
     vector<int> startingVector;
+    double differenceValue = 0;
     for (int i =0; i<k; i++) {
-        orderedNodes = priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator>();
+        orderedNodes = new priority_queue<pair<int, double>, vector<pair<int, double>>, QueueComparator>();
         permutation = generatePermutation(startingVector);
         for(int j = 0; j<i; j++) {
             assert(seedSet.find(permutation[j])!=seedSet.end());
         }
-        assert(permutation.size()==this->graph->n);
+        assert(permutation.size()==this->graph->getNumberOfVertices());
         ModularApproximation *approximation = new ModularApproximation(permutation, setting);
         approximation->createTIMEvaluator(graph);
         approximation->findAllApproximations();
-        for(int i=0; i<graph->n; i++) {
-            int evaluation = approximation->evaluateFunction(i);
-            orderedNodes.push(make_pair(i, evaluation));
+        for(int i=0; i<graph->getNumberOfVertices(); i++) {
+            double evaluation = approximation->evaluateFunction(i);
+            orderedNodes->push(make_pair(i, evaluation));
         }
         delete approximation;
-
-        int top = orderedNodes.top().first;
+        
+        int top = orderedNodes->top().first;
+        double diffValue = orderedNodes->top().second;
         while(seedSet.find(top)!=seedSet.end()) {
-            orderedNodes.pop();
-            top = orderedNodes.top().first;
+            orderedNodes->pop();
+            top = orderedNodes->top().first;
+            diffValue = orderedNodes->top().second;
         }
+        delete orderedNodes;
         seedSet.insert(top);
+        differenceValue+=diffValue;
         startingVector.push_back(top);
     }
+    this->differenceValue = differenceValue;
     
     return seedSet;
 }
 
+// This will treat g as a modular function and approximate f-g_approx
+set<int> DifferenceApproximator::executeAlgorithmModularG(int k) {
+    set<int> seedSet;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> orderedNodes;
+    TIMEvaluator *timEvaluator = new TIMEvaluator(this->graph, setting5);
+    TIMCoverage *timCoverageTargets = timEvaluator->getTIMCoverage();
+    double reverseScale = (double)1/timEvaluator->getScalingFactorTargets();
+    
+    for (int i=0; i<graph->getNumberOfVertices(); i++) {
+        double nonTargetsEstimate = timEvaluator->findSingleNodeNonTargetsInfluence(i);
+        timCoverageTargets->offsetCoverage(i, nonTargetsEstimate * reverseScale * -1);
+    }
+    seedSet = timCoverageTargets->findTopKNodes(k, timEvaluator->getRRSetsTargets());
+    delete timEvaluator;
+    
+    return seedSet;
+}
 
 // Call this function with setting 3. This will approximate only g while optimizing: f - g_aprox
 set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunction(ApproximationSetting setting, int k) {
@@ -192,19 +266,22 @@ set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunction(Approx
     approximation->findAllApproximations();
     TIMCoverage *timCoverageTargets = approximation->getTIMEvaluator()->getTIMCoverage();
     
-    for (int i=0; i<graph->n; i++) {
+    for (int i=0; i<graph->getNumberOfVertices(); i++) {
         /* 
          Get g(i) and update coverage so that its value is now f(i) - g(i).
          If you add i to the seed, and update the coverage of each node, its value will be TIM estimate of f(i|seed set) - g(i)
          */
         // This value is negative
-        int nonTargetsEstimateNegated = approximation->evaluateFunction(i);
+        double nonTargetsEstimateNegated = approximation->evaluateFunction(i);
         // Now scale it back
         TIMEvaluator *timEvaluator = approximation->getTIMEvaluator();
-        double reverseScale = (double)1/timEvaluator->getScalingFactorNonTargets();
+        double reverseScale = (double)1/timEvaluator->getScalingFactorTargets();
         timCoverageTargets->offsetCoverage(i, nonTargetsEstimateNegated * reverseScale);
     }
     seedSet = timCoverageTargets->findTopKNodes(k, approximation->getTIMEvaluator()->getRRSetsTargets());
+//    double fValue = timCoverageTargets->getNumberOfRRSetsCovered() * approximation->getTIMEvaluator()->getScalingFactorTargets();
+//    double gValue = approximation->evaluateFunction(seedSet);
+//    this->differenceValue = fValue + gValue;
     
     delete approximation;
     return seedSet;
@@ -229,11 +306,11 @@ set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunctionExtendP
         
         
         TIMEvaluator *timEvaluator = approximation->getTIMEvaluator();
-        double reverseScale = (double)1/timEvaluator->getScalingFactorNonTargets();
+        double reverseScale = (double)1/timEvaluator->getScalingFactorTargets();
         
         vector<int> scaledApproximations;
         for (int j=0; j<this->n; j++) {
-            int gValue = approximation->evaluateFunction(j);
+            double gValue = approximation->evaluateFunction(j);
             scaledApproximations.push_back(gValue * reverseScale * -1);
         }
         
@@ -251,7 +328,212 @@ set<int> DifferenceApproximator::executeAlgorithmApproximatingOneFunctionExtendP
 }
 
 DifferenceApproximator::~DifferenceApproximator() {
-    if(this->permutation!=NULL) {
-        delete this->permutation;
+    delete this->permutation;
+}
+
+DifferenceApproximator& DifferenceApproximator::operator=( const DifferenceApproximator &obj) {
+    if (&obj==this) {
+        return *this;
     }
+    delete this->permutation;
+    if(obj.permutation!=NULL) {
+        this->permutation = new vector<int>(*obj.permutation);
+    }
+    return *this;
+}
+
+DifferenceApproximator::DifferenceApproximator( const DifferenceApproximator &obj) {
+    if(obj.permutation!=NULL) {
+        this->permutation = new vector<int>(*obj.permutation);
+    }
+}
+
+vector<double> DifferenceApproximator::calculateUpperBound(TIMCoverage *timCoverageNonTargets, double scalingFactorNonTargets, set<int> relativeSet) {
+    
+    double gOfX = timCoverageNonTargets->findInfluence(relativeSet, scalingFactorNonTargets);
+    
+    set<int> XCopy = relativeSet;
+    double marginalGainSummations = 0;
+    for (int v:relativeSet) {
+        XCopy.erase(v);
+        double gain = gOfX - timCoverageNonTargets->findInfluence(XCopy, scalingFactorNonTargets);
+        XCopy.insert(v);
+        marginalGainSummations+=gain;
+        
+    }
+    set<int> seedSet;
+    vector<double> approximations = vector<double>(this->n);
+    for (int i=0; i<this->n; i++) {
+        if(relativeSet.find(i)==relativeSet.end()) {
+            seedSet.insert(i);
+            double gOfI = timCoverageNonTargets->findInfluence(seedSet, scalingFactorNonTargets);
+            approximations[i] = gOfX - marginalGainSummations + gOfI;
+            seedSet.erase(i);
+        } else {
+            XCopy.erase(i);
+            double gain = gOfX - timCoverageNonTargets->findInfluence(XCopy, scalingFactorNonTargets);
+            XCopy.insert(i);
+            approximations[i] = gOfX - marginalGainSummations + gain;
+        }
+        
+    }
+    return approximations;
+}
+
+set<int> DifferenceApproximator::executeGreedyAlgorithmOnDS(int budget) {
+    set<int> seedSet;
+    TIMEvaluator *timEvaluator = new TIMEvaluator(this->graph, setting5);
+    double scalingFactorTargets = timEvaluator->getScalingFactorTargets();
+    double scalingFactorNonTargets = timEvaluator->getScalingFactorNonTargets();
+    TIMCoverage *timCoverageTargets = timEvaluator->getTIMCoverage();
+    TIMCoverage *timCoverageNonTargets = timEvaluator->getTIMCoverageNonTargets();
+    int n = graph->getNumberOfVertices();
+    
+    double maximumDifference = -1;
+    
+    int maxNode=-1;
+    double objectiveFunctionValue = 0;
+    for (int i=0; i<budget; i++) {
+        maximumDifference = -1;
+        maxNode = -1;
+//        if(i==0) {
+//            int mNode = timCoverageTargets->queue.top().first;
+//            cout << "\n f value = " << timCoverageTargets->marginalGainWithVertex(mNode, scalingFactorTargets);
+//            cout << "\n g value = " << timCoverageNonTargets->marginalGainWithVertex(mNode, scalingFactorNonTargets);
+//            cout << "\n Node = " << mNode;
+//            cout << "\n new RR sets covered = " << timCoverageTargets->numberOfNewRRSetsCoveredByVertex(mNode);
+//            cout << "\n As calculated = " << timCoverageTargets->numberOfNewRRSetsCoveredByVertex(mNode) * scalingFactorTargets;
+//            cout << flush;
+//            assert(timCoverageTargets->numberOfNewRRSetsCoveredByVertex(mNode) * scalingFactorTargets== timCoverageTargets->marginalGainWithVertex(mNode, scalingFactorTargets));
+//        }
+        for (int u=0; u<n; u++) {
+            double mgTarget = timCoverageTargets->marginalGainWithVertex(u, scalingFactorTargets);
+            double mgNonTarget = timCoverageNonTargets->marginalGainWithVertex(u, scalingFactorNonTargets);
+            if((mgTarget - mgNonTarget) > maximumDifference) {
+                if (seedSet.find(u)==seedSet.end()) {
+                    maximumDifference = mgTarget - mgNonTarget;
+                    maxNode = u;
+                }
+            }
+        }
+        if(maxNode==-1) break;
+        seedSet.insert(maxNode);
+        FILE_LOG(logDEBUG) << "\n Adding node with max difference value: " << maximumDifference;
+        FILE_LOG(logDEBUG) << "\t Node is " << maxNode <<flush;
+        timCoverageTargets->addToSeed(maxNode, timEvaluator->getRRSetsTargets());
+        timCoverageNonTargets->addToSeed(maxNode, timEvaluator->getRRSetsNonTargets());
+        objectiveFunctionValue+=maximumDifference;
+        greedySolutions.push_back(objectiveFunctionValue);
+    }
+    delete timEvaluator;
+    return seedSet;
+
+}
+
+set<int> DifferenceApproximator::executeSupSubProcedure(int k) {
+    set<int> seedSet, previousSeedSet;
+    TIMEvaluator *timEvaluator = new TIMEvaluator(this->graph, setting5);
+    double scalingFactorNonTargets = timEvaluator->getScalingFactorNonTargets();
+    TIMCoverage *timCoverageDifference = timEvaluator->getTIMCoverage();
+    TIMCoverage *timCoverageNonTargets = timEvaluator->getTIMCoverageNonTargets();
+    int n = graph->getNumberOfVertices();
+    vector<double> approximations;
+    for (int v=0; v<n; v++) {
+        approximations.push_back(timEvaluator->findSingleNodeNonTargetsInfluence(v));
+    }
+    int iteration = 0;
+    
+    bool converge = false;
+    do {
+        vector<int> seedVector;
+        previousSeedSet = seedSet;
+        
+        for (int u: previousSeedSet) {
+            seedVector.push_back(u);
+        }
+        vector<double> marginalGains = timCoverageNonTargets->singleNodeMarginalGainWRTSet(seedVector, scalingFactorNonTargets);
+        assert(marginalGains.size()==seedVector.size());
+        
+        //Adjust approximations
+        for (int i=0; i<seedVector.size(); i++) {
+            approximations[seedVector[i]]= approximations[seedVector[i]] + marginalGains[i] - timEvaluator->findSingleNodeNonTargetsInfluence(seedVector[i]);
+        }
+        
+        for(int i=0; i<n; i++) {
+            timCoverageDifference->offsetCoverage(i, -1 * (1/timEvaluator->getScalingFactorTargets()) * approximations[i]);
+        }
+        timCoverageDifference->updatePriorityQueueWithCurrentValues();
+        
+        TIMCoverage *coveragePointer = timEvaluator->getTIMCoverage();
+        vector<vector<int>> *rrSetsPointer = timEvaluator->getRRSetsTargets();
+        seedSet = randGreedyCSO(*coveragePointer, rrSetsPointer, k);
+        
+        for(int i=0; i<n; i++) {
+            timCoverageDifference->offsetCoverage(i, 1 * (1/timEvaluator->getScalingFactorTargets()) * approximations[i]);
+        }
+        timCoverageDifference->updatePriorityQueueWithCurrentValues();
+        
+        // Adjust approximations back
+        for (int i=0; i<seedVector.size(); i++) {
+            approximations[seedVector[i]]= approximations[seedVector[i]] - marginalGains[i] + timEvaluator->findSingleNodeNonTargetsInfluence(seedVector[i]);
+        }
+        iteration++;
+        
+        
+        set<int> s3;
+        set_intersection(previousSeedSet.begin(), previousSeedSet.end(), seedSet.begin(), seedSet.end(), std::inserter(s3,s3.begin()));
+        converge = (s3.size()>= (0.7 * k));
+        if(iteration%300==0) {
+            cout << "\n Completed iteration: " << iteration;
+            cout <<"\n Set intersection size is " << s3.size() << flush;
+        }
+        if(iteration>5000) {
+            converge = true;
+            seedSet.clear();
+        }
+    } while(!converge);
+    
+    delete timEvaluator;
+    return seedSet;
+}
+
+set<int> DifferenceApproximator::randGreedyCSO(TIMCoverage timCoverageDifference, vector<vector<int>> *rrSets, int budget) {
+    set<int> seedSet;
+    int k = budget;
+    vector<int> *coverage = &timCoverageDifference.coverage;
+    while (seedSet.size()<k) {
+        priority_queue<pair<int, int>, vector<pair<int, int>>, QueueComparator> queue(timCoverageDifference.queue);
+        vector<pair<int, int>> topKPairs;
+        int i=0;
+        while(i<k) {
+            pair<int, int> nodeWithCoverage = make_pair(-1, -1);
+            bool nodeFound = false;
+            while (!queue.empty() && !nodeFound) {
+                nodeWithCoverage = queue.top();
+                queue.pop();
+                if(nodeWithCoverage.second>(*coverage)[nodeWithCoverage.first]) {
+                    queue.push(make_pair(nodeWithCoverage.first, (*coverage)[nodeWithCoverage.first]));
+                    continue;
+                }
+                if(seedSet.find(nodeWithCoverage.first)==seedSet.end()) nodeFound = true;
+            }
+            if(!nodeFound) {
+                break;
+            }
+            topKPairs.push_back(nodeWithCoverage);
+            i++;
+        }
+        assert(topKPairs.size()==k);
+        int randomUIndex = rand() % k;
+        int randomU = topKPairs[randomUIndex].first;
+        seedSet.insert(randomU);
+        timCoverageDifference.addToSeed(randomU, rrSets);
+        
+    }
+    
+    return seedSet;
+}
+
+vector<double> DifferenceApproximator::getGreedySolutions() {
+    return this->greedySolutions;
 }

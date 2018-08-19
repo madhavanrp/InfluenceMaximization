@@ -24,12 +24,14 @@ class EstimateNonTargets {
     vector<double> nodeCounts;
     vector<vector<int>> rrSets;
     Graph *graph;
+    string model;
     
 public:
     
     
     EstimateNonTargets(Graph *graph);
     EstimateNonTargets();
+    void setDiffusionModel(string model);
     int getNonTargets(int vertex);
     void writeToFile(string fileName);
     vector<double> getNonTargetsUsingTIM();

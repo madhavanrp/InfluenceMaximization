@@ -62,7 +62,46 @@
             ReferencedContainer = "container:InfluenceMaximization.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "--algorithm generate --graph ca-GrQc-processed.txt --percentage 25 --labelMethod 1"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm difference --graph ca-GrQc-processed.txt --percentage 80 --labelMethod 0 --budget 20 --approximation 6"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm timtim --graph apache-ant.txt --threshold 100 --budget 20 --percentage 5"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm dp --graph ca-GrQc-processed.txt --budget 4 --percentage 100 --decompositionFile output_ca-GrQc-processed.txt.part.5241"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm dpdm --graph graph_ic.inf --budget 40 --percentage 100 --decompositionFile output_graph_ic.inf.kaffpa.2 --nBuckets 2"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm baseline --graph graph_ic.inf --percentage 80 --budget 20 --threshold 10 --model LT"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm timtim --graph graph_ic.inf --percentage 80 --budget 20 --threshold 10 --model IC"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm tim --graph ca-GrQc-processed.txt --budget 4 --percentage 100"
+            isEnabled = "NO">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <AdditionalOptions>
+         <AdditionalOption
+            key = "NSZombieEnabled"
+            value = "YES"
+            isEnabled = "YES">
+         </AdditionalOption>
       </AdditionalOptions>
       <LocationScenarioReference
          identifier = "com.apple.dt.IDEFoundation.CurrentLocationScenarioIdentifier"

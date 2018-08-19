@@ -10,18 +10,28 @@
 #ifndef TIMCoverage_c
 #define TIMCoverage_c
 
-#include <stdio.h>
+#include <iostream>
 #include <algorithm>
 #include <assert.h>
 #include <queue>
 #include <set>
 #include <math.h>
+#include <unordered_map>
+#include <unordered_set>
+
 using namespace std;
 
 struct QueueComparator {
     bool operator()(pair<int, int> a, pair<int, int> b)
     {
         return a.second < b.second;
+    }
+};
+
+struct ReverseQueueComparator {
+    bool operator()(pair<int, int> a, pair<int, int> b)
+    {
+        return a.second > b.second;
     }
 };
 
@@ -32,6 +42,7 @@ public:
 
 class TIMCoverage {
     int numberOfRRSetsCovered;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, ReverseQueueComparator> reverseQueue;
 public:
     vector<bool> nodeMark;
     vector<bool> edgeMark;
@@ -49,30 +60,41 @@ public:
     
     int countForVertex(int u);
     int numberOfNewRRSetsCoveredByVertex(int vertex);
+    double marginalGainWithVertex(int vertex, double scalingFactor);
+    void incrementRRSetsCovered(int number);
     
     vector<int> getRRSetsCoveredByVertex(int vertex);
     
-    void offsetCoverage(int vertex, int offset) ;
+    void offsetCoverage(int vertex, int offset);
+    void updatePriorityQueueWithCurrentValues();
     
     void initializeLookupTable(vector<vector<int>>* randomRRSets, int n) ;
     
     void initializeDataStructures(int R, int n) ;
     
-    pair<int, int> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) ;
-    pair<int, int> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets, NodeChecker *nodeChecker);
+    pair<int, double> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets) ;
+    pair<int, double> findMaxInfluentialNodeAndUpdateModel(vector<vector<int>> *rrSets, NodeChecker *nodeChecker);
+    set<int> findMinInfluentialNodes(vector<vector<int>> *rrSets);
     
-    pair<int, int> findMaxInfluentialNodeWithApproximations(set<int> *seedSet, vector<int> *approximationsScaled);
+    pair<int, double> findMaxInfluentialNodeWithApproximations(set<int> *seedSet, vector<int> *approximationsScaled);
     
     set<pair<int, int>> findTopKNodesWithInfluence(int k, vector<vector<int>> *rrSets);
+    pair<vector<int>,int> findTopKNodesFromCandidatesWithoutUpdate(int k, vector<vector<int>> *rrSets, set<int> candidateNodes);
+    void constructReverseQueue();
     
     set<int> findTopKNodes(int k, vector<vector<int>> *rrSets);
+    set<int> findTopKNodesModular(int k);
     
     void addToSeed(int vertex, vector<vector<int>> *rrSets);
 
-    int findInfluence(set<int> seedSet, double scalingFactor);
+    double findInfluence(set<int> seedSet, double scalingFactor);
+    vector<double> singleNodeMarginalGainWRTSet(vector<int> X, double scalingFactor);
     int getNumberOfRRSetsCovered();
     
+    vector<bool> *getNodeMark();
+    vector<bool> *getEdgeMark();
     TIMCoverage( const TIMCoverage &obj);
+    TIMCoverage& operator=( const TIMCoverage &obj);
     ~TIMCoverage();
 };
 

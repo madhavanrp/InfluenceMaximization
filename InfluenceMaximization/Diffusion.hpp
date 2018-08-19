@@ -41,7 +41,7 @@ inline void singleDiffusion(set<int> *activatedSet, Graph *graph, set<int> *seed
             nVisitMark++;
             queue->pop_front();
             activatedSet->insert(u);
-            for (int v : graph->graph[u]) {
+            for (int v : (*graph->getGraph())[u]) {
                 bool activeEdge = graph->flipCoinOnEdge(u, v);
                 if (activeEdge) {
                     if(!(*visited)[v])
@@ -59,10 +59,10 @@ inline void singleDiffusion(set<int> *activatedSet, Graph *graph, set<int> *seed
 }
 
 inline vector<int> performDiffusion(Graph *graph, set<int> seedSet, set<int> *alreadyActivated) {
-    int activatedFrequency[graph->n];
+    int activatedFrequency[graph->getNumberOfVertices()];
     vector<int> visitMark;
     vector<bool> visited;
-    for(int i=0; i<graph->n; i++) {
+    for(int i=0; i<graph->getNumberOfVertices(); i++) {
         activatedFrequency[i] = 0;
         visitMark.push_back(0);
         visited.push_back(false);
@@ -90,7 +90,7 @@ inline vector<int> performDiffusion(Graph *graph, set<int> seedSet, set<int> *al
     int averageActiveSetSize = round((double)totalActiveSetSize/(double)NUMBER_OF_SIMULATIONS);
 //    cout << "\n Total activated set size = " << totalActiveSetSize;
 //    cout << "\n Average activated set size = " << averageActiveSetSize;
-    for(int i=0; i<graph->n; i++) {
+    for(int i=0; i<graph->getNumberOfVertices(); i++) {
         queue.push(make_pair(i, activatedFrequency[i]));
     }
     
@@ -108,7 +108,7 @@ inline pair<int, int> findInfluenceUsingDiffusion(Graph *graph, set<int> seedSet
     int targetsActivated = 0;
     int nonTargetsActivated = 0;
     for(int activeNode:activatedSet) {
-        if(graph->labels[activeNode]) targetsActivated++;
+        if(graph->isTarget(activeNode)) targetsActivated++;
         else nonTargetsActivated++;
     }
     return make_pair(targetsActivated, nonTargetsActivated);
@@ -125,7 +125,7 @@ inline pair<pair<int, int>, set<int>> findActivatedSetAndInfluenceUsingDiffusion
     int targetsActivated = 0;
     int nonTargetsActivated = 0;
     for(int activeNode:activatedSet) {
-        if(graph->labels[activeNode]) targetsActivated++;
+        if(graph->isTarget(activeNode)) targetsActivated++;
         else nonTargetsActivated++;
         activated.insert(activeNode);
     }

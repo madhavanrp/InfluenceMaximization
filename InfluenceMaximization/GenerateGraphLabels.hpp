@@ -10,20 +10,29 @@
 #define GenerateGraphLabels_hpp
 
 #include <stdio.h>
-#include "Graph.hpp"
 #include <math.h>
-
-enum LabelSetting {
-    LabelSetting1
-};
+#include <assert.h>
+#include "TIM-Models/TIMCoverage.hpp"
+#include "TIMInfluenceCalculator.hpp"
+#include "Diffusion.hpp"
+#include "LabelSetting.hpp"
 
 class GenerateGraphLabels {
+private:
     Graph *graph;
     LabelSetting setting;
     float percentage;
-    GenerateGraphLabels(Graph *graph, float percentage, LabelSetting setting);
+    int numberOfTargetsToLabel, numberOfNonTargetsToLabel;
+    int totalNumberOfNonTargets;
+    vector<NodeLabel> labels;
+    void initializeDataAndGenerate(Graph *graph, float percentage, LabelSetting labelSetting);
     void generate();
+    void generateWithSetting1(int numberOfTargets, int numberOfNonTargets);
+    void generateWithTIMNonTargets(int numberOfTargets, int numberOfNonTargets);
+    void generateUniformRandom();
+    void doDFSWithLabel(int currentNode, int currentDepth, int depthLimit);
 public:
+    GenerateGraphLabels(Graph *graph, float percentage, LabelSetting setting);
     GenerateGraphLabels(Graph *graph, float percentage);
 };
 

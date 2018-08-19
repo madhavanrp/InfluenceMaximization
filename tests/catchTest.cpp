@@ -141,8 +141,9 @@ TEST_CASE("Get proper leaf nodes", "IMTree leaf nodes") {
     IMTree imTree = createTestIMTree();
     vector<struct node*> leafNodes = imTree.getLeafNodes(1);
     REQUIRE(leafNodes.size()==3);
-    imTree = *new IMTree();
-    REQUIRE(imTree.getLeafNodes(0).size()==1);
+    IMTree *anotherTree = new IMTree();
+    REQUIRE(anotherTree->getLeafNodes(0).size()==1);
+    delete anotherTree;
 }
 
 void deleteHere(IMTree *tree, struct node *leaf) {

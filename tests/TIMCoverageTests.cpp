@@ -183,4 +183,38 @@ TEST_CASE("TIM Coverage queue copy", "TIMCoverage") {
     delete copy;
 }
 
+TEST_CASE("Marginal Gain WRT Some Set", "TIMCoverage") {
+    
+    
+    vector<int> seedVector;
+    vector<vector<int>> rrSets, lookupTable;
+    for(int i=0; i<5; i++) {
+        rrSets.push_back(vector<int>());
+        seedVector.push_back(i);
+        for (int j=0; j<10; j++) {
+            if(j==0) {
+                rrSets[i].push_back(j);
+            }
+        }
+    }
+    TIMCoverage *timCoverage = new TIMCoverage(&lookupTable);
+    timCoverage->initializeLookupTable(&rrSets, 10);
+    REQUIRE(timCoverage->lookupTable->size()==10);
+    timCoverage->initializeDataStructures(5, 10);
+    
+    vector<double> marginalGains = timCoverage->singleNodeMarginalGainWRTSet(seedVector, 1);
+    REQUIRE(marginalGains.size()==seedVector.size());
+    int vertex = 0;
+    for(double mg: marginalGains) {
+        if (vertex==0) {
+            REQUIRE(mg==5);
+        } else {
+            REQUIRE(mg==0);
+        }
+        vertex++;
+    }
+    
+    delete timCoverage;
+}
+
 #endif
