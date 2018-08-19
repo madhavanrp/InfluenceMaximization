@@ -2,6 +2,12 @@
 
 In social networks, it is often the case that we need to spread ideas and influence through the network. For this to succeed, individual nodes with high influence should be identified so as to maximize the influence spread. This is the Influence Maximization problem. In Targeted Influence Maximization, we want to find influential nodes that maximize the influence to one set of "Target" users, while maintaining the number of "Non Targets" influenced below a threshold number. In this repository we study various algorithms to solve this problem.
 
+
+# Results
+![Expected Influence Image](experiment-results/influenceImage.png)
+
+To see additional results, click [here](experiment-results/experiment-results.pdf).
+
 # How to Compile
 We recommend using GCC 4.9 and greater.
 1. Set the compiler path for CXX in Makefile
@@ -49,7 +55,3 @@ The above command will execute the baseline greedy algorithm on Epinions, and pr
 # Download Graph Data
 The graphs that we have used, along with labels file can be downloaded [here](https://www.dropbox.com/s/qqr4a5k0irx7kgh/graph_data.zip?dl=0&raw=true). Unzip them and place all files in graphs folder before running the program.
 
-# Results
-![Expected Influence Image](experiment-results/influenceImage.png)
-
-For a full summary of results, click [here](experiment-results/experiment-results.pdf).
