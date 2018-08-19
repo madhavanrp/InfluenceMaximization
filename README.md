@@ -11,27 +11,29 @@ We recommend using GCC 4.9 and greater.
     ```
 This will make an executable named "influence".
 # How to run
-Store the graph file/labels file in the graphs folder. The graph file has the following format:
+Create a folder with the name "results". Store the graph file,labels file in the graphs folder. The graph file has the following format:
 ```
 First line: <number of node> <number of edges>
 From second line: <from node> <to node>
 ```
 
-The labels file name hase the following format:
+The labels file name has the following format:
 ```
 Name of the file: <Graph name>_<percentage>_labels.txt
 Example: epinions.txt_0.70_labels.txt
 ```
 The labels file hase the following format. Here if the node is a target, label it "A". Otherwise, label it B
 ```
-<nodeId> <A or B>
+First line: # A comment describing the labels selection
+From second line: <nodeId> <A or B>
 ```
 
 Set the following Parameters:
-1. algorithm - "baseline" for Baseline greedy, "timtim" for Multi Greedy
+1. algorithm - "baseline" for Natural Greedy, "timtim" for Multi Greedy
 2. percentage - The percentage of targets. eg: 70 for 70% Targets
 3. budget - Set the seed set size
 4. threshold - set the non targets threshold
+5. model - "IC" for Independent Cascade Model (default), "LT" for Linear Threshold model. 
 
 Example command:
 ```
