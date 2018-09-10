@@ -22,6 +22,7 @@ void Graph::readGraph(string fileName, float percentage) {
 Graph::Graph() {
     this->standardProbability = false;
     this->diffusionModel = "IC";
+    sfmt_init_gen_rand(&sfmt, rand());
 }
 
 void Graph::setDiffusionModel(string model) {
@@ -49,7 +50,7 @@ int Graph:: generateRandomNumber(int u, int v) {
     else {
         randomNumberLimit = inDegree[v];
     }
-    return rand() % randomNumberLimit;
+    return sfmt_genrand_uint32(&sfmt) % randomNumberLimit;
 }
 
 double Graph::getWeightForLTModel(int u, int v) {
@@ -241,9 +242,9 @@ void Graph::generateRandomRRSets(int R, bool label) {
     }
     for(int i=0;i<R;i++) {
         int randomVertex;
-        randomVertex = rand() % n;
+        randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         while(this->labels[randomVertex]==NodeLabelNonTarget) {
-            randomVertex = rand() % n;
+            randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         }
         generateRandomRRSet(randomVertex, i);
         totalSize+=rrSets[i].size();
@@ -307,7 +308,7 @@ vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
             
             if(graphTranspose[u].size()==0)
                 continue;
-            double randomDouble = (double)rand() / (double)RAND_MAX;
+            double randomDouble = sfmt_genrand_res53(&sfmt);
             for(int i=0; i<(int)graphTranspose[u].size(); i++){
                 int v = graphTranspose[u][i];
                 randomDouble = randomDouble - this->getWeightForLTModel(v, u);

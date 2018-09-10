@@ -15,7 +15,7 @@
 #include <assert.h>
 #include "json.hpp"
 #include "Diffusion.hpp"
-
+#include "SFMT/SFMT.h"
 
 #define EPSILON 2
 
@@ -25,6 +25,7 @@ class EstimateNonTargets {
     vector<vector<int>> rrSets;
     Graph *graph;
     string model;
+    sfmt_t sfmt;
     
 public:
     

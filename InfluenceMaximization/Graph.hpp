@@ -21,6 +21,7 @@
 #include <stdexcept>
 #include <unordered_map>
 #include "LabelSetting.hpp"
+#include "SFMT/SFMT.h"
 
 using namespace std;
 
@@ -34,6 +35,7 @@ private:
     float propogationProbability;
     int propogationProbabilityNumber;
     bool standardProbability;
+    sfmt_t sfmt;
     string diffusionModel;
     string graphName;
     float percentageTargets;

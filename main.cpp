@@ -26,6 +26,7 @@
 #include "InfluenceMaximization/Diffusion.hpp"
 #include "InfluenceMaximization/HeuristicsExecuter.hpp"
 #include "InfluenceMaximization/DPAlgorithm/HeirarchicalDecomposition.hpp"
+#include "InfluenceMaximization/SFMT/SFMT.h"
 
 #include <iomanip>
 #include <ctime>
@@ -662,7 +663,11 @@ void executeDPAlgorithm(cxxopts::ParseResult result) {
 
 int main(int argc, char **argv) {
     cout << "Starting program\n";
+    sfmt_t sfmt;
     srand(time(0));
+    sfmt_init_gen_rand(&sfmt, rand());
+    
+    cout << "\n X is " << sfmt_genrand_res53(&sfmt);
     setupLogger();
     cout << "Setup logger \n";
     cxxopts::Options options("Targeted Influence Maximization", "Experiments and research.");

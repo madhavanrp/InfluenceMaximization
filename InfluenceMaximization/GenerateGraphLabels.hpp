@@ -16,10 +16,12 @@
 #include "TIMInfluenceCalculator.hpp"
 #include "Diffusion.hpp"
 #include "LabelSetting.hpp"
+#include "SFMT/SFMT.h"
 
 class GenerateGraphLabels {
 private:
     Graph *graph;
+    sfmt_t sfmt;
     LabelSetting setting;
     float percentage;
     int numberOfTargetsToLabel, numberOfNonTargetsToLabel;

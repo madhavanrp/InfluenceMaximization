@@ -20,6 +20,7 @@ void GenerateGraphLabels::initializeDataAndGenerate(Graph *graph, float percenta
     for (int i=0; i<n; i++) {
         this->labels[i] = NodeLabelTarget;
     }
+    sfmt_init_gen_rand(&sfmt, rand());
     generate();
 }
 GenerateGraphLabels::GenerateGraphLabels(Graph *graph, float percentage, LabelSetting setting) {
@@ -39,7 +40,7 @@ void GenerateGraphLabels::doDFSWithLabel(int currentNode, int currentDepth, int 
     float probability = 0.75f;
     vector<vector<int>> *adjacencyList = this->graph->getGraph();
     for(int neighbour: (*adjacencyList)[currentNode]) {
-        float randomFloat = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX));
+        float randomFloat = sfmt_genrand_res53(&sfmt);
         if(randomFloat<=probability && (this->labels[currentNode]==NodeLabelNonTarget)) {
             doDFSWithLabel(neighbour, currentDepth+1, depthLimit);
         }
@@ -76,7 +77,7 @@ void GenerateGraphLabels::generate() {
 void GenerateGraphLabels::generateUniformRandom() {
     int n = graph->getNumberOfVertices();
     for (int i=0; i<n; i++) {
-        float randomFloat = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX));
+        float randomFloat = sfmt_genrand_res53(&sfmt);
         if (randomFloat<=this->percentage) {
             this->labels[i] = NodeLabelTarget;
         } else {
@@ -94,7 +95,7 @@ void GenerateGraphLabels::generateWithSetting1(int numberOfTargets, int numberOf
     cout << "\n Number of  targets aimed is " << numberOfTargets;
     int level = 2;
     while(this->totalNumberOfNonTargets< this->numberOfNonTargetsToLabel) {
-        int randomVertex = rand() % n;
+        int randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         if(this->labels[randomVertex]==NodeLabelNonTarget) continue;
         doDFSWithLabel(randomVertex, 0, level);
     }
