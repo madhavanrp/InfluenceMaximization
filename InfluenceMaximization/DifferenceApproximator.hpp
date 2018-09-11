@@ -18,6 +18,7 @@
 #include "ApproximationSetting.hpp"
 #include "TIMInfluenceCalculator.hpp"
 #include "log.h"
+#include "SFMT/SFMT.h"
 
 using namespace std;
 
@@ -55,6 +56,7 @@ class DifferenceApproximator {
     Graph *graph;
     double differenceValue;
     vector<double> greedySolutions;
+    sfmt_t sfmt;
 public:
     double getDifferenceValue();
     DifferenceApproximator(Graph *graph);

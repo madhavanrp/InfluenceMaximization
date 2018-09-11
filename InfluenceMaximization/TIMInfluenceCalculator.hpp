@@ -15,6 +15,7 @@
 #include <cmath>
 #include <memory>
 #include "TIM-Models/TIMCoverage.hpp"
+#include "SFMT/SFMT.h"
 
 class TIMInfluenceCalculator {
     Graph *graph;
@@ -23,6 +24,7 @@ class TIMInfluenceCalculator {
     vector<vector<int>> rrSetsNonTargets;
     vector<vector<int>> rrSetsTargets;
     string model;
+    sfmt_t sfmt;
     
     shared_ptr<TIMCoverage> timCoverageTargets, timCoverageNonTargets;
     shared_ptr<vector<vector<int>>> lookupTableTargets, lookupTableNonTargets;

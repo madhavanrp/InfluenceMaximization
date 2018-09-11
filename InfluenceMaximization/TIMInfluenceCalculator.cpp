@@ -9,6 +9,7 @@
 #include "TIMInfluenceCalculator.hpp"
 
 TIMInfluenceCalculator::TIMInfluenceCalculator(Graph *graph) {
+    sfmt_init_gen_rand(&sfmt, rand());
     //Default Epsilon
     constructCalculator(graph, 2, "IC");
 }
@@ -69,9 +70,9 @@ void TIMInfluenceCalculator::generateRandomRRSetsTargets(int R) {
     }
     int totalSize = 0;
     for(int i=0;i<R;i++) {
-        randomVertex = rand() % n;
+        randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         while(!graph->isTarget(randomVertex)) {
-            randomVertex = rand() % n;
+            randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         }
         generateRandomRRSet(randomVertex, i, &rrSetsTargets, &targetCounts);
         totalSize += (int)rrSetsTargets[i].size();
@@ -85,7 +86,7 @@ void TIMInfluenceCalculator::generateRandomRRSetsNonTargets(int R) {
     vector<int> *nonTargets = graph->getNonTargets();
     if(graph->getNumberOfNonTargets()>0) {
         for(int i=0;i<R;i++) {
-            randomVertex = (*nonTargets)[rand() % graph->getNumberOfNonTargets()];
+            randomVertex = (*nonTargets)[sfmt_genrand_uint32(&sfmt) % graph->getNumberOfNonTargets()];
             assert(!graph->isTarget(randomVertex));
             generateRandomRRSet(randomVertex, i, &rrSetsNonTargets, &nonTargetCounts);
         }
@@ -141,7 +142,7 @@ void TIMInfluenceCalculator::generateRandomRRSet(int randomVertex, int rrSetID, 
             
             if((*graphTranspose)[u].size()==0)
                 continue;
-            double randomDouble = (double)rand() / (double)RAND_MAX;
+            double randomDouble = sfmt_genrand_res53(&sfmt);
             for(int i=0; i<(int)(*graphTranspose)[u].size(); i++){
                 int v = (*graphTranspose)[u][i];
                 randomDouble = randomDouble - graph->getWeightForLTModel(v, u);

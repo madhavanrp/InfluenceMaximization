@@ -345,9 +345,9 @@ void Graph::generateRandomRRSetsWithoutVisitingNonTargets(int R) {
     }
     for(int i=0;i<R;i++) {
         int randomVertex;
-        randomVertex = rand() % n;
+        randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         while(labels[randomVertex]==NodeLabelNonTarget) {
-            randomVertex = rand() % n;
+            randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         }
         generateRandomRRSetWithoutVisitingNonTargets(randomVertex, i);
         totalSize+=rrSets[i].size();
