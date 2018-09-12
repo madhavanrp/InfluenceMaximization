@@ -33,9 +33,6 @@
 
 using json = nlohmann::json;
 
-#define PHASE1TIM_PHASE2TIM 1;
-#define PHASE1SIM_PHASE2SIM 2;
-
 void setupLogger() {
     time_t rawtime;
     struct tm * timeinfo;
@@ -167,7 +164,7 @@ void executeTIMTIM(cxxopts::ParseResult result) {
     int percentageTargets;
     bool fromFile = false;
     string nonTargetsFileName;
-    int method = PHASE1TIM_PHASE2TIM;
+    int method = 1;
     bool useIndegree = true;
     float probability = 0;
     budget = result["budget"].as<int>();
@@ -377,7 +374,7 @@ void executeTIMOnLabelledGraph(cxxopts::ParseResult result, bool modular) {
     double epsilon = (double)EPSILON;
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
     //    R = 23648871;
-    unlabelledGraph->generateRandomRRSets(R, true);
+    unlabelledGraph->generateRandomRRSets(R);
     vector<vector<int>>* rrSets = unlabelledGraph->getRandomRRSets();
     
     vector<vector<int>> lookupTable;

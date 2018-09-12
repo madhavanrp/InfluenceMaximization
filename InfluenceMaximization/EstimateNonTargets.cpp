@@ -36,6 +36,7 @@ int EstimateNonTargets::getNonTargets(int vertex) {
 //    return getNonTargetsUsingTIM();
     return 0;
 }
+
 vector<double> EstimateNonTargets::getNonTargetsUsingSIM() {
     set<int> seedSet;
     for(int i=0; i<n; i++) {
@@ -63,16 +64,14 @@ vector<double>* EstimateNonTargets::getAllNonTargetsCount() {
 
 vector<vector<int>>* EstimateNonTargets::generateRandomRRSets(int R, bool label) {
     clock_t begin = clock();
-    while(rrSets.size()<R) {
-        rrSets.push_back(vector<int>());
-    }
+    rrSets = vector<vector<int>>();
     int randomVertex;
     if(graph->getNumberOfNonTargets()>0) {
         vector<int> *nonTargets = graph->getNonTargets();
         for(int i=0;i<R;i++) {
             randomVertex = (*nonTargets)[sfmt_genrand_uint32(&this->sfmt) % graph->getNumberOfNonTargets()];
             assert(graph->isNonTarget(randomVertex));
-            generateRandomRRSet(randomVertex, i);
+            generateRandomRRSet(randomVertex);
         }
     }
     int i=0;
@@ -101,9 +100,8 @@ vector<vector<int>>* EstimateNonTargets::generateRandomRRSets(int R, bool label)
     return &rrSets;
 }
 
-vector<int> EstimateNonTargets::generateRandomRRSet(int randomVertex, int rrSetID) {
+void EstimateNonTargets::generateRandomRRSet(int randomVertex) {
     q.clear();
-    rrSets[rrSetID].push_back(randomVertex);
     q.push_back(randomVertex);
     int nVisitMark = 0;
     visitMark[nVisitMark++] = randomVertex;
@@ -125,7 +123,6 @@ vector<int> EstimateNonTargets::generateRandomRRSet(int randomVertex, int rrSetI
                 visited[v]=true;
                 nodeCounts[v]++;
                 q.push_back(v);
-                rrSets[rrSetID].push_back(v);
             }
         }
         else {
@@ -148,19 +145,17 @@ vector<int> EstimateNonTargets::generateRandomRRSet(int randomVertex, int rrSetI
                 visited[v]=true;
                 nodeCounts[v]++;
                 q.push_back(v);
-                rrSets[rrSetID].push_back(v);
                 break;
             }
         }
         
         
     }
+    rrSets.push_back(vector<int>(visitMark.begin(), visitMark.begin()+nVisitMark));
     for(int i=0;i<nVisitMark;i++) {
         visited[visitMark[i]] = false;
         
     }
-    return rrSets[rrSetID];
-    
 }
 
 void EstimateNonTargets::writeToFile(string fileName) {

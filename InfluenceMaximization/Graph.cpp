@@ -233,20 +233,17 @@ vector<int>* Graph::getNonTargets() {
     return &this->nonTargets;
 }
 
-void Graph::generateRandomRRSets(int R, bool label) {
+void Graph::generateRandomRRSets(int R) {
     this->rrSets = vector<vector<int>>();
     int totalSize = 0;
     clock_t begin = clock();
-    while(rrSets.size()<R) {
-        rrSets.push_back(vector<int>());
-    }
     for(int i=0;i<R;i++) {
         int randomVertex;
         randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         while(this->labels[randomVertex]==NodeLabelNonTarget) {
             randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         }
-        generateRandomRRSet(randomVertex, i);
+        generateRandomRRSet(randomVertex);
         totalSize+=rrSets[i].size();
     }
     clock_t end = clock();
@@ -275,9 +272,8 @@ vector<vector<int>>* Graph::getGraphTranspose() {
     return &this->graphTranspose;
 }
 
-vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
+void Graph::generateRandomRRSet(int randomVertex) {
     q.clear();
-    rrSets[rrSetID].push_back(randomVertex);
     q.push_back(randomVertex);
     int nVisitMark = 0;
     visitMark[nVisitMark++] = randomVertex;
@@ -298,7 +294,6 @@ vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
                     visited[v]=true;
                 }
                 q.push_back(v);
-                rrSets[rrSetID].push_back(v);
             }
         }
         else {
@@ -321,18 +316,17 @@ vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
                 visited[v]=true;
                 q.push_back(v);
                 
-                rrSets[rrSetID].push_back(v);
                 break;
             }
         }
         
         
     }
+    rrSets.push_back(vector<int>(visitMark.begin(), visitMark.begin()+nVisitMark));
     for(int i=0;i<nVisitMark;i++) {
         visited[visitMark[i]] = false;
         
     }
-    return rrSets[rrSetID];
     
 }
 

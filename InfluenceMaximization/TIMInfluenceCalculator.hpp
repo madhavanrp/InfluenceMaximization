@@ -45,7 +45,7 @@ public:
     TIMInfluenceCalculator(Graph *graph, double epsilon, string model);
     
     //Generation of Random RR Sets
-    void generateRandomRRSet(int randomVertex, int rrSetID, vector<vector<int>> *rrSets, vector<int> *counts);
+    void generateRandomRRSet(int randomVertex, vector<vector<int>> *rrSets, vector<int> *counts);
     void generateRandomRRSetsTargets(int R);
     void generateRandomRRSetsNonTargets(int R);
     

@@ -36,12 +36,6 @@ void TIMInfluenceCalculator::constructCalculator(Graph *graph, double epsilon, s
         this->visited.push_back(false);
     }
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
-    int i=0;
-    while (i<R) {
-        rrSetsTargets.push_back(vector<int>());
-        rrSetsNonTargets.push_back(vector<int>());
-        i++;
-    }
     
     // Generate the Random RR Sets
     generateRandomRRSetsNonTargets(R);
@@ -74,7 +68,7 @@ void TIMInfluenceCalculator::generateRandomRRSetsTargets(int R) {
         while(!graph->isTarget(randomVertex)) {
             randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         }
-        generateRandomRRSet(randomVertex, i, &rrSetsTargets, &targetCounts);
+        generateRandomRRSet(randomVertex, &rrSetsTargets, &targetCounts);
         totalSize += (int)rrSetsTargets[i].size();
     }
     cout << "\n Total Number of elements in RR Sets: " << totalSize;
@@ -88,16 +82,15 @@ void TIMInfluenceCalculator::generateRandomRRSetsNonTargets(int R) {
         for(int i=0;i<R;i++) {
             randomVertex = (*nonTargets)[sfmt_genrand_uint32(&sfmt) % graph->getNumberOfNonTargets()];
             assert(!graph->isTarget(randomVertex));
-            generateRandomRRSet(randomVertex, i, &rrSetsNonTargets, &nonTargetCounts);
+            generateRandomRRSet(randomVertex, &rrSetsNonTargets, &nonTargetCounts);
         }
     }
 }
 
-void TIMInfluenceCalculator::generateRandomRRSet(int randomVertex, int rrSetID, vector<vector<int>> *rrSets, vector<int> *counts) {
+void TIMInfluenceCalculator::generateRandomRRSet(int randomVertex, vector<vector<int>> *rrSets, vector<int> *counts) {
     if (this->model.compare("IC")==0) {
         q.clear();
         
-        (*rrSets)[rrSetID].push_back(randomVertex);
         q.push_back(randomVertex);
         int nVisitMark = 0;
         visitMark[nVisitMark++] = randomVertex;
@@ -118,9 +111,9 @@ void TIMInfluenceCalculator::generateRandomRRSet(int randomVertex, int rrSetID, 
                 visited[v]=true;
                 (*counts)[v]++;
                 q.push_back(v);
-                (*rrSets)[rrSetID].push_back(v);
             }
         }
+        rrSets->push_back(vector<int>(visitMark.begin(), visitMark.begin()+nVisitMark));
         for(int i=0;i<nVisitMark;i++) {
             visited[visitMark[i]] = false;
         }
@@ -129,7 +122,6 @@ void TIMInfluenceCalculator::generateRandomRRSet(int randomVertex, int rrSetID, 
     else {
         q.clear();
         
-        (*rrSets)[rrSetID].push_back(randomVertex);
         q.push_back(randomVertex);
         int nVisitMark = 0;
         visitMark[nVisitMark++] = randomVertex;
@@ -155,11 +147,11 @@ void TIMInfluenceCalculator::generateRandomRRSet(int randomVertex, int rrSetID, 
                 visited[v]=true;
                 q.push_back(v);
                 
-                (*rrSets)[rrSetID].push_back(v);
                 break;
             }
 
         }
+        rrSets->push_back(vector<int>(visitMark.begin(), visitMark.begin()+nVisitMark));
         for(int i=0;i<nVisitMark;i++) {
             visited[visitMark[i]] = false;
         }

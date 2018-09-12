@@ -85,8 +85,8 @@ public:
     vector<vector<int>> *getGraphTranspose();
     
     vector<vector<int> > constructTranspose(vector<vector<int> > aGraph);
-    void generateRandomRRSets(int R, bool label);
-    vector<int> generateRandomRRSet(int randomVertex, int rrSetID);
+    void generateRandomRRSets(int R);
+    void generateRandomRRSet(int randomVertex);
     void clearRandomRRSets();
     vector<vector<int>>* getRandomRRSets();
     

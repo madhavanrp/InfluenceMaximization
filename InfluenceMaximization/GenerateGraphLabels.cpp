@@ -114,7 +114,7 @@ void GenerateGraphLabels::generateWithTIMNonTargets(int numberOfTargets, int num
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
     //    R = 23648871;
     Graph *graph = this->graph;
-    graph->generateRandomRRSets(R, true);
+    graph->generateRandomRRSets(R);
     vector<vector<int>>* rrSets = graph->getRandomRRSets();
     
     vector<vector<int>> lookupTable;
