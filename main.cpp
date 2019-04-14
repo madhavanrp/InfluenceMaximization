@@ -662,7 +662,6 @@ int main(int argc, char **argv) {
     srand(time(0));
     sfmt_init_gen_rand(&sfmt, rand());
     
-    cout << "\n X is " << sfmt_genrand_res53(&sfmt);
     setupLogger();
     cout << "Setup logger \n";
     cxxopts::Options options("Targeted Influence Maximization", "Experiments and research.");
