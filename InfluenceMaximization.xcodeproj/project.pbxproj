@@ -17,7 +17,6 @@
 		3179B9202036309D00C80D9A /* BaselineGreedyTIM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */; };
 		3179B9212036309D00C80D9A /* BaselineGreedyTIM.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A4201BCE71000C70D9 /* BaselineGreedyTIM.hpp */; };
 		3179B9222036309D00C80D9A /* log.h in Sources */ = {isa = PBXBuildFile; fileRef = 31C4ADA01F787C610077D6BF /* log.h */; };
-		3179B9232036309D00C80D9A /* log1.h in Sources */ = {isa = PBXBuildFile; fileRef = 31C4ADA11F787C610077D6BF /* log1.h */; };
 		3179B9242036309D00C80D9A /* IMResults.h in Sources */ = {isa = PBXBuildFile; fileRef = 31279D7A1F6F0CFC00FC4D9B /* IMResults.h */; };
 		3179B9252036309D00C80D9A /* TIMCoverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A120103A04000C70D9 /* TIMCoverage.cpp */; };
 		3179B9262036309D00C80D9A /* TIMCoverage.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D701F63472700FC4D9B /* TIMCoverage.hpp */; };
@@ -28,7 +27,6 @@
 		3179B92B2036309D00C80D9A /* IMTree.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A4949A1F510CBF00745401 /* IMTree.hpp */; };
 		3179B92C2036309D00C80D9A /* EstimateNonTargets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A71F55E92700745401 /* EstimateNonTargets.cpp */; };
 		3179B92D2036309D00C80D9A /* EstimateNonTargets.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A81F55E92700745401 /* EstimateNonTargets.hpp */; };
-		3179B92E2036309D00C80D9A /* TIMUtility.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494AB1F56095900745401 /* TIMUtility.hpp */; };
 		3179B92F2036309D00C80D9A /* Phase2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D6C1F58EBD900FC4D9B /* Phase2.cpp */; };
 		3179B9302036309D00C80D9A /* Phase2.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D6D1F58EBD900FC4D9B /* Phase2.hpp */; };
 		3179B9312036309D00C80D9A /* Diffusion.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D751F6CAB3400FC4D9B /* Diffusion.hpp */; };
@@ -57,7 +55,6 @@
 		3179B9542038E75500C80D9A /* IMTree.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A4949A1F510CBF00745401 /* IMTree.hpp */; };
 		3179B9552038E75500C80D9A /* EstimateNonTargets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A71F55E92700745401 /* EstimateNonTargets.cpp */; };
 		3179B9562038E75500C80D9A /* EstimateNonTargets.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A81F55E92700745401 /* EstimateNonTargets.hpp */; };
-		3179B9572038E75500C80D9A /* TIMUtility.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494AB1F56095900745401 /* TIMUtility.hpp */; };
 		3179B9582038E75500C80D9A /* Phase2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D6C1F58EBD900FC4D9B /* Phase2.cpp */; };
 		3179B9592038E75500C80D9A /* Phase2.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D6D1F58EBD900FC4D9B /* Phase2.hpp */; };
 		3179B95A2038E75500C80D9A /* Diffusion.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D751F6CAB3400FC4D9B /* Diffusion.hpp */; };
@@ -76,7 +73,6 @@
 		3179B9672038E7A700C80D9A /* BaselineGreedyTIM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */; };
 		3179B9682038E7A700C80D9A /* BaselineGreedyTIM.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A4201BCE71000C70D9 /* BaselineGreedyTIM.hpp */; };
 		3179B9692038E7A700C80D9A /* log.h in Sources */ = {isa = PBXBuildFile; fileRef = 31C4ADA01F787C610077D6BF /* log.h */; };
-		3179B96A2038E7A700C80D9A /* log1.h in Sources */ = {isa = PBXBuildFile; fileRef = 31C4ADA11F787C610077D6BF /* log1.h */; };
 		3179B96B2038E7AF00C80D9A /* IMResults.h in Sources */ = {isa = PBXBuildFile; fileRef = 31279D7A1F6F0CFC00FC4D9B /* IMResults.h */; };
 		3179B96C2038E7AF00C80D9A /* TIMCoverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A120103A04000C70D9 /* TIMCoverage.cpp */; };
 		31DBE44A2141E33200966A04 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 31DBE4152141E33200966A04 /* Makefile */; };
@@ -156,10 +152,7 @@
 		31A494A51F55D88B00745401 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		31A494A71F55E92700745401 /* EstimateNonTargets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EstimateNonTargets.cpp; sourceTree = "<group>"; };
 		31A494A81F55E92700745401 /* EstimateNonTargets.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EstimateNonTargets.hpp; sourceTree = "<group>"; };
-		31A494AB1F56095900745401 /* TIMUtility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TIMUtility.hpp; sourceTree = "<group>"; };
 		31C4ADA01F787C610077D6BF /* log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
-		31C4ADA11F787C610077D6BF /* log1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log1.h; sourceTree = "<group>"; };
-		31D871681FD1ED7D00F51E73 /* differencemain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = differencemain.cpp; sourceTree = "<group>"; };
 		31D8716A1FD1EF5B00F51E73 /* cxxopts.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cxxopts.hpp; sourceTree = "<group>"; };
 		31DBE3E72141E33200966A04 /* CHANGE-LOG.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "CHANGE-LOG.txt"; sourceTree = "<group>"; };
 		31DBE3E82141E33200966A04 /* check.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = check.sh; sourceTree = "<group>"; };
@@ -452,7 +445,6 @@
 			children = (
 				310E6A821FE07AF000D72424 /* experiments.py */,
 				31D8716A1FD1EF5B00F51E73 /* cxxopts.hpp */,
-				31D871681FD1ED7D00F51E73 /* differencemain.cpp */,
 				31A494A51F55D88B00745401 /* main.cpp */,
 				31A494A11F55D54700745401 /* tests */,
 				313A589C1F4E072300F86148 /* Makefile */,
@@ -482,7 +474,6 @@
 				310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */,
 				310E78A4201BCE71000C70D9 /* BaselineGreedyTIM.hpp */,
 				31C4ADA01F787C610077D6BF /* log.h */,
-				31C4ADA11F787C610077D6BF /* log1.h */,
 				311423121F733720001BA3FA /* IMResults */,
 				31279D6F1F63469F00FC4D9B /* TIM-Models */,
 				31FC36911F354E56005CAFEB /* Graph.cpp */,
@@ -492,7 +483,6 @@
 				31A4949A1F510CBF00745401 /* IMTree.hpp */,
 				31A494A71F55E92700745401 /* EstimateNonTargets.cpp */,
 				31A494A81F55E92700745401 /* EstimateNonTargets.hpp */,
-				31A494AB1F56095900745401 /* TIMUtility.hpp */,
 				31279D6C1F58EBD900FC4D9B /* Phase2.cpp */,
 				31279D6D1F58EBD900FC4D9B /* Phase2.hpp */,
 				31279D751F6CAB3400FC4D9B /* Diffusion.hpp */,
@@ -629,7 +619,6 @@
 				3179B9672038E7A700C80D9A /* BaselineGreedyTIM.cpp in Sources */,
 				3179B9682038E7A700C80D9A /* BaselineGreedyTIM.hpp in Sources */,
 				3179B9692038E7A700C80D9A /* log.h in Sources */,
-				3179B96A2038E7A700C80D9A /* log1.h in Sources */,
 				3179B9472038E75500C80D9A /* catch.hpp in Sources */,
 				3179B9482038E75500C80D9A /* catchTest.cpp in Sources */,
 				3179B9492038E75500C80D9A /* TIMCoverageTests.cpp in Sources */,
@@ -645,7 +634,6 @@
 				3179B9542038E75500C80D9A /* IMTree.hpp in Sources */,
 				3179B9552038E75500C80D9A /* EstimateNonTargets.cpp in Sources */,
 				3179B9562038E75500C80D9A /* EstimateNonTargets.hpp in Sources */,
-				3179B9572038E75500C80D9A /* TIMUtility.hpp in Sources */,
 				3179B9582038E75500C80D9A /* Phase2.cpp in Sources */,
 				3179B9592038E75500C80D9A /* Phase2.hpp in Sources */,
 				3179B95A2038E75500C80D9A /* Diffusion.hpp in Sources */,
@@ -672,7 +660,6 @@
 				3179B9212036309D00C80D9A /* BaselineGreedyTIM.hpp in Sources */,
 				3179B9222036309D00C80D9A /* log.h in Sources */,
 				31DBE44A2141E33200966A04 /* Makefile in Sources */,
-				3179B9232036309D00C80D9A /* log1.h in Sources */,
 				3179B9242036309D00C80D9A /* IMResults.h in Sources */,
 				3179B9252036309D00C80D9A /* TIMCoverage.cpp in Sources */,
 				3114572620AB7CE800A8DD46 /* HeuristicsExecuter.cpp in Sources */,
@@ -685,7 +672,6 @@
 				3179B92B2036309D00C80D9A /* IMTree.hpp in Sources */,
 				3179B92C2036309D00C80D9A /* EstimateNonTargets.cpp in Sources */,
 				3179B92D2036309D00C80D9A /* EstimateNonTargets.hpp in Sources */,
-				3179B92E2036309D00C80D9A /* TIMUtility.hpp in Sources */,
 				3179B92F2036309D00C80D9A /* Phase2.cpp in Sources */,
 				3179B9302036309D00C80D9A /* Phase2.hpp in Sources */,
 				3179B9312036309D00C80D9A /* Diffusion.hpp in Sources */,
