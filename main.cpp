@@ -12,7 +12,6 @@
 #include "InfluenceMaximization/IMTree.hpp"
 #include "InfluenceMaximization/EstimateNonTargets.hpp"
 #include "InfluenceMaximization/Phase2.hpp"
-#include "InfluenceMaximization/Diffusion.hpp"
 #include "InfluenceMaximization/IMResults/IMResults.h"
 #include "InfluenceMaximization/memoryusage.h"
 #include <string>
