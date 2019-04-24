@@ -87,12 +87,11 @@ void testApprox(Graph *graph, int budget, ApproximationSetting setting, bool ext
             seedSet = differenceApproximator.executeGreedyAlgorithmAdjustingPermutation(setting, budget);
         }
     }
-    TIMInfluenceCalculator  timInfluenceCalculator(graph, 2);
 
     
     clock_t differenceEndTime = clock();
     double differenceTimeTaken = double(differenceEndTime - differenceStartTime) / CLOCKS_PER_SEC;
-    
+    TIMInfluenceCalculator  timInfluenceCalculator(graph, 2);    
     pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
     cout <<"\n Results: ";
     cout << "\nInfluence Targets: " << influence.first;

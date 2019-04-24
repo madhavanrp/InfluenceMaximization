@@ -15,10 +15,12 @@ TIMInfluenceCalculator::TIMInfluenceCalculator(Graph *graph) {
 }
 
 TIMInfluenceCalculator::TIMInfluenceCalculator(Graph *graph, double epsilon) {
+    sfmt_init_gen_rand(&sfmt, rand());
     constructCalculator(graph, epsilon, "IC");
 }
 
 TIMInfluenceCalculator::TIMInfluenceCalculator(Graph *graph, double epsilon, string model) {
+    sfmt_init_gen_rand(&sfmt, rand());
     constructCalculator(graph, epsilon, model);
 }
 
