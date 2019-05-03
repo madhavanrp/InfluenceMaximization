@@ -25,6 +25,7 @@
 #include "InfluenceMaximization/HeuristicsExecuter.hpp"
 #include "InfluenceMaximization/DPAlgorithm/HeirarchicalDecomposition.hpp"
 #include "InfluenceMaximization/SFMT/SFMT.h"
+#include "InfluenceMaximization/GreedyModularKnapsack.hpp"
 
 #include <iomanip>
 #include <ctime>
@@ -356,6 +357,50 @@ void executeDifferenceAlgorithms(cxxopts::ParseResult result) {
     // Setting 1000 as NT threshold. Actually not applicable. TODO: do this better.
     string resultFile = constructResultFileName(graphFileName, budget, 1000, percentageTargets, setting);
     IMResults::getInstance().writeToFile(resultFile);
+    delete graph;
+}
+
+
+void executeGreedyModularKnapsack(cxxopts::ParseResult result) {
+    cout << "\n Executing Greedy Modular Knapsack" << flush;
+//    int budget = result["budget"].as<int>();
+    string graphFileName = result["graph"].as<std::string>();
+    int percentageTargets = result["percentage"].as<int>();
+    int costConstraint = result["threshold"].as<int>();
+    
+    cout << "\n Conducting experiments for:\n";
+    cout <<" Graph: " << graphFileName;
+    cout << "\t Percentage:  " << percentageTargets;
+    cout << "\t Cost Constraint: " << costConstraint;
+    cout << flush;
+    
+    Graph *graph = createGraphObject(result);
+    loadResultsFileFrom(result);
+    loadGraphSizeToResults(graph);
+    
+    clock_t greedyKnapsackStartTime = clock();
+    
+    set<int> seedSet;
+    GreedyModularKnapsack greedyModularKnapsack(graph);
+    seedSet = greedyModularKnapsack.executeNormalizedGreedy(costConstraint);
+    
+    clock_t greedyKnapsackEndTime = clock();
+    double greedyKnapsackTimeTaken = double(greedyKnapsackEndTime - greedyKnapsackStartTime) / CLOCKS_PER_SEC;
+    TIMInfluenceCalculator  timInfluenceCalculator(graph, 2);
+    pair<int, int> influence = timInfluenceCalculator.findInfluence(seedSet);
+    cout <<"\n Results: ";
+    cout << "\nInfluence Targets: " << influence.first;
+    cout << "\nInfluence NT: " << influence.second;
+    IMSeedSet imSeedSet;
+    for(int seed: seedSet) {
+        imSeedSet.addSeed(seed);
+    }
+    imSeedSet.setTargets(influence.first);
+    imSeedSet.setNonTargets(influence.second);
+    IMResults::getInstance().addBestSeedSet(imSeedSet);
+    IMResults::getInstance().setTotalTimeTaken(greedyKnapsackTimeTaken);
+    IMResults::getInstance().setApproximationInfluence(influence);
+    IMResults::getInstance().setExpectedTargets(influence);
     delete graph;
 }
 
@@ -706,7 +751,9 @@ int main(int argc, char **argv) {
             executeDPAlgorithm(result);
         } else if(result["algorithm"].count()>0 && algorithm.compare("dpdm")==0) {
             executeDPAlgorithm(result);
-        } else {
+        } else if(result["algorithm"].count()>0 && algorithm.compare("gmk")==0) {
+            executeGreedyModularKnapsack(result);
+        }else {
             executeDifferenceAlgorithms(result);
         }
     }

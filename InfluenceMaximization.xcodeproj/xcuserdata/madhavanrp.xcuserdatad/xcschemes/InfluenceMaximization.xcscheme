@@ -68,7 +68,15 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--algorithm difference --graph ca-GrQc-processed.txt --percentage 80 --labelMethod 0 --budget 20 --approximation 6"
+            argument = "--algorithm difference -b 1443 --graph graph_ic.inf --percentage 50 --approximation 6  --labelMethod 0"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm gmk --graph graph_ic.inf --percentage 50 --budget 1 --threshold 1099"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--algorithm difference --graph epinions.txt --percentage 80 --labelMethod 0 --budget 20 --approximation 4"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
@@ -88,8 +96,12 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "--algorithm baseline --graph soc-pokec-relationships.txt --percentage 80 --budget 20 --threshold 10 --model IC"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "--algorithm timtim --graph graph_ic.inf --percentage 80 --budget 20 --threshold 10 --model IC"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--algorithm tim --graph ca-GrQc-processed.txt --budget 4 --percentage 100"
@@ -97,11 +109,6 @@
          </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
-         <AdditionalOption
-            key = "NSZombieEnabled"
-            value = "YES"
-            isEnabled = "YES">
-         </AdditionalOption>
       </AdditionalOptions>
       <LocationScenarioReference
          identifier = "com.apple.dt.IDEFoundation.CurrentLocationScenarioIdentifier"

@@ -18,6 +18,7 @@
 #include "SFMT/SFMT.h"
 
 class TIMInfluenceCalculator {
+protected:
     Graph *graph;
     double epsilon;
     void constructCalculator(Graph *graph, double epsilon, string model);
@@ -41,6 +42,7 @@ class TIMInfluenceCalculator {
     
 public:
     TIMInfluenceCalculator(Graph *graph);
+    TIMInfluenceCalculator(Graph *graph, string model);
     TIMInfluenceCalculator(Graph *graph, double epsilon);
     TIMInfluenceCalculator(Graph *graph, double epsilon, string model);
     
