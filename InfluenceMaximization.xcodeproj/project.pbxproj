@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		3114572620AB7CE800A8DD46 /* HeuristicsExecuter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3114572420AB7CE800A8DD46 /* HeuristicsExecuter.cpp */; };
 		3114572720AB7CE800A8DD46 /* HeuristicsExecuter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3114572420AB7CE800A8DD46 /* HeuristicsExecuter.cpp */; };
+		31329B2B2270DD9D00E4C299 /* GreedyModularKnapsack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31329B292270DD9D00E4C299 /* GreedyModularKnapsack.cpp */; };
+		31329B2E227118B800E4C299 /* TIMNormalizedCoverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31329B2C227118B800E4C299 /* TIMNormalizedCoverage.cpp */; };
+		31329B3422711FCA00E4C299 /* NormalizedInfluenceCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31329B3222711FCA00E4C299 /* NormalizedInfluenceCalculator.cpp */; };
+		31329B38227255D800E4C299 /* TIMNormalizedCoverage.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31329B2D227118B800E4C299 /* TIMNormalizedCoverage.hpp */; };
+		31329B39227255D800E4C299 /* GreedyModularKnapsack.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31329B2A2270DD9D00E4C299 /* GreedyModularKnapsack.hpp */; };
+		31329B3A227255D800E4C299 /* NormalizedInfluenceCalculator.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31329B3322711FCA00E4C299 /* NormalizedInfluenceCalculator.hpp */; };
 		3138F06C20CEEA73003E77C2 /* HeirarchicalDecomposition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3138F06A20CEEA73003E77C2 /* HeirarchicalDecomposition.cpp */; };
 		3179B91C2036308000C80D9A /* cxxopts.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31D8716A1FD1EF5B00F51E73 /* cxxopts.hpp */; };
 		3179B91D2036308000C80D9A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A51F55D88B00745401 /* main.cpp */; };
@@ -132,6 +138,12 @@
 		31279D751F6CAB3400FC4D9B /* Diffusion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Diffusion.hpp; sourceTree = "<group>"; };
 		31279D791F6F052C00FC4D9B /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
 		31279D7A1F6F0CFC00FC4D9B /* IMResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IMResults.h; path = IMResults/IMResults.h; sourceTree = "<group>"; };
+		31329B292270DD9D00E4C299 /* GreedyModularKnapsack.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GreedyModularKnapsack.cpp; sourceTree = "<group>"; };
+		31329B2A2270DD9D00E4C299 /* GreedyModularKnapsack.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GreedyModularKnapsack.hpp; sourceTree = "<group>"; };
+		31329B2C227118B800E4C299 /* TIMNormalizedCoverage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TIMNormalizedCoverage.cpp; path = "TIM-Models/TIMNormalizedCoverage.cpp"; sourceTree = "<group>"; };
+		31329B2D227118B800E4C299 /* TIMNormalizedCoverage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TIMNormalizedCoverage.hpp; path = "TIM-Models/TIMNormalizedCoverage.hpp"; sourceTree = "<group>"; };
+		31329B3222711FCA00E4C299 /* NormalizedInfluenceCalculator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NormalizedInfluenceCalculator.cpp; sourceTree = "<group>"; };
+		31329B3322711FCA00E4C299 /* NormalizedInfluenceCalculator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NormalizedInfluenceCalculator.hpp; sourceTree = "<group>"; };
 		3138F06A20CEEA73003E77C2 /* HeirarchicalDecomposition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HeirarchicalDecomposition.cpp; sourceTree = "<group>"; };
 		3138F06B20CEEA73003E77C2 /* HeirarchicalDecomposition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HeirarchicalDecomposition.hpp; sourceTree = "<group>"; };
 		313A589C1F4E072300F86148 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -294,6 +306,8 @@
 			children = (
 				310E78A120103A04000C70D9 /* TIMCoverage.cpp */,
 				31279D701F63472700FC4D9B /* TIMCoverage.hpp */,
+				31329B2C227118B800E4C299 /* TIMNormalizedCoverage.cpp */,
+				31329B2D227118B800E4C299 /* TIMNormalizedCoverage.hpp */,
 			);
 			name = "TIM-Models";
 			sourceTree = "<group>";
@@ -499,6 +513,10 @@
 				310E789D200EB175000C70D9 /* TIMInfluenceCalculator.hpp */,
 				3114572420AB7CE800A8DD46 /* HeuristicsExecuter.cpp */,
 				3114572520AB7CE800A8DD46 /* HeuristicsExecuter.hpp */,
+				31329B292270DD9D00E4C299 /* GreedyModularKnapsack.cpp */,
+				31329B2A2270DD9D00E4C299 /* GreedyModularKnapsack.hpp */,
+				31329B3222711FCA00E4C299 /* NormalizedInfluenceCalculator.cpp */,
+				31329B3322711FCA00E4C299 /* NormalizedInfluenceCalculator.hpp */,
 			);
 			path = InfluenceMaximization;
 			sourceTree = "<group>";
@@ -654,12 +672,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31329B38227255D800E4C299 /* TIMNormalizedCoverage.hpp in Sources */,
+				31329B39227255D800E4C299 /* GreedyModularKnapsack.hpp in Sources */,
+				31329B3A227255D800E4C299 /* NormalizedInfluenceCalculator.hpp in Sources */,
 				3179B91E2036309D00C80D9A /* BaselineGreedy.cpp in Sources */,
 				3179B91F2036309D00C80D9A /* BaselineGreedy.hpp in Sources */,
 				3179B9202036309D00C80D9A /* BaselineGreedyTIM.cpp in Sources */,
 				3179B9212036309D00C80D9A /* BaselineGreedyTIM.hpp in Sources */,
 				3179B9222036309D00C80D9A /* log.h in Sources */,
 				31DBE44A2141E33200966A04 /* Makefile in Sources */,
+				31329B3422711FCA00E4C299 /* NormalizedInfluenceCalculator.cpp in Sources */,
 				3179B9242036309D00C80D9A /* IMResults.h in Sources */,
 				3179B9252036309D00C80D9A /* TIMCoverage.cpp in Sources */,
 				3114572620AB7CE800A8DD46 /* HeuristicsExecuter.cpp in Sources */,
@@ -683,9 +705,11 @@
 				3179B9362036309D00C80D9A /* TIMEvaluator.hpp in Sources */,
 				3179B9372036309D00C80D9A /* ApproximationSetting.hpp in Sources */,
 				3179B9382036309D00C80D9A /* GenerateGraphLabels.cpp in Sources */,
+				31329B2E227118B800E4C299 /* TIMNormalizedCoverage.cpp in Sources */,
 				3179B9392036309D00C80D9A /* GenerateGraphLabels.hpp in Sources */,
 				3179B93A2036309D00C80D9A /* TIMInfluenceCalculator.cpp in Sources */,
 				3179B93B2036309D00C80D9A /* TIMInfluenceCalculator.hpp in Sources */,
+				31329B2B2270DD9D00E4C299 /* GreedyModularKnapsack.cpp in Sources */,
 				3179B91C2036308000C80D9A /* cxxopts.hpp in Sources */,
 				3179B91D2036308000C80D9A /* main.cpp in Sources */,
 			);
