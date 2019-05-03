@@ -170,7 +170,7 @@ Phase2TIM::Phase2TIM(Graph *graph): Phase2(graph) {
     double epsilon = EPSLON_TARGETS;
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
 //    R = 23648871;
-    graph->generateRandomRRSets(R, true);
+    graph->generateRandomRRSets(R);
     rrSets = graph->getRandomRRSets();
     vector<vector<int>> *lookupTable = new vector<vector<int>>();
     this->lookupTable = lookupTable;

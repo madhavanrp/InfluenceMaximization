@@ -22,6 +22,7 @@ void Graph::readGraph(string fileName, float percentage) {
 Graph::Graph() {
     this->standardProbability = false;
     this->diffusionModel = "IC";
+    sfmt_init_gen_rand(&sfmt, rand());
 }
 
 void Graph::setDiffusionModel(string model) {
@@ -49,7 +50,7 @@ int Graph:: generateRandomNumber(int u, int v) {
     else {
         randomNumberLimit = inDegree[v];
     }
-    return rand() % randomNumberLimit;
+    return sfmt_genrand_uint32(&sfmt) % randomNumberLimit;
 }
 
 double Graph::getWeightForLTModel(int u, int v) {
@@ -232,20 +233,17 @@ vector<int>* Graph::getNonTargets() {
     return &this->nonTargets;
 }
 
-void Graph::generateRandomRRSets(int R, bool label) {
+void Graph::generateRandomRRSets(int R) {
     this->rrSets = vector<vector<int>>();
     int totalSize = 0;
     clock_t begin = clock();
-    while(rrSets.size()<R) {
-        rrSets.push_back(vector<int>());
-    }
     for(int i=0;i<R;i++) {
         int randomVertex;
-        randomVertex = rand() % n;
+        randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         while(this->labels[randomVertex]==NodeLabelNonTarget) {
-            randomVertex = rand() % n;
+            randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         }
-        generateRandomRRSet(randomVertex, i);
+        generateRandomRRSet(randomVertex);
         totalSize+=rrSets[i].size();
     }
     clock_t end = clock();
@@ -274,9 +272,8 @@ vector<vector<int>>* Graph::getGraphTranspose() {
     return &this->graphTranspose;
 }
 
-vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
+void Graph::generateRandomRRSet(int randomVertex) {
     q.clear();
-    rrSets[rrSetID].push_back(randomVertex);
     q.push_back(randomVertex);
     int nVisitMark = 0;
     visitMark[nVisitMark++] = randomVertex;
@@ -297,7 +294,6 @@ vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
                     visited[v]=true;
                 }
                 q.push_back(v);
-                rrSets[rrSetID].push_back(v);
             }
         }
         else {
@@ -307,7 +303,7 @@ vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
             
             if(graphTranspose[u].size()==0)
                 continue;
-            double randomDouble = (double)rand() / (double)RAND_MAX;
+            double randomDouble = sfmt_genrand_res53(&sfmt);
             for(int i=0; i<(int)graphTranspose[u].size(); i++){
                 int v = graphTranspose[u][i];
                 randomDouble = randomDouble - this->getWeightForLTModel(v, u);
@@ -320,18 +316,17 @@ vector<int> Graph::generateRandomRRSet(int randomVertex, int rrSetID) {
                 visited[v]=true;
                 q.push_back(v);
                 
-                rrSets[rrSetID].push_back(v);
                 break;
             }
         }
         
         
     }
+    rrSets.push_back(vector<int>(visitMark.begin(), visitMark.begin()+nVisitMark));
     for(int i=0;i<nVisitMark;i++) {
         visited[visitMark[i]] = false;
         
     }
-    return rrSets[rrSetID];
     
 }
 
@@ -344,9 +339,9 @@ void Graph::generateRandomRRSetsWithoutVisitingNonTargets(int R) {
     }
     for(int i=0;i<R;i++) {
         int randomVertex;
-        randomVertex = rand() % n;
+        randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         while(labels[randomVertex]==NodeLabelNonTarget) {
-            randomVertex = rand() % n;
+            randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         }
         generateRandomRRSetWithoutVisitingNonTargets(randomVertex, i);
         totalSize+=rrSets[i].size();

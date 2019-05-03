@@ -124,6 +124,7 @@ double ModularApproximation::evaluateFunction(int element) {
 DifferenceApproximator::DifferenceApproximator(Graph *graph) {
     this->graph = graph;
     this->permutation = NULL;
+    sfmt_init_gen_rand(&sfmt, rand());
 }
 
 double DifferenceApproximator::getDifferenceValue() {
@@ -524,7 +525,7 @@ set<int> DifferenceApproximator::randGreedyCSO(TIMCoverage timCoverageDifference
             i++;
         }
         assert(topKPairs.size()==k);
-        int randomUIndex = rand() % k;
+        int randomUIndex = sfmt_genrand_uint32(&sfmt) % k;
         int randomU = topKPairs[randomUIndex].first;
         seedSet.insert(randomU);
         timCoverageDifference.addToSeed(randomU, rrSets);

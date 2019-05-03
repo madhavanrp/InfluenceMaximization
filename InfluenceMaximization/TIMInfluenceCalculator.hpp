@@ -15,14 +15,17 @@
 #include <cmath>
 #include <memory>
 #include "TIM-Models/TIMCoverage.hpp"
+#include "SFMT/SFMT.h"
 
 class TIMInfluenceCalculator {
+protected:
     Graph *graph;
     double epsilon;
     void constructCalculator(Graph *graph, double epsilon, string model);
     vector<vector<int>> rrSetsNonTargets;
     vector<vector<int>> rrSetsTargets;
     string model;
+    sfmt_t sfmt;
     
     shared_ptr<TIMCoverage> timCoverageTargets, timCoverageNonTargets;
     shared_ptr<vector<vector<int>>> lookupTableTargets, lookupTableNonTargets;
@@ -39,11 +42,12 @@ class TIMInfluenceCalculator {
     
 public:
     TIMInfluenceCalculator(Graph *graph);
+    TIMInfluenceCalculator(Graph *graph, string model);
     TIMInfluenceCalculator(Graph *graph, double epsilon);
     TIMInfluenceCalculator(Graph *graph, double epsilon, string model);
     
     //Generation of Random RR Sets
-    void generateRandomRRSet(int randomVertex, int rrSetID, vector<vector<int>> *rrSets, vector<int> *counts);
+    void generateRandomRRSet(int randomVertex, vector<vector<int>> *rrSets, vector<int> *counts);
     void generateRandomRRSetsTargets(int R);
     void generateRandomRRSetsNonTargets(int R);
     

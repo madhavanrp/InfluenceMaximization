@@ -77,7 +77,7 @@ void TIMEvaluator::calculateTargets() {
     int n = this->graph->getNumberOfVertices();
     double epsilon = TIM_EPSILON_TARGETS;
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
-    graph->generateRandomRRSets(R, true);
+    graph->generateRandomRRSets(R);
     rrSetsTargets = (*graph->getRandomRRSets());
     this->reverseMapTargets = new vector<vector<int>>();
     this->timCoverage = new TIMCoverage(this->reverseMapTargets);

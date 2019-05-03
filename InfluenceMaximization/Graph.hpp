@@ -21,6 +21,7 @@
 #include <stdexcept>
 #include <unordered_map>
 #include "LabelSetting.hpp"
+#include "SFMT/SFMT.h"
 
 using namespace std;
 
@@ -34,6 +35,7 @@ private:
     float propogationProbability;
     int propogationProbabilityNumber;
     bool standardProbability;
+    sfmt_t sfmt;
     string diffusionModel;
     string graphName;
     float percentageTargets;
@@ -83,8 +85,8 @@ public:
     vector<vector<int>> *getGraphTranspose();
     
     vector<vector<int> > constructTranspose(vector<vector<int> > aGraph);
-    void generateRandomRRSets(int R, bool label);
-    vector<int> generateRandomRRSet(int randomVertex, int rrSetID);
+    void generateRandomRRSets(int R);
+    void generateRandomRRSet(int randomVertex);
     void clearRandomRRSets();
     vector<vector<int>>* getRandomRRSets();
     
