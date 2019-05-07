@@ -10,13 +10,13 @@
 #define Phase2_hpp
 
 #include <stdio.h>
-#include "IMTree.hpp"
-#include "Graph.hpp"
+#include "InfluenceMaximization/CIM/IMTree.hpp"
+#include "InfluenceMaximization/Graph/Graph.hpp"
 #include <queue>
 #include <cmath>
 #include <set>
-#include "Diffusion.hpp"
-#include "TIMInfluenceCalculator.hpp"
+#include "InfluenceMaximization/Diffusion.hpp"
+#include "InfluenceMaximization/TIMInfluenceCalculator.hpp"
 
 #define EPSLON_TARGETS 2
 

@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>CIM.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
 		<key>InfluenceMaximization.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -23,6 +28,11 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>310E6A121FDE0FAB00D72424</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>313767F72280AA490058A4AB</key>
 		<dict>
 			<key>primary</key>
 			<true/>

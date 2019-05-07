@@ -10,13 +10,12 @@
 #define EstimateNonTargets_hpp
 
 #include <stdio.h>
-#include "Graph.hpp"
+#include "InfluenceMaximization/Graph/Graph.hpp"
 #include <cmath>
 #include <assert.h>
-#include "json.hpp"
-#include "Diffusion.hpp"
+#include "InfluenceMaximization/json.hpp"
+#include "InfluenceMaximization/Diffusion.hpp"
 #include "SFMT/SFMT.h"
-
 #define EPSILON 2
 
 class EstimateNonTargets {

@@ -10,12 +10,12 @@
 #define TIMInfluenceCalculator_hpp
 
 #include <stdio.h>
+#include "InfluenceMaximization/TIM-Models/TIMCoverage.hpp"
+#include "SFMT/SFMT.h"
 #include "Graph.hpp"
 #include <set>
 #include <cmath>
 #include <memory>
-#include "TIM-Models/TIMCoverage.hpp"
-#include "SFMT/SFMT.h"
 
 class TIMInfluenceCalculator {
 protected:
