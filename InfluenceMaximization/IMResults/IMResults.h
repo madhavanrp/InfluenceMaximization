@@ -9,9 +9,10 @@
 #ifndef IMResults_h
 #define IMResults_h
 
-#include "../IMTree.hpp"
-#include "../ApproximationSetting.hpp"
-#include "../LabelSetting.hpp"
+#include "InfluenceMaximization/Graph/LabelSetting.hpp"
+#include "InfluenceMaximization/json.hpp"
+#include "InfluenceMaximization/Models/IMSeedSet.hpp"
+#include <limits.h>
 
 using json = nlohmann::json;
 
@@ -116,8 +117,8 @@ public:
     void setApproximationTime(double value) {
         data["approximationTime"] = value;
     }
-    void setApproximationSetting(ApproximationSetting setting) {
-        data["approximationSetting"] = static_cast<int>(setting);
+    void setApproximationSetting(int setting) {
+        data["approximationSetting"] = setting;
     }
     void setExtendingPermutation(bool extend) {
         data["extend"] = extend;

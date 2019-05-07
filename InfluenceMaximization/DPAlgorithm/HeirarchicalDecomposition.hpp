@@ -10,14 +10,14 @@
 #define HeirarchicalDecomposition_hpp
 
 #include <stdio.h>
-#include "../Graph.hpp"
+#include "InfluenceMaximization/Graph/Graph.hpp"
 #include <string.h>
 #include <assert.h>
 #include <math.h>
 #include <unordered_set>
 #include <memory>
 #include <limits.h>
-#include "../TIMInfluenceCalculator.hpp"
+#include "InfluenceMaximization/TIMInfluenceCalculator.hpp"
 
 class HeirarchicalDecomposition {
     vector<int> binaryTree;

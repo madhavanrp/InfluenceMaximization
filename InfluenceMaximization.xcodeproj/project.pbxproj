@@ -15,9 +15,42 @@
 		31329B38227255D800E4C299 /* TIMNormalizedCoverage.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31329B2D227118B800E4C299 /* TIMNormalizedCoverage.hpp */; };
 		31329B39227255D800E4C299 /* GreedyModularKnapsack.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31329B2A2270DD9D00E4C299 /* GreedyModularKnapsack.hpp */; };
 		31329B3A227255D800E4C299 /* NormalizedInfluenceCalculator.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31329B3322711FCA00E4C299 /* NormalizedInfluenceCalculator.hpp */; };
+		3137678D2280A5120058A4AB /* HeirarchicalDecomposition.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 3138F06B20CEEA73003E77C2 /* HeirarchicalDecomposition.hpp */; };
+		3137678E2280A55C0058A4AB /* SFMT.h in Sources */ = {isa = PBXBuildFile; fileRef = 31DBE43E2141E33200966A04 /* SFMT.h */; };
+		313767FF2280AA890058A4AB /* main_utils.h in Sources */ = {isa = PBXBuildFile; fileRef = 3137678C2280A27F0058A4AB /* main_utils.h */; };
+		313768002280AA890058A4AB /* cxxopts.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31D8716A1FD1EF5B00F51E73 /* cxxopts.hpp */; };
+		313768012280AA890058A4AB /* cim_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A51F55D88B00745401 /* cim_main.cpp */; };
+		313768022280AA950058A4AB /* LabelSetting.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 3179B9702051F14B00C80D9A /* LabelSetting.hpp */; };
+		313768032280AA950058A4AB /* Graph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31FC36911F354E56005CAFEB /* Graph.cpp */; };
+		313768042280AA950058A4AB /* Graph.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31FC36921F354E56005CAFEB /* Graph.hpp */; };
+		313768052280AA950058A4AB /* GenerateGraphLabels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3107F09E1FE4661900EA0135 /* GenerateGraphLabels.cpp */; };
+		313768062280AA950058A4AB /* GenerateGraphLabels.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 3107F09F1FE4661900EA0135 /* GenerateGraphLabels.hpp */; };
+		313768072280AAA70058A4AB /* IMTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494991F510CBF00745401 /* IMTree.cpp */; };
+		313768082280AAA70058A4AB /* IMTree.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A4949A1F510CBF00745401 /* IMTree.hpp */; };
+		313768092280AAA70058A4AB /* EstimateNonTargets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A71F55E92700745401 /* EstimateNonTargets.cpp */; };
+		3137680A2280AAA70058A4AB /* EstimateNonTargets.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A81F55E92700745401 /* EstimateNonTargets.hpp */; };
+		3137680B2280AAA70058A4AB /* Phase2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D6C1F58EBD900FC4D9B /* Phase2.cpp */; };
+		3137680C2280AAA70058A4AB /* Phase2.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D6D1F58EBD900FC4D9B /* Phase2.hpp */; };
+		3137680D2280AAA70058A4AB /* BaselineGreedy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */; };
+		3137680E2280AAA70058A4AB /* BaselineGreedy.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 311FFDFB20041C5900F68590 /* BaselineGreedy.hpp */; };
+		3137680F2280AAA70058A4AB /* BaselineGreedyTIM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */; };
+		313768102280AAA70058A4AB /* BaselineGreedyTIM.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A4201BCE71000C70D9 /* BaselineGreedyTIM.hpp */; };
+		313768112280AAE50058A4AB /* log.h in Sources */ = {isa = PBXBuildFile; fileRef = 31C4ADA01F787C610077D6BF /* log.h */; };
+		313768122280AAE50058A4AB /* IMResults.h in Sources */ = {isa = PBXBuildFile; fileRef = 31279D7A1F6F0CFC00FC4D9B /* IMResults.h */; };
+		313768132280AAE50058A4AB /* TIMCoverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A120103A04000C70D9 /* TIMCoverage.cpp */; };
+		313768142280AAE50058A4AB /* TIMCoverage.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D701F63472700FC4D9B /* TIMCoverage.hpp */; };
+		313768152280AAE50058A4AB /* TIMNormalizedCoverage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31329B2C227118B800E4C299 /* TIMNormalizedCoverage.cpp */; };
+		313768162280AAE50058A4AB /* TIMNormalizedCoverage.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31329B2D227118B800E4C299 /* TIMNormalizedCoverage.hpp */; };
+		313768172280AAE50058A4AB /* memoryusage.h in Sources */ = {isa = PBXBuildFile; fileRef = 311423111F6F4AA7001BA3FA /* memoryusage.h */; };
+		313768182280AAE50058A4AB /* Diffusion.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D751F6CAB3400FC4D9B /* Diffusion.hpp */; };
+		313768192280AAE50058A4AB /* json.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31279D791F6F052C00FC4D9B /* json.hpp */; };
+		3137681A2280AAE50058A4AB /* TIMInfluenceCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E789C200EB175000C70D9 /* TIMInfluenceCalculator.cpp */; };
+		3137681B2280AAE50058A4AB /* TIMInfluenceCalculator.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E789D200EB175000C70D9 /* TIMInfluenceCalculator.hpp */; };
+		3137681C2280D5610058A4AB /* SFMT.c in Sources */ = {isa = PBXBuildFile; fileRef = 31DBE43D2141E33200966A04 /* SFMT.c */; };
+		3137681D2280D5610058A4AB /* SFMT.h in Sources */ = {isa = PBXBuildFile; fileRef = 31DBE43E2141E33200966A04 /* SFMT.h */; };
 		3138F06C20CEEA73003E77C2 /* HeirarchicalDecomposition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3138F06A20CEEA73003E77C2 /* HeirarchicalDecomposition.cpp */; };
 		3179B91C2036308000C80D9A /* cxxopts.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 31D8716A1FD1EF5B00F51E73 /* cxxopts.hpp */; };
-		3179B91D2036308000C80D9A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A51F55D88B00745401 /* main.cpp */; };
+		3179B91D2036308000C80D9A /* cim_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31A494A51F55D88B00745401 /* cim_main.cpp */; };
 		3179B91E2036309D00C80D9A /* BaselineGreedy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */; };
 		3179B91F2036309D00C80D9A /* BaselineGreedy.hpp in Sources */ = {isa = PBXBuildFile; fileRef = 311FFDFB20041C5900F68590 /* BaselineGreedy.hpp */; };
 		3179B9202036309D00C80D9A /* BaselineGreedyTIM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */; };
@@ -95,6 +128,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		313767F62280AA490058A4AB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		3179B93E2038E6F300C80D9A /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -116,56 +158,58 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3107F09E1FE4661900EA0135 /* GenerateGraphLabels.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenerateGraphLabels.cpp; sourceTree = "<group>"; };
-		3107F09F1FE4661900EA0135 /* GenerateGraphLabels.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GenerateGraphLabels.hpp; sourceTree = "<group>"; };
+		3107F09E1FE4661900EA0135 /* GenerateGraphLabels.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GenerateGraphLabels.cpp; path = InfluenceMaximization/Graph/GenerateGraphLabels.cpp; sourceTree = SOURCE_ROOT; };
+		3107F09F1FE4661900EA0135 /* GenerateGraphLabels.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GenerateGraphLabels.hpp; path = InfluenceMaximization/Graph/GenerateGraphLabels.hpp; sourceTree = SOURCE_ROOT; };
 		310E6A131FDE0FAB00D72424 /* jsonexperimenter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jsonexperimenter; sourceTree = BUILT_PRODUCTS_DIR; };
 		310E6A821FE07AF000D72424 /* experiments.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = experiments.py; sourceTree = "<group>"; };
-		310E789C200EB175000C70D9 /* TIMInfluenceCalculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMInfluenceCalculator.cpp; sourceTree = "<group>"; };
-		310E789D200EB175000C70D9 /* TIMInfluenceCalculator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TIMInfluenceCalculator.hpp; sourceTree = "<group>"; };
-		310E78A120103A04000C70D9 /* TIMCoverage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TIMCoverage.cpp; path = "TIM-Models/TIMCoverage.cpp"; sourceTree = "<group>"; };
-		310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaselineGreedyTIM.cpp; sourceTree = "<group>"; };
-		310E78A4201BCE71000C70D9 /* BaselineGreedyTIM.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BaselineGreedyTIM.hpp; sourceTree = "<group>"; };
-		311423111F6F4AA7001BA3FA /* memoryusage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memoryusage.h; sourceTree = "<group>"; };
-		3114572420AB7CE800A8DD46 /* HeuristicsExecuter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HeuristicsExecuter.cpp; sourceTree = "<group>"; };
-		3114572520AB7CE800A8DD46 /* HeuristicsExecuter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HeuristicsExecuter.hpp; sourceTree = "<group>"; };
-		311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaselineGreedy.cpp; sourceTree = "<group>"; };
-		311FFDFB20041C5900F68590 /* BaselineGreedy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BaselineGreedy.hpp; sourceTree = "<group>"; };
+		310E789C200EB175000C70D9 /* TIMInfluenceCalculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TIMInfluenceCalculator.cpp; path = InfluenceMaximization/TIMInfluenceCalculator.cpp; sourceTree = SOURCE_ROOT; };
+		310E789D200EB175000C70D9 /* TIMInfluenceCalculator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TIMInfluenceCalculator.hpp; path = InfluenceMaximization/TIMInfluenceCalculator.hpp; sourceTree = SOURCE_ROOT; };
+		310E78A120103A04000C70D9 /* TIMCoverage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TIMCoverage.cpp; path = "InfluenceMaximization/TIM-Models/TIMCoverage.cpp"; sourceTree = SOURCE_ROOT; };
+		310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BaselineGreedyTIM.cpp; path = InfluenceMaximization/CIM/BaselineGreedyTIM.cpp; sourceTree = SOURCE_ROOT; };
+		310E78A4201BCE71000C70D9 /* BaselineGreedyTIM.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BaselineGreedyTIM.hpp; path = InfluenceMaximization/CIM/BaselineGreedyTIM.hpp; sourceTree = SOURCE_ROOT; };
+		311423111F6F4AA7001BA3FA /* memoryusage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = memoryusage.h; path = InfluenceMaximization/memoryusage.h; sourceTree = SOURCE_ROOT; };
+		3114572420AB7CE800A8DD46 /* HeuristicsExecuter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HeuristicsExecuter.cpp; path = InfluenceMaximization/Heuristics/HeuristicsExecuter.cpp; sourceTree = SOURCE_ROOT; };
+		3114572520AB7CE800A8DD46 /* HeuristicsExecuter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HeuristicsExecuter.hpp; path = InfluenceMaximization/Heuristics/HeuristicsExecuter.hpp; sourceTree = SOURCE_ROOT; };
+		311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BaselineGreedy.cpp; path = InfluenceMaximization/CIM/BaselineGreedy.cpp; sourceTree = SOURCE_ROOT; };
+		311FFDFB20041C5900F68590 /* BaselineGreedy.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BaselineGreedy.hpp; path = InfluenceMaximization/CIM/BaselineGreedy.hpp; sourceTree = SOURCE_ROOT; };
 		311FFDFD20041D1500F68590 /* BaselineGreedyTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaselineGreedyTests.cpp; sourceTree = "<group>"; };
-		31279D6C1F58EBD900FC4D9B /* Phase2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Phase2.cpp; sourceTree = "<group>"; };
-		31279D6D1F58EBD900FC4D9B /* Phase2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Phase2.hpp; sourceTree = "<group>"; };
-		31279D701F63472700FC4D9B /* TIMCoverage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TIMCoverage.hpp; path = "TIM-Models/TIMCoverage.hpp"; sourceTree = "<group>"; };
+		31279D6C1F58EBD900FC4D9B /* Phase2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Phase2.cpp; path = InfluenceMaximization/CIM/Phase2.cpp; sourceTree = SOURCE_ROOT; };
+		31279D6D1F58EBD900FC4D9B /* Phase2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Phase2.hpp; path = InfluenceMaximization/CIM/Phase2.hpp; sourceTree = SOURCE_ROOT; };
+		31279D701F63472700FC4D9B /* TIMCoverage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TIMCoverage.hpp; path = "InfluenceMaximization/TIM-Models/TIMCoverage.hpp"; sourceTree = SOURCE_ROOT; };
 		31279D721F63485200FC4D9B /* TIMCoverageTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMCoverageTests.cpp; sourceTree = "<group>"; };
-		31279D751F6CAB3400FC4D9B /* Diffusion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Diffusion.hpp; sourceTree = "<group>"; };
-		31279D791F6F052C00FC4D9B /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
-		31279D7A1F6F0CFC00FC4D9B /* IMResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IMResults.h; path = IMResults/IMResults.h; sourceTree = "<group>"; };
-		31329B292270DD9D00E4C299 /* GreedyModularKnapsack.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GreedyModularKnapsack.cpp; sourceTree = "<group>"; };
-		31329B2A2270DD9D00E4C299 /* GreedyModularKnapsack.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GreedyModularKnapsack.hpp; sourceTree = "<group>"; };
-		31329B2C227118B800E4C299 /* TIMNormalizedCoverage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TIMNormalizedCoverage.cpp; path = "TIM-Models/TIMNormalizedCoverage.cpp"; sourceTree = "<group>"; };
-		31329B2D227118B800E4C299 /* TIMNormalizedCoverage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TIMNormalizedCoverage.hpp; path = "TIM-Models/TIMNormalizedCoverage.hpp"; sourceTree = "<group>"; };
-		31329B3222711FCA00E4C299 /* NormalizedInfluenceCalculator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NormalizedInfluenceCalculator.cpp; sourceTree = "<group>"; };
-		31329B3322711FCA00E4C299 /* NormalizedInfluenceCalculator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NormalizedInfluenceCalculator.hpp; sourceTree = "<group>"; };
-		3138F06A20CEEA73003E77C2 /* HeirarchicalDecomposition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HeirarchicalDecomposition.cpp; sourceTree = "<group>"; };
-		3138F06B20CEEA73003E77C2 /* HeirarchicalDecomposition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HeirarchicalDecomposition.hpp; sourceTree = "<group>"; };
+		31279D751F6CAB3400FC4D9B /* Diffusion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Diffusion.hpp; path = InfluenceMaximization/Diffusion.hpp; sourceTree = SOURCE_ROOT; };
+		31279D791F6F052C00FC4D9B /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = json.hpp; path = InfluenceMaximization/json.hpp; sourceTree = SOURCE_ROOT; };
+		31279D7A1F6F0CFC00FC4D9B /* IMResults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IMResults.h; path = InfluenceMaximization/IMResults/IMResults.h; sourceTree = SOURCE_ROOT; };
+		31329B292270DD9D00E4C299 /* GreedyModularKnapsack.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = GreedyModularKnapsack.cpp; path = InfluenceMaximization/ModularKnapsack/GreedyModularKnapsack.cpp; sourceTree = SOURCE_ROOT; };
+		31329B2A2270DD9D00E4C299 /* GreedyModularKnapsack.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GreedyModularKnapsack.hpp; path = InfluenceMaximization/ModularKnapsack/GreedyModularKnapsack.hpp; sourceTree = SOURCE_ROOT; };
+		31329B2C227118B800E4C299 /* TIMNormalizedCoverage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TIMNormalizedCoverage.cpp; path = "InfluenceMaximization/TIM-Models/TIMNormalizedCoverage.cpp"; sourceTree = SOURCE_ROOT; };
+		31329B2D227118B800E4C299 /* TIMNormalizedCoverage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TIMNormalizedCoverage.hpp; path = "InfluenceMaximization/TIM-Models/TIMNormalizedCoverage.hpp"; sourceTree = SOURCE_ROOT; };
+		31329B3222711FCA00E4C299 /* NormalizedInfluenceCalculator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NormalizedInfluenceCalculator.cpp; path = InfluenceMaximization/ModularKnapsack/NormalizedInfluenceCalculator.cpp; sourceTree = SOURCE_ROOT; };
+		31329B3322711FCA00E4C299 /* NormalizedInfluenceCalculator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = NormalizedInfluenceCalculator.hpp; path = InfluenceMaximization/ModularKnapsack/NormalizedInfluenceCalculator.hpp; sourceTree = SOURCE_ROOT; };
+		3137678C2280A27F0058A4AB /* main_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main_utils.h; sourceTree = SOURCE_ROOT; };
+		313767F82280AA490058A4AB /* CIM */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CIM; sourceTree = BUILT_PRODUCTS_DIR; };
+		3138F06A20CEEA73003E77C2 /* HeirarchicalDecomposition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HeirarchicalDecomposition.cpp; path = InfluenceMaximization/DPAlgorithm/HeirarchicalDecomposition.cpp; sourceTree = SOURCE_ROOT; };
+		3138F06B20CEEA73003E77C2 /* HeirarchicalDecomposition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = HeirarchicalDecomposition.hpp; path = InfluenceMaximization/DPAlgorithm/HeirarchicalDecomposition.hpp; sourceTree = SOURCE_ROOT; };
 		313A589C1F4E072300F86148 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		3141B0F51F86BE1500B4F1D2 /* GraphTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphTests.cpp; sourceTree = "<group>"; };
-		3159634B1F9E756C000EB2F4 /* DifferenceApproximator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DifferenceApproximator.cpp; sourceTree = "<group>"; };
-		3159634C1F9E756C000EB2F4 /* DifferenceApproximator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DifferenceApproximator.hpp; sourceTree = "<group>"; };
+		3159634B1F9E756C000EB2F4 /* DifferenceApproximator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DifferenceApproximator.cpp; path = InfluenceMaximization/DifferenceAlgorithms/DifferenceApproximator.cpp; sourceTree = SOURCE_ROOT; };
+		3159634C1F9E756C000EB2F4 /* DifferenceApproximator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DifferenceApproximator.hpp; path = InfluenceMaximization/DifferenceAlgorithms/DifferenceApproximator.hpp; sourceTree = SOURCE_ROOT; };
 		3159634E1F9E8797000EB2F4 /* ApproximationTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApproximationTests.cpp; sourceTree = "<group>"; };
-		315963541F9EC153000EB2F4 /* TIMEvaluator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMEvaluator.cpp; sourceTree = "<group>"; };
-		315963551F9EC153000EB2F4 /* TIMEvaluator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TIMEvaluator.hpp; sourceTree = "<group>"; };
+		315963541F9EC153000EB2F4 /* TIMEvaluator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TIMEvaluator.cpp; path = InfluenceMaximization/DifferenceAlgorithms/TIMEvaluator.cpp; sourceTree = SOURCE_ROOT; };
+		315963551F9EC153000EB2F4 /* TIMEvaluator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TIMEvaluator.hpp; path = InfluenceMaximization/DifferenceAlgorithms/TIMEvaluator.hpp; sourceTree = SOURCE_ROOT; };
 		315963571F9FCFEA000EB2F4 /* TIMEvaluatorTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TIMEvaluatorTests.cpp; sourceTree = "<group>"; };
-		315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ApproximationSetting.hpp; sourceTree = "<group>"; };
+		315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ApproximationSetting.hpp; path = InfluenceMaximization/DifferenceAlgorithms/ApproximationSetting.hpp; sourceTree = SOURCE_ROOT; };
 		3179B9402038E6F300C80D9A /* InfluenceTests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = InfluenceTests; sourceTree = BUILT_PRODUCTS_DIR; };
-		3179B9702051F14B00C80D9A /* LabelSetting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LabelSetting.hpp; sourceTree = "<group>"; };
-		31A494991F510CBF00745401 /* IMTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IMTree.cpp; sourceTree = "<group>"; };
-		31A4949A1F510CBF00745401 /* IMTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = IMTree.hpp; sourceTree = "<group>"; };
+		3179B9702051F14B00C80D9A /* LabelSetting.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LabelSetting.hpp; path = InfluenceMaximization/Graph/LabelSetting.hpp; sourceTree = SOURCE_ROOT; };
+		31A494991F510CBF00745401 /* IMTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IMTree.cpp; path = InfluenceMaximization/CIM/IMTree.cpp; sourceTree = SOURCE_ROOT; };
+		31A4949A1F510CBF00745401 /* IMTree.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IMTree.hpp; path = InfluenceMaximization/CIM/IMTree.hpp; sourceTree = SOURCE_ROOT; };
 		31A494A21F55D54700745401 /* catch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = catch.hpp; sourceTree = "<group>"; };
 		31A494A31F55D54700745401 /* catchTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = catchTest.cpp; sourceTree = "<group>"; };
-		31A494A51F55D88B00745401 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		31A494A71F55E92700745401 /* EstimateNonTargets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EstimateNonTargets.cpp; sourceTree = "<group>"; };
-		31A494A81F55E92700745401 /* EstimateNonTargets.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EstimateNonTargets.hpp; sourceTree = "<group>"; };
-		31C4ADA01F787C610077D6BF /* log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
-		31D8716A1FD1EF5B00F51E73 /* cxxopts.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cxxopts.hpp; sourceTree = "<group>"; };
+		31A494A51F55D88B00745401 /* cim_main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cim_main.cpp; sourceTree = SOURCE_ROOT; };
+		31A494A71F55E92700745401 /* EstimateNonTargets.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EstimateNonTargets.cpp; path = InfluenceMaximization/CIM/EstimateNonTargets.cpp; sourceTree = SOURCE_ROOT; };
+		31A494A81F55E92700745401 /* EstimateNonTargets.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = EstimateNonTargets.hpp; path = InfluenceMaximization/CIM/EstimateNonTargets.hpp; sourceTree = SOURCE_ROOT; };
+		31C4ADA01F787C610077D6BF /* log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = log.h; path = InfluenceMaximization/log.h; sourceTree = SOURCE_ROOT; };
+		31D8716A1FD1EF5B00F51E73 /* cxxopts.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cxxopts.hpp; sourceTree = SOURCE_ROOT; };
 		31DBE3E72141E33200966A04 /* CHANGE-LOG.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "CHANGE-LOG.txt"; sourceTree = "<group>"; };
 		31DBE3E82141E33200966A04 /* check.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = check.sh; sourceTree = "<group>"; };
 		31DBE3E92141E33200966A04 /* FILES.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FILES.txt; sourceTree = "<group>"; };
@@ -251,7 +295,7 @@
 		31DBE43B2141E33200966A04 /* SFMT.607.out.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SFMT.607.out.txt; sourceTree = "<group>"; };
 		31DBE43C2141E33200966A04 /* SFMT.86243.out.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SFMT.86243.out.txt; sourceTree = "<group>"; };
 		31DBE43D2141E33200966A04 /* SFMT.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SFMT.c; sourceTree = "<group>"; };
-		31DBE43E2141E33200966A04 /* SFMT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFMT.h; sourceTree = "<group>"; };
+		31DBE43E2141E33200966A04 /* SFMT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SFMT.h; path = SFMT/SFMT.h; sourceTree = SOURCE_ROOT; };
 		31DBE43F2141E33200966A04 /* test-std-M11213 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "test-std-M11213"; sourceTree = "<group>"; };
 		31DBE4402141E33200966A04 /* test-std-M1279 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "test-std-M1279"; sourceTree = "<group>"; };
 		31DBE4412141E33200966A04 /* test-std-M132049 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "test-std-M132049"; sourceTree = "<group>"; };
@@ -263,13 +307,20 @@
 		31DBE4472141E33200966A04 /* test-std-M607 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "test-std-M607"; sourceTree = "<group>"; };
 		31DBE4482141E33200966A04 /* test-std-M86243 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "test-std-M86243"; sourceTree = "<group>"; };
 		31FC36871F354892005CAFEB /* InfluenceMaximization */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = InfluenceMaximization; sourceTree = BUILT_PRODUCTS_DIR; };
-		31FC36911F354E56005CAFEB /* Graph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Graph.cpp; sourceTree = "<group>"; };
-		31FC36921F354E56005CAFEB /* Graph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Graph.hpp; sourceTree = "<group>"; };
+		31FC36911F354E56005CAFEB /* Graph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Graph.cpp; path = InfluenceMaximization/Graph/Graph.cpp; sourceTree = SOURCE_ROOT; };
+		31FC36921F354E56005CAFEB /* Graph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Graph.hpp; path = InfluenceMaximization/Graph/Graph.hpp; sourceTree = SOURCE_ROOT; };
 		31FC36941F3556A6005CAFEB /* graphs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = graphs; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		310E6A101FDE0FAB00D72424 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		313767F52280AA490058A4AB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -299,7 +350,8 @@
 				31279D7A1F6F0CFC00FC4D9B /* IMResults.h */,
 			);
 			name = IMResults;
-			sourceTree = "<group>";
+			path = InfluenceMaximization;
+			sourceTree = SOURCE_ROOT;
 		};
 		31279D6F1F63469F00FC4D9B /* TIM-Models */ = {
 			isa = PBXGroup;
@@ -310,7 +362,74 @@
 				31329B2D227118B800E4C299 /* TIMNormalizedCoverage.hpp */,
 			);
 			name = "TIM-Models";
-			sourceTree = "<group>";
+			path = InfluenceMaximization;
+			sourceTree = SOURCE_ROOT;
+		};
+		3137678722809A3B0058A4AB /* CIM */ = {
+			isa = PBXGroup;
+			children = (
+				31A494991F510CBF00745401 /* IMTree.cpp */,
+				31A4949A1F510CBF00745401 /* IMTree.hpp */,
+				31A494A71F55E92700745401 /* EstimateNonTargets.cpp */,
+				31A494A81F55E92700745401 /* EstimateNonTargets.hpp */,
+				31279D6C1F58EBD900FC4D9B /* Phase2.cpp */,
+				31279D6D1F58EBD900FC4D9B /* Phase2.hpp */,
+				311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */,
+				311FFDFB20041C5900F68590 /* BaselineGreedy.hpp */,
+				310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */,
+				310E78A4201BCE71000C70D9 /* BaselineGreedyTIM.hpp */,
+			);
+			name = CIM;
+			path = InfluenceMaximization/CIM;
+			sourceTree = SOURCE_ROOT;
+		};
+		3137678822809B6A0058A4AB /* Graph */ = {
+			isa = PBXGroup;
+			children = (
+				3179B9702051F14B00C80D9A /* LabelSetting.hpp */,
+				31FC36911F354E56005CAFEB /* Graph.cpp */,
+				31FC36921F354E56005CAFEB /* Graph.hpp */,
+				3107F09E1FE4661900EA0135 /* GenerateGraphLabels.cpp */,
+				3107F09F1FE4661900EA0135 /* GenerateGraphLabels.hpp */,
+			);
+			name = Graph;
+			path = InfluenceMaximization/Graph;
+			sourceTree = SOURCE_ROOT;
+		};
+		3137678922809C920058A4AB /* DifferenceAlgorithms */ = {
+			isa = PBXGroup;
+			children = (
+				3159634B1F9E756C000EB2F4 /* DifferenceApproximator.cpp */,
+				3159634C1F9E756C000EB2F4 /* DifferenceApproximator.hpp */,
+				315963541F9EC153000EB2F4 /* TIMEvaluator.cpp */,
+				315963551F9EC153000EB2F4 /* TIMEvaluator.hpp */,
+				315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */,
+			);
+			name = DifferenceAlgorithms;
+			path = InfluenceMaximization/DifferenceAlgorithms;
+			sourceTree = SOURCE_ROOT;
+		};
+		3137678A22809DFC0058A4AB /* ModularKnapsack */ = {
+			isa = PBXGroup;
+			children = (
+				31329B292270DD9D00E4C299 /* GreedyModularKnapsack.cpp */,
+				31329B2A2270DD9D00E4C299 /* GreedyModularKnapsack.hpp */,
+				31329B3222711FCA00E4C299 /* NormalizedInfluenceCalculator.cpp */,
+				31329B3322711FCA00E4C299 /* NormalizedInfluenceCalculator.hpp */,
+			);
+			name = ModularKnapsack;
+			path = InfluenceMaximization/ModularKnapsack;
+			sourceTree = SOURCE_ROOT;
+		};
+		3137678B22809E2E0058A4AB /* Heuristics */ = {
+			isa = PBXGroup;
+			children = (
+				3114572420AB7CE800A8DD46 /* HeuristicsExecuter.cpp */,
+				3114572520AB7CE800A8DD46 /* HeuristicsExecuter.hpp */,
+			);
+			name = Heuristics;
+			path = InfluenceMaximization/Heuristics;
+			sourceTree = SOURCE_ROOT;
 		};
 		3138F06920CEEA73003E77C2 /* DPAlgorithm */ = {
 			isa = PBXGroup;
@@ -318,8 +437,9 @@
 				3138F06A20CEEA73003E77C2 /* HeirarchicalDecomposition.cpp */,
 				3138F06B20CEEA73003E77C2 /* HeirarchicalDecomposition.hpp */,
 			);
-			path = DPAlgorithm;
-			sourceTree = "<group>";
+			name = DPAlgorithm;
+			path = InfluenceMaximization/DPAlgorithm;
+			sourceTree = SOURCE_ROOT;
 		};
 		31A494A11F55D54700745401 /* tests */ = {
 			isa = PBXGroup;
@@ -388,7 +508,7 @@
 				31DBE4482141E33200966A04 /* test-std-M86243 */,
 			);
 			path = SFMT;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		31DBE3EA2141E33200966A04 /* html */ = {
 			isa = PBXGroup;
@@ -457,9 +577,11 @@
 		31FC367E1F354892005CAFEB = {
 			isa = PBXGroup;
 			children = (
+				31DBE3E62141E33200966A04 /* SFMT */,
+				3137678C2280A27F0058A4AB /* main_utils.h */,
 				310E6A821FE07AF000D72424 /* experiments.py */,
 				31D8716A1FD1EF5B00F51E73 /* cxxopts.hpp */,
-				31A494A51F55D88B00745401 /* main.cpp */,
+				31A494A51F55D88B00745401 /* cim_main.cpp */,
 				31A494A11F55D54700745401 /* tests */,
 				313A589C1F4E072300F86148 /* Makefile */,
 				31FC36891F354892005CAFEB /* InfluenceMaximization */,
@@ -474,6 +596,7 @@
 				31FC36871F354892005CAFEB /* InfluenceMaximization */,
 				310E6A131FDE0FAB00D72424 /* jsonexperimenter */,
 				3179B9402038E6F300C80D9A /* InfluenceTests */,
+				313767F82280AA490058A4AB /* CIM */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -481,45 +604,23 @@
 		31FC36891F354892005CAFEB /* InfluenceMaximization */ = {
 			isa = PBXGroup;
 			children = (
-				31DBE3E62141E33200966A04 /* SFMT */,
+				3137678B22809E2E0058A4AB /* Heuristics */,
+				3137678A22809DFC0058A4AB /* ModularKnapsack */,
+				3137678922809C920058A4AB /* DifferenceAlgorithms */,
+				3137678822809B6A0058A4AB /* Graph */,
+				3137678722809A3B0058A4AB /* CIM */,
 				3138F06920CEEA73003E77C2 /* DPAlgorithm */,
-				311FFDFA20041C5900F68590 /* BaselineGreedy.cpp */,
-				311FFDFB20041C5900F68590 /* BaselineGreedy.hpp */,
-				310E78A3201BCE71000C70D9 /* BaselineGreedyTIM.cpp */,
-				310E78A4201BCE71000C70D9 /* BaselineGreedyTIM.hpp */,
 				31C4ADA01F787C610077D6BF /* log.h */,
 				311423121F733720001BA3FA /* IMResults */,
 				31279D6F1F63469F00FC4D9B /* TIM-Models */,
-				31FC36911F354E56005CAFEB /* Graph.cpp */,
-				31FC36921F354E56005CAFEB /* Graph.hpp */,
 				311423111F6F4AA7001BA3FA /* memoryusage.h */,
-				31A494991F510CBF00745401 /* IMTree.cpp */,
-				31A4949A1F510CBF00745401 /* IMTree.hpp */,
-				31A494A71F55E92700745401 /* EstimateNonTargets.cpp */,
-				31A494A81F55E92700745401 /* EstimateNonTargets.hpp */,
-				31279D6C1F58EBD900FC4D9B /* Phase2.cpp */,
-				31279D6D1F58EBD900FC4D9B /* Phase2.hpp */,
 				31279D751F6CAB3400FC4D9B /* Diffusion.hpp */,
 				31279D791F6F052C00FC4D9B /* json.hpp */,
-				3159634B1F9E756C000EB2F4 /* DifferenceApproximator.cpp */,
-				3159634C1F9E756C000EB2F4 /* DifferenceApproximator.hpp */,
-				315963541F9EC153000EB2F4 /* TIMEvaluator.cpp */,
-				315963551F9EC153000EB2F4 /* TIMEvaluator.hpp */,
-				315963591FA7B862000EB2F4 /* ApproximationSetting.hpp */,
-				3179B9702051F14B00C80D9A /* LabelSetting.hpp */,
-				3107F09E1FE4661900EA0135 /* GenerateGraphLabels.cpp */,
-				3107F09F1FE4661900EA0135 /* GenerateGraphLabels.hpp */,
 				310E789C200EB175000C70D9 /* TIMInfluenceCalculator.cpp */,
 				310E789D200EB175000C70D9 /* TIMInfluenceCalculator.hpp */,
-				3114572420AB7CE800A8DD46 /* HeuristicsExecuter.cpp */,
-				3114572520AB7CE800A8DD46 /* HeuristicsExecuter.hpp */,
-				31329B292270DD9D00E4C299 /* GreedyModularKnapsack.cpp */,
-				31329B2A2270DD9D00E4C299 /* GreedyModularKnapsack.hpp */,
-				31329B3222711FCA00E4C299 /* NormalizedInfluenceCalculator.cpp */,
-				31329B3322711FCA00E4C299 /* NormalizedInfluenceCalculator.hpp */,
 			);
 			path = InfluenceMaximization;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -539,6 +640,23 @@
 			name = jsonexperimenter;
 			productName = jsonexperimenter;
 			productReference = 310E6A131FDE0FAB00D72424 /* jsonexperimenter */;
+			productType = "com.apple.product-type.tool";
+		};
+		313767F72280AA490058A4AB /* CIM */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 313767FC2280AA490058A4AB /* Build configuration list for PBXNativeTarget "CIM" */;
+			buildPhases = (
+				313767F42280AA490058A4AB /* Sources */,
+				313767F52280AA490058A4AB /* Frameworks */,
+				313767F62280AA490058A4AB /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CIM;
+			productName = CIM;
+			productReference = 313767F82280AA490058A4AB /* CIM */;
 			productType = "com.apple.product-type.tool";
 		};
 		3179B93F2038E6F300C80D9A /* InfluenceTests */ = {
@@ -588,6 +706,10 @@
 						CreatedOnToolsVersion = 8.3.3;
 						ProvisioningStyle = Automatic;
 					};
+					313767F72280AA490058A4AB = {
+						CreatedOnToolsVersion = 10.1;
+						ProvisioningStyle = Automatic;
+					};
 					3179B93F2038E6F300C80D9A = {
 						CreatedOnToolsVersion = 8.3.3;
 						ProvisioningStyle = Automatic;
@@ -613,6 +735,7 @@
 				31FC36861F354892005CAFEB /* InfluenceMaximization */,
 				310E6A121FDE0FAB00D72424 /* jsonexperimenter */,
 				3179B93F2038E6F300C80D9A /* InfluenceTests */,
+				313767F72280AA490058A4AB /* CIM */,
 			);
 		};
 /* End PBXProject section */
@@ -622,6 +745,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		313767F42280AA490058A4AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3137681C2280D5610058A4AB /* SFMT.c in Sources */,
+				3137681D2280D5610058A4AB /* SFMT.h in Sources */,
+				313768112280AAE50058A4AB /* log.h in Sources */,
+				313768122280AAE50058A4AB /* IMResults.h in Sources */,
+				313768132280AAE50058A4AB /* TIMCoverage.cpp in Sources */,
+				313768142280AAE50058A4AB /* TIMCoverage.hpp in Sources */,
+				313768152280AAE50058A4AB /* TIMNormalizedCoverage.cpp in Sources */,
+				313768162280AAE50058A4AB /* TIMNormalizedCoverage.hpp in Sources */,
+				313768172280AAE50058A4AB /* memoryusage.h in Sources */,
+				313768182280AAE50058A4AB /* Diffusion.hpp in Sources */,
+				313768192280AAE50058A4AB /* json.hpp in Sources */,
+				3137681A2280AAE50058A4AB /* TIMInfluenceCalculator.cpp in Sources */,
+				3137681B2280AAE50058A4AB /* TIMInfluenceCalculator.hpp in Sources */,
+				313768072280AAA70058A4AB /* IMTree.cpp in Sources */,
+				313768082280AAA70058A4AB /* IMTree.hpp in Sources */,
+				313768092280AAA70058A4AB /* EstimateNonTargets.cpp in Sources */,
+				3137680A2280AAA70058A4AB /* EstimateNonTargets.hpp in Sources */,
+				3137680B2280AAA70058A4AB /* Phase2.cpp in Sources */,
+				3137680C2280AAA70058A4AB /* Phase2.hpp in Sources */,
+				3137680D2280AAA70058A4AB /* BaselineGreedy.cpp in Sources */,
+				3137680E2280AAA70058A4AB /* BaselineGreedy.hpp in Sources */,
+				3137680F2280AAA70058A4AB /* BaselineGreedyTIM.cpp in Sources */,
+				313768102280AAA70058A4AB /* BaselineGreedyTIM.hpp in Sources */,
+				313768022280AA950058A4AB /* LabelSetting.hpp in Sources */,
+				313768032280AA950058A4AB /* Graph.cpp in Sources */,
+				313768042280AA950058A4AB /* Graph.hpp in Sources */,
+				313768052280AA950058A4AB /* GenerateGraphLabels.cpp in Sources */,
+				313768062280AA950058A4AB /* GenerateGraphLabels.hpp in Sources */,
+				313767FF2280AA890058A4AB /* main_utils.h in Sources */,
+				313768002280AA890058A4AB /* cxxopts.hpp in Sources */,
+				313768012280AA890058A4AB /* cim_main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,6 +833,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3137678E2280A55C0058A4AB /* SFMT.h in Sources */,
+				3137678D2280A5120058A4AB /* HeirarchicalDecomposition.hpp in Sources */,
 				31329B38227255D800E4C299 /* TIMNormalizedCoverage.hpp in Sources */,
 				31329B39227255D800E4C299 /* GreedyModularKnapsack.hpp in Sources */,
 				31329B3A227255D800E4C299 /* NormalizedInfluenceCalculator.hpp in Sources */,
@@ -711,7 +874,7 @@
 				3179B93B2036309D00C80D9A /* TIMInfluenceCalculator.hpp in Sources */,
 				31329B2B2270DD9D00E4C299 /* GreedyModularKnapsack.cpp in Sources */,
 				3179B91C2036308000C80D9A /* cxxopts.hpp in Sources */,
-				3179B91D2036308000C80D9A /* main.cpp in Sources */,
+				3179B91D2036308000C80D9A /* cim_main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -729,6 +892,53 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		313767FD2280AA490058A4AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
+			};
+			name = Debug;
+		};
+		313767FE2280AA490058A4AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 			};
 			name = Release;
 		};
@@ -859,6 +1069,15 @@
 			buildConfigurations = (
 				310E6A171FDE0FAB00D72424 /* Debug */,
 				310E6A181FDE0FAB00D72424 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		313767FC2280AA490058A4AB /* Build configuration list for PBXNativeTarget "CIM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				313767FD2280AA490058A4AB /* Debug */,
+				313767FE2280AA490058A4AB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

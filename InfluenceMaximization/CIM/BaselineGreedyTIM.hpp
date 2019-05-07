@@ -10,11 +10,11 @@
 #define BaselineGreedyTIM_hpp
 
 #include <stdio.h>
-#include "Graph.hpp"
+#include "InfluenceMaximization/Graph/Graph.hpp"
 #include <set>
-#include "TIMInfluenceCalculator.hpp"
-#include "TIM-Models/TIMCoverage.hpp"
-#include "log.h"
+#include "InfluenceMaximization/TIMInfluenceCalculator.hpp"
+#include "InfluenceMaximization/TIM-Models/TIMCoverage.hpp"
+#include "InfluenceMaximization/log.h"
 #include <limits.h>
 
 class BaselineGreedyTIM: public virtual NodeChecker {

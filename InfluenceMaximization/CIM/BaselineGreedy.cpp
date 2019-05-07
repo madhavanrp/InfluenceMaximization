@@ -8,7 +8,6 @@
 
 #include "BaselineGreedy.hpp"
 #include <assert.h>
-#include "log.h"
 
 priority_queue<CELFNode, vector<CELFNode>, CelfComparator> *BaselineGreedy::getQueue() {
     return &this->queue;

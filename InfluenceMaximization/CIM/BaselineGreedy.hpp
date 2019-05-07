@@ -10,9 +10,10 @@
 #define BaselineGreedy_hpp
 
 #include <stdio.h>
-#include "Graph.hpp"
+#include "InfluenceMaximization/Graph/Graph.hpp"
 #include <set>
-#include "Diffusion.hpp"
+#include "InfluenceMaximization/Diffusion.hpp"
+#include "InfluenceMaximization/log.h"
 
 typedef struct CELFNode{
     int nodeID;

@@ -149,41 +149,6 @@ void IMTree::removeBranch(struct node* leaf) {
 }
 
 
-set<int> IMSeedSet::getSeedSet() {
-    return this->seedSet;
-}
-int IMSeedSet::getTargets() {
-    return this->targets;
-}
-int IMSeedSet::getNonTargets() {
-    return this->nonTargets;
-}
-
-IMSeedSet::IMSeedSet() {
-    this->targets = 0;
-    this->nonTargets = 0;
-}
-
-void IMSeedSet::setSeedSet(set<int> seedSet) {
-    this->seedSet = seedSet;
-}
-
-void IMSeedSet::setSeedVector(vector<int> seedVector) {
-    this->seedVector = seedVector;
-}
-
-vector<int> IMSeedSet::getSeedVector() {
-    return this->seedVector;
-}
-
-void IMSeedSet::setTargets(int targets) {
-    this->targets = targets;
-}
-
-void IMSeedSet::setNonTargets(int nonTargets) {
-    this->nonTargets = nonTargets;
-}
-
 vector<IMSeedSet> IMTree::getAllSeeds(int depth) {
     vector<struct node*> leafNodes = getLeafNodes(depth);
     vector<IMSeedSet> seedSets;
@@ -202,10 +167,6 @@ vector<IMSeedSet> IMTree::getAllSeeds(int depth) {
     return seedSets;
 }
 
-void IMSeedSet::addSeed(int nodeID) {
-    this->seedVector.push_back(nodeID);
-    this->seedSet.insert(nodeID);
-}
 
 IMSeedSet IMTree::getBestSeedSet(int depth) {
     vector<struct node*> leafNodes = getLeafNodes(depth);
