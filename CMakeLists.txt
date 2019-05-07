@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 project(InfluenceMaximization)
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_FLAGS "-Wall -std=c++11 -O3")
 
 include_directories(.)
 include_directories(InfluenceMaximization)
