@@ -29,6 +29,7 @@ protected:
     vector<double> *nonTargetEstimates;
 public:
     Phase2(Graph *graph);
+    virtual ~Phase2();
     virtual struct node* addChild(struct node* parent, int childNodeID, double targets, double nonTargets);
     
     double getScalingFactorTargets();
@@ -50,7 +51,7 @@ class Phase2TIM: public Phase2 {
     vector<vector<int>> *lookupTable;
 public:
     Phase2TIM(Graph *graph);
-    ~Phase2TIM();
+    virtual ~Phase2TIM();
     struct node* addChild(struct node* parent, int childNodeID, double targets, double nonTargets);
     pair<int,int> findMaxInfluentialNode(set<int> candidateNodes, vector<struct node*> seedSet, double totalNonTargets, int nonTargetThreshold);
     int addToSeed(int vertex, TIMCoverage *timCoverage);

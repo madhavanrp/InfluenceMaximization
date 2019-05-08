@@ -159,6 +159,9 @@ Phase2::Phase2(Graph *graph) {
     this->graph = graph;
 }
 
+Phase2::~Phase2() {
+    
+}
 
 Phase2SIM::Phase2SIM(Graph *graph): Phase2(graph) {
     
