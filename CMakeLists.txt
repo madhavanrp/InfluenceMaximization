@@ -80,3 +80,8 @@ add_executable(dpalgorithm
         ${Graph_SOURCES}
         ${DP_SOURCES}
         dpalgorithm_main.cpp)
+
+add_executable(attitude
+        ${Common_SOURCES}
+        ${Graph_SOURCES}
+        attitude_main.cpp InfluenceMaximization/Attitude/AttitudeCalculator.cpp InfluenceMaximization/Attitude/AttitudeCalculator.hpp)

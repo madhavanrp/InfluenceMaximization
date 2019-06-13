@@ -44,7 +44,8 @@ void TIMInfluenceCalculator::constructCalculator(Graph *graph, double epsilon, s
         this->visited.push_back(false);
     }
     int R = (8+2 * epsilon) * n * (2 * log(n) + log(2))/(epsilon * epsilon);
-    
+    R = (double)0.15*(double)R;
+    R = 150000;
     // Generate the Random RR Sets
     generateRandomRRSetsNonTargets(R);
     generateRandomRRSetsTargets(R);
@@ -71,6 +72,7 @@ void TIMInfluenceCalculator::generateRandomRRSetsTargets(int R) {
         cout << "\n Value of R is " << R;
     }
     int totalSize = 0;
+    cout << "\n Generating number of RR Sets for influence: " << R << flush;
     for(int i=0;i<R;i++) {
         randomVertex = sfmt_genrand_uint32(&sfmt) % n;
         while(!graph->isTarget(randomVertex)) {
@@ -78,6 +80,9 @@ void TIMInfluenceCalculator::generateRandomRRSetsTargets(int R) {
         }
         generateRandomRRSet(randomVertex, &rrSetsTargets, &targetCounts);
         totalSize += (int)rrSetsTargets[i].size();
+        if(i%10000==0) {
+            cout << "\n Finished number of sets: " << i << flush;
+        }
     }
     cout << "\n Total Number of elements in RR Sets: " << totalSize;
     cout << "\n Average size of an RR Set is " << (double)totalSize/(double)R;

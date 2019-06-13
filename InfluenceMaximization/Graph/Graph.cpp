@@ -57,9 +57,25 @@ double Graph::getWeightForLTModel(int u, int v) {
     return (double)1/(double)inDegree[v];
 }
 
-bool Graph:: flipCoinOnEdge(int u, int v) {
+bool Graph::flipCoinOnEdge(int u, int v) {
     int randomNumber = generateRandomNumber(u, v);
     return randomNumber==0;
+}
+
+vector<pair<int,int>>* Graph::getEdgeSet() {
+    return &this->edgeSet;
+}
+
+void Graph::generateEdgeProbabilitiesTrivalencyModel() {
+    double values[3] = {0.001, 0.01,0.1};
+    int r;
+    this->edgeProbabilitiesAssigned = true;
+    for (int u = 0; u < n; ++u) {
+        for (int v: graph[u]) {
+            r = sfmt_genrand_uint32(&sfmt) % 3;
+            edgeProbabilities[to_string(u) + "#" + to_string(v)] = (double)1/values[r];
+        }
+    }
 }
 
 void Graph::readGraph(string fileName, float percentage, LabelSetting labelSetting) {
@@ -106,7 +122,12 @@ void Graph::readGraph(string fileName, float percentage, LabelSetting labelSetti
             if(inDegree[to] > maxDegree) {
                 maxDegree = inDegree[to];
             }
+            pair<int, int> edge;  //store an edge in the edge set
+            edge.first = from;
+            edge.second = to;
+            this->edgeSet.push_back(edge);
         }
+        assert(edgeSet.size() == m);
         myFile.close();
     }
     

@@ -35,6 +35,7 @@ private:
     float propogationProbability;
     int propogationProbabilityNumber;
     bool standardProbability;
+    bool trivalency;
     sfmt_t sfmt;
     string diffusionModel;
     string graphName;
@@ -47,6 +48,7 @@ private:
     int n, m;
     vector<vector<int> > graph;
     vector<vector<int> > graphTranspose;
+    vector<pair<int, int>> edgeSet; //store all edges in graph, used as the start of generating a RRSet
     unordered_map<string, int> edgeProbabilities;
     bool edgeProbabilitiesAssigned;
     
@@ -83,6 +85,7 @@ public:
     vector<int> *getNonTargets();
     vector<vector<int>> *getGraph();
     vector<vector<int>> *getGraphTranspose();
+    vector<pair<int,int>> *getEdgeSet();
     
     vector<vector<int> > constructTranspose(vector<vector<int> > aGraph);
     void generateRandomRRSets(int R);
@@ -99,6 +102,7 @@ public:
     int getPropogationProbabilityNumber();
     double getWeightForLTModel(int u, int v);
     void setDiffusionModel(string model);
+    void generateEdgeProbabilitiesTrivalencyModel();
     
     
     // For heuristics
